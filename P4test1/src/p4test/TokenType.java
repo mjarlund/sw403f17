@@ -3,7 +3,7 @@ package p4test;
 /**
  * Created by Mysjkin on 24-02-2017.
  */
-public enum TokentypeP4
+public enum TokenType
 {
     SEPERATOR,
     IDENTIFIER,
