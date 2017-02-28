@@ -1,0 +1,9 @@
+E:\Dropbox\School\Languages and Compiler\csharplexer\Lexer\bin\Debug\Lexer.exe.config
+E:\Dropbox\School\Languages and Compiler\csharplexer\Lexer\bin\Debug\Lexer.exe
+E:\Dropbox\School\Languages and Compiler\csharplexer\Lexer\bin\Debug\Lexer.pdb
+E:\Dropbox\School\Languages and Compiler\csharplexer\Lexer\obj\Debug\Lexer.csprojResolveAssemblyReference.cache
+E:\Dropbox\School\Languages and Compiler\csharplexer\Lexer\obj\Debug\Lexer.exe
+E:\Dropbox\School\Languages and Compiler\csharplexer\Lexer\obj\Debug\Lexer.pdb
+C:\Users\Mikkel\Dropbox\School\Languages and Compiler\csharplexer\Lexer\bin\Debug\Lexer.exe.config
+C:\Users\Mikkel\Dropbox\School\Languages and Compiler\csharplexer\Lexer\obj\Debug\Lexer.exe
+C:\Users\Mikkel\Dropbox\School\Languages and Compiler\csharplexer\Lexer\obj\Debug\Lexer.pdb

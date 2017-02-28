@@ -1,64 +1,58 @@
 package p4test;
 
-import com.sun.org.apache.xpath.internal.operations.Bool;
-
-import javax.xml.ws.soap.AddressingFeature;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  * Created by Mysjkin on 24-02-2017.
  */
 public class Scanner
 {
-    /* Uses stringbuilder maybe more effective without */
+    /* Uses string builder maybe more effective without */
 
 
     public static final char EOF = (char)-1;
     public static final int EOF_TYPE = 1;
 
-    private static DefaultHashMap<String, TokentypeP4> words =
-            new DefaultHashMap<String,TokentypeP4>(TokentypeP4.IDENTIFIER);
+    private static DefaultHashMap<String, TokenType> words =
+            new DefaultHashMap<String, TokenType>(TokenType.IDENTIFIER);
 
     protected String input;
     protected int index = 0;
     protected char currentChar;
     protected int inputLen;
-    private int previosIndex;
+    private int previousIndex;
 
     public Scanner(String input)
     {
         this.input = input;
         inputLen = input.length();
         currentChar = input.charAt(index);
-        // Operatos
-        words.put("or",TokentypeP4.OPERATOR); words.put("and",TokentypeP4.OPERATOR);
-        words.put("equals",TokentypeP4.OPERATOR); words.put("is",TokentypeP4.OPERATOR);
-        words.put("not",TokentypeP4.OPERATOR); words.put("over",TokentypeP4.OPERATOR);
-        words.put("under",TokentypeP4.OPERATOR);
+
+        // Operators
+        words.put("or", TokenType.OPERATOR); words.put("and", TokenType.OPERATOR);
+        words.put("equals", TokenType.OPERATOR); words.put("is", TokenType.OPERATOR);
+        words.put("not", TokenType.OPERATOR); words.put("over", TokenType.OPERATOR);
+        words.put("under", TokenType.OPERATOR);
 
         // Keywords
-        words.put("until", TokentypeP4.KEYWORD); words.put("end", TokentypeP4.KEYWORD);
-        words.put("if", TokentypeP4.KEYWORD); words.put("else", TokentypeP4.KEYWORD);
-        words.put("string", TokentypeP4.KEYWORD); words.put("boolean", TokentypeP4.KEYWORD);
-        words.put("return", TokentypeP4.KEYWORD); words.put("void", TokentypeP4.KEYWORD);
-        words.put("structure", TokentypeP4.KEYWORD); words.put("fraction", TokentypeP4.KEYWORD);
-        words.put("number", TokentypeP4.KEYWORD); words.put("boolean", TokentypeP4.KEYWORD);
-        words.put("string", TokentypeP4.KEYWORD); words.put("character", TokentypeP4.KEYWORD);
+        words.put("until", TokenType.KEYWORD); words.put("end", TokenType.KEYWORD);
+        words.put("if", TokenType.KEYWORD); words.put("else", TokenType.KEYWORD);
+        words.put("string", TokenType.KEYWORD); words.put("boolean", TokenType.KEYWORD);
+        words.put("return", TokenType.KEYWORD); words.put("void", TokenType.KEYWORD);
+        words.put("structure", TokenType.KEYWORD); words.put("fraction", TokenType.KEYWORD);
+        words.put("number", TokenType.KEYWORD); words.put("boolean", TokenType.KEYWORD);
+        words.put("string", TokenType.KEYWORD); words.put("character", TokenType.KEYWORD);
 
         // Other
-        words.put("false", TokentypeP4.BOOLEAN_LITERAL); words.put("true", TokentypeP4.BOOLEAN_LITERAL);
+        words.put("false", TokenType.BOOLEAN_LITERAL); words.put("true", TokenType.BOOLEAN_LITERAL);
     }
     protected void PushBack()
     {
-        index = previosIndex;
+        index = previousIndex;
         currentChar = input.charAt(index);
     }
     public void Consume(){Advance(); WhiteSpace();}
     public void Advance()
     {
-        previosIndex = index;
+        previousIndex = index;
         index++;
         if(index >= inputLen)
             currentChar = EOF;
@@ -83,11 +77,11 @@ public class Scanner
             {
                 case '\n':case '(':case ')':case ',':
                     if(currentChar=='\n')
-                        return new Token("\\n", TokentypeP4.SEPERATOR);
+                        return new Token("\\n", TokenType.SEPERATOR);
                     else
-                        return new Token(Character.toString(currentChar), TokentypeP4.SEPERATOR);
+                        return new Token(Character.toString(currentChar), TokenType.SEPERATOR);
                 case '+':case '-':case '/':case '*':
-                    return new Token(Character.toString(currentChar), TokentypeP4.OPERATOR);
+                    return new Token(Character.toString(currentChar), TokenType.OPERATOR);
                 case '\'':
                     return ScanChar();
                 case '\"':
@@ -129,7 +123,7 @@ public class Scanner
         val+= currentChar;
         Advance();
 
-        return new Token(val,TokentypeP4.CHAR_LITERAL);
+        return new Token(val, TokenType.CHAR_LITERAL);
     }
     private Token ScanString()
     {
@@ -141,19 +135,19 @@ public class Scanner
         } while(currentChar != '\"');
         sb.append(currentChar);
         Advance();
-        return new Token(sb.toString(), TokentypeP4.STRING_LITERAL);
+        return new Token(sb.toString(), TokenType.STRING_LITERAL);
     }
 
     private Token ScanDigit()
     {
         StringBuilder sb = new StringBuilder();
-        TokentypeP4 type = TokentypeP4.INTEGER_LITERAL;
+        TokenType type = TokenType.INTEGER_LITERAL;
         do
         {
             sb.append(currentChar);
             Advance();
-            if(currentChar == '.' && type == TokentypeP4.INTEGER_LITERAL) {
-                type = TokentypeP4.FLOAT_LITERAL;
+            if(currentChar == '.' && type == TokenType.INTEGER_LITERAL) {
+                type = TokenType.FLOAT_LITERAL;
                 sb.append(currentChar);
                 Advance();
             }
@@ -173,11 +167,11 @@ public class Scanner
         //PushBack(); // pushback to previous char, because moved to fare in the do while
 
         String val = sb.toString();
-        TokentypeP4 type = words.get(val);
-        if(type != TokentypeP4.IDENTIFIER)
+        TokenType type = words.get(val);
+        if(type != TokenType.IDENTIFIER)
             return new Token(val, type);
 
-        return new Token(val, TokentypeP4.IDENTIFIER);
+        return new Token(val, TokenType.IDENTIFIER);
     }
     private void Letter()
     {

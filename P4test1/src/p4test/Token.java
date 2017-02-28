@@ -7,16 +7,13 @@ package p4test;
  */
 public class Token
 {
-    private TokentypeP4 type;
-    private String val;
+    public final TokenType Type;
+    public final String Value;
 
-    public TokentypeP4 GetType(){return type;}
-    public String GetVal() {return val;}
-
-    public Token(String val, TokentypeP4 type)
+    public Token(String val, TokenType type)
     {
-        this.val = val;
-        this.type = type;
+        this.Value = val;
+        this.Type = type;
     }
-    public String toString() {return "<"+val+","+type+">";}
+    public String toString() {return "<"+Type+","+Value+">";}
 }
