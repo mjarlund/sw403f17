@@ -76,10 +76,15 @@ public class Scanner
             switch (currentChar)
             {
                 case '\n':case '(':case ')':case ',':
-                    if(currentChar=='\n')
+                    if(currentChar=='\n') {
+                        Advance();
                         return new Token("\\n", TokenType.SEPERATOR);
+                    }
                     else
+                    {
+                        Advance();
                         return new Token(Character.toString(currentChar), TokenType.SEPERATOR);
+                    }
                 case '+':case '-':case '/':case '*':
                     return new Token(Character.toString(currentChar), TokenType.OPERATOR);
                 case '\'':
@@ -96,7 +101,7 @@ public class Scanner
                         throw new Error("invalid char: "+currentChar);
             }
         }
-        throw new Error("No termination");
+        return null;
     }
 
     private boolean IsWS()
