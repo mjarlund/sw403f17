@@ -83,10 +83,11 @@ public class Scanner
                     else
                     {
                         Advance();
-                        return new Token(Character.toString(currentChar), TokenType.SEPERATOR);
+                        return new Token(Character.toString(input.charAt(previousIndex)), TokenType.SEPERATOR);
                     }
                 case '+':case '-':case '/':case '*':
-                    return new Token(Character.toString(currentChar), TokenType.OPERATOR);
+                    Advance();
+                    return new Token(Character.toString(input.charAt(previousIndex)), TokenType.OPERATOR);
                 case '\'':
                     return ScanChar();
                 case '\"':
