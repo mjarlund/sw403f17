@@ -39,24 +39,18 @@ public class ParserIaro
     private void Dcls()
     {
         boolean quit = false;
-        while(!quit)
+        while(!quit && input.currentChar != input.EOF)
         {
-            try
+            switch (getIndex(currentIndex).Value)
             {
-                switch (getIndex(currentIndex).Value) {
-                    case "number":
-                    case "fraction":
-                    case "string":
-                    case "character":
-                        Dcl();
-                        break;
-                    default:
-                        quit = true;
-                }
-            }
-            catch (Exception e)
-            {
-                quit = true;
+                case "number":
+                case "fraction":
+                case "string":
+                case "character":
+                    Dcl();
+                    break;
+                default:
+                    quit = true;
             }
         }
     }
