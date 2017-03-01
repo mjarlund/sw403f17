@@ -41,16 +41,22 @@ public class ParserIaro
         boolean quit = false;
         while(!quit)
         {
-            switch (getIndex(currentIndex).Value)
+            try
             {
-                case "number":
-                case "fraction":
-                case "string":
-                case "character":
-                    Dcl();
-                    break;
-                default:
-                    quit = true;
+                switch (getIndex(currentIndex).Value) {
+                    case "number":
+                    case "fraction":
+                    case "string":
+                    case "character":
+                        Dcl();
+                        break;
+                    default:
+                        quit = true;
+                }
+            }
+            catch (Exception e)
+            {
+                quit = true;
             }
         }
     }
