@@ -17,7 +17,7 @@ public class test
                 "        character b equals \'a\'\n" +
                 "        boolean s equals false\n" +
                 "    end FirstMission"; */
-        String input = "number a\n";
+        String input = "number a, number b\n";
 
         // Run scanner on test string
         Scanner scanner = new Scanner(input);
