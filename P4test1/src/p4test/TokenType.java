@@ -14,4 +14,5 @@ public enum TokenType
     CHAR_LITERAL,
     OPERATOR,
     KEYWORD,
+    EOF
 }

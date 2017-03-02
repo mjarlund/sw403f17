@@ -17,8 +17,12 @@ public class test
                 "        character b equals \'a\'\n" +
                 "        boolean s equals false\n" +
                 "    end FirstMission"; */
-        String input = "number a\n";
+        String input = "number anders(string er, string faggot, boolean erdetsandheden)";
 
+        ParserMikkel bla = new ParserMikkel(new Scanner(input));
+        bla.Parse();
+
+        /*
         // Run scanner on test string
         Scanner scanner = new Scanner(input);
         try
@@ -33,5 +37,6 @@ public class test
         {
             System.out.println(e);
         }
+        */
     }
 }

@@ -1,22 +1,33 @@
 package p4test;
 
+import jdk.internal.org.objectweb.asm.tree.analysis.Value;
+
+import java.util.ArrayList;
+
 /**
  * Created by Mysjkin on 28-02-2017.
  */
 public class ParserIaro
 {
-    private Token lookahed;
+    // lookahed value
+    private int k = 2;
+    private Token[] lookahed;
     private Scanner input;
+    private int currentIndex = 0;
 
     public ParserIaro(Scanner input)
     {
         this.input = input;
-        lookahed = input.nextToken();
+        lookahed = new Token[k];
+        for(int i = 0; i < k; i++)
+        {
+            lookahed[i] = input.nextToken();
+        }
     }
     public void Run()
     {
         Dcls();
-        Stmts();
+        //Stmts();
         if(input.currentChar == input.EOF)
         {
             System.out.println("Parse Completed");
@@ -28,15 +39,16 @@ public class ParserIaro
     private void Dcls()
     {
         boolean quit = false;
-        while(!quit)
+        while(!quit && input.currentChar != input.EOF)
         {
-            switch (lookahed.Value)
+            switch (getIndex(currentIndex).Value)
             {
                 case "number":
                 case "fraction":
                 case "string":
                 case "character":
                     Dcl();
+                    break;
                 default:
                     quit = true;
             }
@@ -46,25 +58,35 @@ public class ParserIaro
     {
         match(TokenType.KEYWORD);
         match(TokenType.IDENTIFIER);
-        match(TokenType.SEPERATOR, "\\n");
+        match(TokenType.SEPERATOR);
     }
     private void Stmts()
     {
+        while(input.currentChar != input.EOF)
+        {
+            switch(getIndex(currentIndex).Value)
+            {
 
+            }
+        }
     }
     private void Stmt()
     {
 
     }
+    private Token getIndex(int index)
+    {
+        return lookahed[index % k];
+    }
     private void match(TokenType type, String c1)
     {
         try
         {
-            if (lookahed.Type == type && lookahed.Value == c1) {
+            if (getIndex(currentIndex).Type == type && getIndex(currentIndex).Value == c1) {
                 System.out.println("matched " + c1);
                 consume();
             } else
-                throw new Error("double match expected " + c1 + " got " + lookahed.Value);
+                throw new Error("double match expected " + c1 + " got " + getIndex(currentIndex).Value);
         }
         catch (NullPointerException e)
         {
@@ -73,16 +95,17 @@ public class ParserIaro
     }
     private void match(TokenType type)
     {
-        if(lookahed.Type == type)
+        if(getIndex(currentIndex).Type == type)
         {
             System.out.println("matched "+type);
             consume();
         }
         else
-            throw new Error("single match expected "+type.toString()+" got "+lookahed.Type.toString());
+            throw new Error("single match expected "+type.toString()+" got "+getIndex(currentIndex).Type.toString());
     }
     private void consume()
     {
-        lookahed = input.nextToken();
+        lookahed[currentIndex % k] = input.nextToken();
+        currentIndex++;
     }
 }

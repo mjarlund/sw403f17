@@ -38,8 +38,8 @@ public class Scanner
         words.put("string", TokenType.KEYWORD); words.put("boolean", TokenType.KEYWORD);
         words.put("return", TokenType.KEYWORD); words.put("void", TokenType.KEYWORD);
         words.put("structure", TokenType.KEYWORD); words.put("fraction", TokenType.KEYWORD);
-        words.put("number", TokenType.KEYWORD); words.put("boolean", TokenType.KEYWORD);
-        words.put("string", TokenType.KEYWORD); words.put("character", TokenType.KEYWORD);
+        words.put("number", TokenType.KEYWORD);  words.put("string", TokenType.KEYWORD);
+        words.put("character", TokenType.KEYWORD);
 
         // Other
         words.put("false", TokenType.BOOLEAN_LITERAL); words.put("true", TokenType.BOOLEAN_LITERAL);
@@ -83,10 +83,11 @@ public class Scanner
                     else
                     {
                         Advance();
-                        return new Token(Character.toString(currentChar), TokenType.SEPERATOR);
+                        return new Token(Character.toString(input.charAt(previousIndex)), TokenType.SEPERATOR);
                     }
                 case '+':case '-':case '/':case '*':
-                    return new Token(Character.toString(currentChar), TokenType.OPERATOR);
+                    Advance();
+                    return new Token(Character.toString(input.charAt(previousIndex)), TokenType.OPERATOR);
                 case '\'':
                     return ScanChar();
                 case '\"':
