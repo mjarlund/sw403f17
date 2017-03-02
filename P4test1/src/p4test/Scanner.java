@@ -29,7 +29,7 @@ public class Scanner
         // Operators
         words.put("or", TokenType.OPERATOR); words.put("and", TokenType.OPERATOR);
         words.put("equals", TokenType.OPERATOR); words.put("is", TokenType.OPERATOR);
-        words.put("not", TokenType.OPERATOR); words.put("over", TokenType.OPERATOR);
+        words.put("not", TokenType.OPERATOR); words.put("above", TokenType.OPERATOR);
         words.put("under", TokenType.OPERATOR);
 
         // Keywords
@@ -38,7 +38,7 @@ public class Scanner
         words.put("string", TokenType.KEYWORD); words.put("boolean", TokenType.KEYWORD);
         words.put("return", TokenType.KEYWORD); words.put("void", TokenType.KEYWORD);
         words.put("structure", TokenType.KEYWORD); words.put("fraction", TokenType.KEYWORD);
-        words.put("number", TokenType.KEYWORD);  words.put("string", TokenType.KEYWORD);
+        words.put("number", TokenType.KEYWORD);  words.put("text", TokenType.KEYWORD);
         words.put("character", TokenType.KEYWORD);
 
         // Other
