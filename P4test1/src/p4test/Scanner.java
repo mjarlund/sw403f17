@@ -78,12 +78,12 @@ public class Scanner
                 case '\n':case '(':case ')':case ',':
                     if(currentChar=='\n') {
                         Advance();
-                        return new Token("\\n", TokenType.SEPERATOR);
+                        return new Token("\\n", TokenType.SEPARATOR);
                     }
                     else
                     {
                         Advance();
-                        return new Token(Character.toString(input.charAt(previousIndex)), TokenType.SEPERATOR);
+                        return new Token(Character.toString(input.charAt(previousIndex)), TokenType.SEPARATOR);
                     }
                 case '+':case '-':case '/':case '*':
                     Advance();

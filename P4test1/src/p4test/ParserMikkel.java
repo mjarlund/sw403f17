@@ -27,13 +27,18 @@ public class ParserMikkel {
         return Parse();
     }
 
-    // Prog -> Stmts $
+    // Prog -> Dcls Stmts $
     public boolean Parse() {
         // Get initial tokens
         InitiateLookAheadBuffer();
 
-        Dcls();
-        // Stmts();
+        try {
+            Dcls();
+            Stmts();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         if(input.currentChar == input.EOF) {
             // Parsing succeeded
             return true;
@@ -48,160 +53,411 @@ public class ParserMikkel {
         Dcls -> Dcl Dcls
                 | Func Stmts Dcls
      */
-    private void Dcls() {
-        // Both Dcl and Func predicts a type, so we check if lookahead is a type.
-        if(Match(GetToken(currentIndex), MatchType.TYPE)) {
-
-            // Both Dcl and Func predicts an Id, so we check if lookahead is an Id.
-            if(GetToken(currentIndex + 1).Type != TokenType.IDENTIFIER) throw new Error("Invalid syntax");
-
-            // Func predicts an '(' to be the next token, so we check if lookahead is a '('.
-            if(GetToken(currentIndex + 2).Type == TokenType.SEPERATOR) {
-                Func();
-
-                // Stmts();
-                // Dcls();
-            }
-            else {
+    private void Dcls() throws Exception {
+        try {
+            // Both Dcl and Func takes type and id as the first two tokens, so in order to pick the right route,
+            // we need to check if the third occurring token is a separator as needed by func.
+            if(GetToken(currentIndex + 2).Type != TokenType.SEPARATOR) {
                 Dcl();
                 Dcls();
             }
+            else {
+                Func();
+                Stmts();
+                Dcls();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
         }
     }
 
     /*
         Func -> Signature Block end id
      */
-    private void Func() {
-        String funcId = GetToken(currentIndex+1).Value;
-        Signature();
-        // Block();
-        // MatchExpect(TokenType.KEYWORD, "end");
-        // MatchExpect(TokenType.IDENTIFIER, funcId);
+    private void Func() throws Exception {
+        try {
+            String id = GetToken(currentIndex+1).Value;
+            Signature();
+            Block();
+            MatchExpect(TokenType.KEYWORD, "end");
+            MatchExpect(TokenType.IDENTIFIER, id);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
     }
 
     /*
         Signature -> Dcl ( Params )
     */
-    private void Signature() {
-        Dcl();
-        MatchExpect(TokenType.SEPERATOR, "(");
-        Params();
-        MatchExpect(TokenType.SEPERATOR, ")");
+    private void Signature() throws Exception {
+        try {
+            Dcl();
+            MatchExpect(TokenType.SEPARATOR, "(");
+            Params();
+            MatchExpect(TokenType.SEPARATOR, ")");
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
     }
 
     /*
-        Params -> Dcl*
+        Params -> Dcl (,Dcl)*
+                | LAMBDA
      */
-    private void Params(){
+    private void Params() throws Exception {
 
-        while(true) {
-            if(Match(GetToken(currentIndex), MatchType.TYPE) &&
-                    GetToken(currentIndex + 1).Type == TokenType.IDENTIFIER) {
-
+        while(MatchCheck(currentIndex, TokenType.KEYWORD, "number", "character", "string", "boolean", "void", "float")) {
+            try {
                 Dcl();
 
-                if(Match(GetToken(currentIndex + 1), MatchType.TYPE)) {
-                    MatchExpect(TokenType.SEPERATOR, ",");
+                if(MatchCheck(currentIndex + 1, TokenType.KEYWORD, "number", "character", "string", "boolean", "void", "float")
+                        && !MatchCheck(currentIndex, TokenType.SEPARATOR, ")")) {
+                    MatchExpect(TokenType.SEPARATOR, ",");
                 }
-
-            } else break;
+            } catch (Exception e) {
+                e.printStackTrace();
+                throw e;
+            }
         }
 
     }
 
     /*
-        Dcl -> type id
+        Dcl -> Type id
      */
     private void Dcl() {
-        MatchExpect(TokenType.KEYWORD);
-        MatchExpect(TokenType.IDENTIFIER);
+        try {
+            Type();
+            MatchExpect(TokenType.IDENTIFIER);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /*
-    Stmts -> Stmt Stmts
-            | Func Stmts
-            | LAMBDA
+        Stmts -> Stmt Stmts
+    	        | LAMBDA
      */
-    private void Stmts() {
-        // Both Stmt and Func predicts a type, so we check if lookahead is a type.
-        if(Match(GetToken(currentIndex), MatchType.TYPE)) {
+    private void Stmts() throws Exception {
+        // Stmt predicts a type, so we check if lookahead is compliant.
+        if(MatchCheck(currentIndex, TokenType.KEYWORD, "number", "character", "string", "boolean", "void", "float")) {
+            try {
+                Stmt();
+                Stmts();
+            } catch (Exception e) {
+                e.printStackTrace();
+                throw e;
+            }
+        }
+    }
 
-            // Both Stmt and Func predicts an Id, so we check if lookahead is an Id.
-            if(GetToken(currentIndex + 1).Type != TokenType.IDENTIFIER) throw new Error("Invalid syntax");
+    /*
+        Stmt -> Dcl is Val Expr
+   	            | LAMBDA
+     */
+    private void Stmt() throws Exception {
+        // Dcl predicts a type, so we check if lookahead is compliant.
+        if(MatchCheck(currentIndex, TokenType.KEYWORD, "number", "character", "string", "boolean", "void", "float")) {
 
-            // Func predicts an '(' to be the next token, so we check if lookahead is a '('.
-            if(GetToken(currentIndex + 2).Type == TokenType.SEPERATOR) {
-                Func();
+            try {
+                Dcl();
+                MatchExpect(TokenType.OPERATOR, "is");
+                Val();
+                Expr();
+            } catch (Exception e) {
+                e.printStackTrace();
+                throw e;
+            }
+
+        }
+    }
+
+    /*
+        Block -> ( Stmts | CtrlStrc | FuncCall )*
+     */
+    private void Block() throws Exception {
+        while(GetToken(currentIndex).Value != "end" || GetToken(currentIndex).Value != "EOF") {
+
+            try {
+                // TokenType can either be keyword (for Stmts or CtrlStrc) or identifier (for FuncCall).
+                if(GetToken(currentIndex).Type == TokenType.IDENTIFIER) {
+                    FuncCall();
+                }
+                else if(GetToken(currentIndex).Type == TokenType.KEYWORD) {
+
+                    // CtrlStrc expects an if or until
+                    if(MatchCheck(currentIndex, TokenType.KEYWORD, "if", "until")) {
+                        CtrlStrc();
+                    }
+                    else {
+                        Stmts();
+                    }
+                }
+                else {
+                    throw new InvalidSyntaxException(GetToken(currentIndex), TokenType.IDENTIFIER, TokenType.KEYWORD);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                throw e;
+            }
+        }
+    }
+
+    /*
+        FuncCall -> id ‘(‘ Params ‘)’
+     */
+    private void FuncCall() throws Exception {
+        try {
+            MatchExpect(TokenType.IDENTIFIER);
+            MatchExpect(TokenType.SEPARATOR, "(");
+            Params();
+            MatchExpect(TokenType.SEPARATOR, ")");
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
+
+    }
+
+    /*
+        CtrlStrc -> ( IfStmt | UntilStmt )
+     */
+    private void CtrlStrc() throws Exception {
+        try {
+            // We expect either if or until, so we'll check for one of them
+            if(GetToken(currentIndex).Value == "if") {
+                IfStmt();
             }
             else {
-                Stmt();
+                UntilStmt();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+    /*
+        IfStmt -> if ‘(‘ BoolExpr ‘)’ Block end if
+     */
+    private void IfStmt() throws Exception {
+        try {
+            MatchExpect(TokenType.KEYWORD, "if");
+            MatchExpect(TokenType.SEPARATOR, "(");
+            BoolExpr();
+            MatchExpect(TokenType.SEPARATOR, ")");
+            Block();
+            MatchExpect(TokenType.KEYWORD, "end");
+            MatchExpect(TokenType.KEYWORD, "if");
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+    /*
+        UntilStmt -> until ‘(‘ BoolExpr ‘)’ Block end until
+     */
+    private void UntilStmt() throws Exception {
+        try {
+            MatchExpect(TokenType.KEYWORD, "until");
+            MatchExpect(TokenType.SEPARATOR, "(");
+            BoolExpr();
+            MatchExpect(TokenType.SEPARATOR, ")");
+            Block();
+            MatchExpect(TokenType.KEYWORD, "end");
+            MatchExpect(TokenType.KEYWORD, "until");
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+    /*
+        BoolExpr -> true
+                | false
+                | BoolExpr or BoolExpr
+                | BoolExpr equals BoolExpr
+                | BoolExpr and BoolExpr
+                | not ‘(‘ BoolExpr ‘)’
+     */
+    private void BoolExpr() throws Exception {
+        try {
+            if(GetToken(currentIndex).Type == TokenType.BOOLEAN_LITERAL) {
+                switch (GetToken(currentIndex).Value) {
+                    case "false":
+                        MatchExpect(TokenType.BOOLEAN_LITERAL, "false");
+                        break;
+                    case "true":
+                        MatchExpect(TokenType.BOOLEAN_LITERAL, "true");
+                        break;
+                }
             }
 
-            // Recursively call self
-            // Stmts();
-        }
-
-
-        // Otherwise, do nothing (Epsilon rule)
-    }
-
-    private void Stmt() {
-    }
-
-
-    private void Block(){
-
-    }
-
-
-
-    private void Val() {
-
-    }
-
-    private boolean Match(Token token, MatchType type) {
-        switch (type) {
-            case TYPE:
-                if(token.Type == TokenType.KEYWORD) {
-
-                    switch(token.Value) {
-                        case "number":
-                        case "character":
-                        case "string":
-                        case "boolean":
-                        case "void":
-                        case "float":
-                            return true;
-                    }
-
+            if(GetToken(currentIndex).Type == TokenType.OPERATOR) {
+                switch (GetToken(currentIndex).Value) {
+                    case "or":
+                        MatchExpect(TokenType.OPERATOR, "or");
+                        break;
+                    case "equals":
+                        MatchExpect(TokenType.OPERATOR, "equals");
+                        break;
+                    case "and":
+                        MatchExpect(TokenType.OPERATOR, "and");
+                        break;
+                    case "not":
+                        MatchExpect(TokenType.OPERATOR, "not");
+                        MatchExpect(TokenType.SEPARATOR, "(");
+                        BoolExpr();
+                        MatchExpect(TokenType.SEPARATOR, ")");
+                        break;
                 }
-            default:
-                return false;
+            }
+
+            if(GetToken(currentIndex + 1).Type == TokenType.OPERATOR ||
+                    GetToken(currentIndex + 1).Type == TokenType.SEPARATOR
+                            && GetToken(currentIndex + 1).Value == ")") {
+                BoolExpr();
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+
+
+    /*
+        Val ->  id
+            | id ‘(‘Args’)’
+     */
+    private void Val() throws Exception {
+        // In either case, we expect an identifier
+        try {
+            MatchExpect(TokenType.IDENTIFIER);
+            // For the 2nd case to run, we expect a separator
+            if(GetToken(currentIndex).Type == TokenType.SEPARATOR) {
+                MatchExpect(TokenType.SEPARATOR, "(");
+                MatchExpect(TokenType.SEPARATOR, ")");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
+
+
+    }
+
+    /*
+        Args -> id
+                |  id (, id)*
+                | LAMBDA
+     */
+    private void Args() throws Exception {
+        while(GetToken(currentIndex).Type == TokenType.IDENTIFIER) {
+            try {
+                MatchExpect(TokenType.IDENTIFIER);
+
+                if(GetToken(currentIndex + 1).Type == TokenType.IDENTIFIER)
+                    MatchExpect(TokenType.SEPARATOR, ",");
+            } catch (Exception e) {
+                e.printStackTrace();
+                throw e;
+            }
+
+        }
+    }
+
+    /*
+        Expr -> plus Val Expr
+                | minus Val Expr
+                | div Val Expr
+                | mul Val Expr
+                | LAMBDA
+     */
+    private void Expr() throws Exception {
+        if(GetToken(currentIndex).Type == TokenType.OPERATOR) {
+            try {
+                MatchExpect(TokenType.OPERATOR, "plus", "minus", "div", "mul");
+                Val();
+                Expr();
+            } catch (Exception e) {
+                e.printStackTrace();
+                throw e;
+            }
+
         }
 
     }
 
-    private void MatchExpect(TokenType type, String value){
+    private void Type() throws Exception {
+        try {
+            MatchExpect(TokenType.KEYWORD, "number", "character", "string", "boolean", "void", "float");
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
+
+    }
+
+    private Boolean MatchCheck(int tokenIndex, TokenType type, String ... values) {
+        Token token = GetToken(tokenIndex);
+        for(String value : values) {
+            if (token.Type == type && token.Value.equals(value)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private Boolean MatchCheck(int tokenIndex, TokenType ... types) {
+        Token token = GetToken(tokenIndex);
+        for(TokenType type : types) {
+            if (token.Type == type) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private void MatchExpect(TokenType type, String ... values) throws Exception {
+        Token token = GetToken(currentIndex);
+        Boolean matched = false;
+        for(String value : values) {
+            if (token.Type == type && token.Value.equals(value)) {
+                System.out.println("Matched"+" "+token);
+                ConsumeToken();
+                matched = true;
+                break;
+            }
+        }
+
+        if(!matched)
+            throw new InvalidSyntaxException(token, values);
+    }
+
+    private void MatchExpect(TokenType type, String value) throws Exception {
         Token token = GetToken(currentIndex);
         if (token.Type == type && token.Value.equals(value)) {
             System.out.println("Matched"+" "+token);
             ConsumeToken();
         }
         else
-            throw new Error("Invalid syntax expected "+value+" got " +token.Value);
+            throw new InvalidSyntaxException(token, value);
     }
-    private void MatchExpect(TokenType type){
+
+    private void MatchExpect(TokenType type) throws Exception {
         Token token = GetToken(currentIndex);
         if (token.Type == type) {
             System.out.println("Matched" + " "+token);
             ConsumeToken();
         }
         else
-            throw new Error("Invalid syntax");
-    }
-    private enum MatchType {
-        TYPE,
+            throw new InvalidSyntaxException(token, type);
     }
 
     private Token GetToken(int index)

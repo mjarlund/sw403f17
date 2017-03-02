@@ -1,9 +1,5 @@
 package p4test;
 
-import jdk.internal.org.objectweb.asm.tree.analysis.Value;
-
-import java.util.ArrayList;
-
 /**
  * Created by Mysjkin on 28-02-2017.
  */
@@ -58,7 +54,7 @@ public class ParserIaro
     {
         match(TokenType.KEYWORD);
         match(TokenType.IDENTIFIER);
-        match(TokenType.SEPERATOR);
+        match(TokenType.SEPARATOR);
     }
     private void Stmts()
     {

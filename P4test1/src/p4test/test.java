@@ -7,17 +7,13 @@ public class test
 {
     public static void main(String args[])
     {
-        // Test string
-        /*String input = "void FirstMission (structure person, number speed)\n" +
-                "    until (heading equals 90 90.0)\n" +
-                "        turn (left)\n" +
-                "        move (forward)\n" +
-                "        end until\n" +
-                "        string a equals \"wasd\"\n" +
-                "        character b equals \'a\'\n" +
-                "        boolean s equals false\n" +
-                "    end FirstMission"; */
-        String input = "number anders(string er, string faggot, boolean erdetsandheden)";
+        String input =
+                "void FirstMission (string person, number speed) " +
+                    "number target is speed " +
+                    "until(true) " +
+                        "string turn is target " +
+                    "end until " +
+                "end FirstMission ";
 
         ParserMikkel bla = new ParserMikkel(new Scanner(input));
         bla.Parse();

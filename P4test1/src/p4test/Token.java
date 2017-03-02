@@ -15,5 +15,5 @@ public class Token
         this.Value = val;
         this.Type = type;
     }
-    public String toString() {return "<"+Type+","+Value+">";}
+    public String toString() {return "<"+Type+", \'"+Value+"\'>";}
 }
