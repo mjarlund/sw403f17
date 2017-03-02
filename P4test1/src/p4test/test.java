@@ -17,7 +17,7 @@ public class test
                 "        character b equals \'a\'\n" +
                 "        boolean s equals false\n" +
                 "    end FirstMission"; */
-        String input = "number anders(bla)";
+        String input = "number anders(string er, string faggot, boolean erdetsandheden)";
 
         ParserMikkel bla = new ParserMikkel(new Scanner(input));
         bla.Parse();
