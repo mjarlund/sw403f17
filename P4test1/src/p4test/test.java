@@ -17,12 +17,10 @@ public class test
                 "        character b equals \'a\'\n" +
                 "        boolean s equals false\n" +
                 "    end FirstMission"; */
-        String input = "number anders";
+        String input = "number anders(bla)";
 
         ParserMikkel bla = new ParserMikkel(new Scanner(input));
-        if(bla.Parse()) {
-            System.out.println("Success");
-        }
+        bla.Parse();
 
         /*
         // Run scanner on test string

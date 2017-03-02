@@ -29,7 +29,9 @@ public class ParserMikkel {
     private Scanner input;
     private Token lookAhead;
     private Token GetLookAhead() {
-        return input.nextToken();
+        Token tmp = input.nextToken();
+        System.out.println(tmp);
+        return tmp;
     }
 
     public ParserMikkel(Scanner input) {
@@ -106,15 +108,17 @@ public class ParserMikkel {
     private boolean Match(Token token, MatchType type) {
         switch (type) {
             case TYPE:
-                switch (token.Type) {
-                    case BOOLEAN_LITERAL:
-                    case INTEGER_LITERAL:
-                    case CHAR_LITERAL:
-                    case FLOAT_LITERAL:
-                    case STRING_LITERAL:
-                        return true;
-                    default:
-                        return false;
+                if(token.Type == TokenType.KEYWORD) {
+
+                    switch(token.Value) {
+                        case "number":
+                        case "string":
+                        case "boolean":
+                        case "void":
+                        case "float":
+                            return true;
+                    }
+
                 }
             default:
                 return false;
