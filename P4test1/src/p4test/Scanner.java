@@ -44,6 +44,11 @@ public class Scanner
         // Other
         words.put("false", TokenType.BOOLEAN_LITERAL); words.put("true", TokenType.BOOLEAN_LITERAL);
     }
+    public boolean IsEOF()
+    {
+        boolean ans;
+        return ans = currentChar == EOF ? true : false;
+    }
     protected void PushBack()
     {
         index = previousIndex;
