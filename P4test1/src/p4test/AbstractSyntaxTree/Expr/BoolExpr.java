@@ -1,6 +1,7 @@
 package p4test.AbstractSyntaxTree.Expr;
 
 import p4test.AST.Nodes.expr.Expr;
+import p4test.AbstractSyntaxTree.Visitor;
 import p4test.Token;
 
 /**
@@ -13,6 +14,10 @@ public class BoolExpr extends Expression
         AddNode(expr1);
         Operator = operator;
         AddNode(expr2);
+    }
+    public void visit(Visitor v)
+    {
+        v.visit(this);
     }
     public final Token Operator;
 }

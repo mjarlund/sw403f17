@@ -1,6 +1,7 @@
 package p4test.AbstractSyntaxTree.Expr;
 
 import p4test.AbstractSyntaxTree.AST;
+import p4test.AbstractSyntaxTree.Visitor;
 
 import java.util.List;
 
@@ -11,5 +12,9 @@ public class Arguments extends AST
 {
     public Arguments()
     {
+    }
+    public void visit(Visitor v)
+    {
+        v.visit(this);
     }
 }

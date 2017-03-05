@@ -1,5 +1,6 @@
 package p4test.AbstractSyntaxTree.Expr;
 
+import p4test.AbstractSyntaxTree.Visitor;
 import p4test.Token;
 
 /**
@@ -13,5 +14,10 @@ public class BinaryOP extends Expression
         Operation = operation;
         AddNode(expr2);
     }
+    public void visit(Visitor v)
+    {
+        v.visit(this);
+    }
+
     public final Token Operation;
 }

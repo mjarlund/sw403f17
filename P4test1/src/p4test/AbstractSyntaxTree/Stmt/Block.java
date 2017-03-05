@@ -1,5 +1,7 @@
 package p4test.AbstractSyntaxTree.Stmt;
 
+import p4test.AbstractSyntaxTree.Visitor;
+
 import java.util.List;
 
 /**
@@ -13,5 +15,9 @@ public class Block extends Statement
         {
             AddNode(stmt);
         }
+    }
+    public void visit(Visitor v)
+    {
+        v.visit(this);
     }
 }
