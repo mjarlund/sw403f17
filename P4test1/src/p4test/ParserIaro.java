@@ -23,7 +23,7 @@ public class ParserIaro
     public void Run()
     {
         Dcls();
-        //Stmts();
+        //Stmt();
         if(input.currentChar == input.EOF)
         {
             System.out.println("Parse Completed");

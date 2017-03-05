@@ -1,9 +1,11 @@
 package p4test.AST;
 
+import p4test.AST.Nodes.dcls.FuncDCL;
+
 /**
  * Created by mysjkin on 3/3/17.
  */
-public class Visitor
+public abstract class Visitor
 {
-    /* TODO: make this with magic*/
+    public abstract Object VisitFuncDCL(FuncDCL ast);
 }

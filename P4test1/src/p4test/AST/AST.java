@@ -19,7 +19,6 @@ public abstract class AST
 
     public void AddNode(AST node)
     {
-        // avoid stackoverflow
         if(children == null)
             children = new ArrayList<AST>();
         children.add(node);
@@ -43,4 +42,5 @@ public abstract class AST
         }
         return sb.toString();
     }
+    //public abstract void AcceptVisitor(Visitor v);
 }

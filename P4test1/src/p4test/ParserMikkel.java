@@ -27,7 +27,7 @@ public class ParserMikkel {
         return Parse();
     }
 
-    // Prog -> Dcls Stmts $
+    // Prog -> Dcls Stmt $
     public boolean Parse() {
         // Get initial tokens
         InitiateLookAheadBuffer();
@@ -51,7 +51,7 @@ public class ParserMikkel {
 
     /*
         Dcls -> Dcl Dcls
-                | Func Stmts Dcls
+                | Func Stmt Dcls
      */
     private void Dcls() throws Exception {
         try {
@@ -138,7 +138,7 @@ public class ParserMikkel {
     }
 
     /*
-        Stmts -> Stmt Stmts
+        Stmt -> Stmt Stmt
     	        | LAMBDA
      */
     private void Stmts() throws Exception {
@@ -176,13 +176,13 @@ public class ParserMikkel {
     }
 
     /*
-        Block -> ( Stmts | CtrlStrc | FuncCall )*
+        Block -> ( Stmt | CtrlStrc | FuncCall )*
      */
     private void Block() throws Exception {
         while(GetToken(currentIndex).Value != "end" || GetToken(currentIndex).Value != "EOF") {
 
             try {
-                // TokenType can either be keyword (for Stmts or CtrlStrc) or identifier (for FuncCall).
+                // TokenType can either be keyword (for Stmt or CtrlStrc) or identifier (for FuncCall).
                 if(GetToken(currentIndex).Type == TokenType.IDENTIFIER) {
                     FuncCall();
                 }

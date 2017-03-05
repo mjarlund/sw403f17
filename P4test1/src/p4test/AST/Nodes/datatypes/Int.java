@@ -7,10 +7,10 @@ import p4test.TokenType;
 /**
  * Created by mysjkin on 3/3/17.
  */
-public class Int extends Expr {
+public class Int extends Expr
+{
     public Int(Token token)
     {
         super(token);
-        evaluationType = TokenType.INTEGER_LITERAL;
     }
 }

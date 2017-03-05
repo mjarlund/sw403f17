@@ -9,10 +9,8 @@ import p4test.TokenType;
  */
 public class Expr extends AST
 {
-    public TokenType evaluationType;
     public Expr(Token token)
     {
         super(token);
-        evaluationType = token.Type;
     }
 }
