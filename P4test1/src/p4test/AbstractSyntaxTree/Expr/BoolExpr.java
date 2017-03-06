@@ -1,6 +1,5 @@
 package p4test.AbstractSyntaxTree.Expr;
 
-import p4test.AST.Nodes.expr.Expr;
 import p4test.AbstractSyntaxTree.Visitor;
 import p4test.Token;
 
