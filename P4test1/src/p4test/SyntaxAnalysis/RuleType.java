@@ -1,37 +1,82 @@
-package p4test;
+package p4test.SyntaxAnalysis;
 
 // Terminals start with lowercase and non-terminals uppercase
 public enum RuleType
 {
+    // Terminator rules
     EPSILON,
     EOF,
+
+    // Start rule
     Program,
+
+    // Statement rules
     Statement,
     Statements,
     DeclarationStatement,
     ExpressionStatement,
     SelectionStatement,
     ItterationStatement,
-    Type,
+
     identifier,
+    end,
+    is,
+    of,
+    below,
+    above,
+
+    // SelectionStatement specific terminals
+    if,
+    else,
+
+    // Litteral values
+    integerLiteral,
+    floatingPointLiteral,
+    stringLiteral,
+    booleanLitteral,
+
+    // Types
+    void,
+    text,
+    number,
+    fraction,
+    character,
+    boolean,
+    struct,
+
+    // Misc
+    bracketOpen,
+    bracketClose,
+    squareBracketOpen,
+    squareBracketClose,
+
+    until,
+    foreach,
+    in,
+
+    dot,
+
+
+    add,
+    sub,
+    div,
+    mul,
+
+    Type,
     DeclarationStatementPrime,
     ListDeclarationStatement,
     FormalParameterList,
     Block,
-    end,
-    is,
-    of,
     ParameterList,
     FormalParameterListBody,
-    bracketOpen,
-    bracketClose,
+
     FormalParameterListBodyPrime,
 
     Expression,
 
+
     AssignmentExpression,
     AssignmentExpressionPrime,
-
     NotExpression,
     NotExpressionPrime,
 
@@ -47,19 +92,12 @@ public enum RuleType
     RelationalExpression,
     RelationalExpressionPrime,
 
-    below,
-    above,
-
     AdditiveExpressionPrime,
     AdditiveExpression,
 
-    +,
-    -,
 
     MultiplicativeExpression,
 
-    *,
-    /,
 
     PrimaryExpression,
 
@@ -67,37 +105,20 @@ public enum RuleType
 
     IdentifierAppendantOptional,
 
-    integerLiteral,
-    floatingPointLiteral,
-    stringLiteral,
-    falseLiteral,
-    trueLiteral,
 
     ExpressionStatementPrime,
     ExpressionStatementPrimePrime,
     ParameterList,
-    dot,
+
     Parameter,
     ParameterList,
-    squareBracketOpen,
-    squareBracketClose,
     ParameterListBody,
     ParameterListBodyPrime,
-    ifLitteral,
+
     Condition,
     SelectionStatementPrime,
-    elseLitteral,
-    until,
-    foreach,
-    in,
-    text,
-    number,
-    fraction,
-    character,
-    booleanLitteral,
-    voidLitteral,
     StructSpecifier,
-    struct,
+
     StructSpecifierPrime,
     StructDeclaration,
 
