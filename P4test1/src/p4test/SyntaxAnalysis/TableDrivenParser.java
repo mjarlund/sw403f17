@@ -22,10 +22,12 @@ public class TableDrivenParser
     private Stack<String> parseStack;
     private Queue<Token> nodeQueue;
     private Token CurrentToken;
+    private ASTFactory AstFactory;
 
     public TableDrivenParser(Scanner input)
     {
         this.input = input;
+        AstFactory = new ASTFactory();
         terminals = new ArrayList<>();
         // terminal values in CFG
         terminals.add("Type"); terminals.add("Identifier");
@@ -62,7 +64,7 @@ public class TableDrivenParser
                     if(nodeQueue.size() > 0)
                     {
                         System.out.println(nodeQueue.peek().Value);
-                        programTree.AddNode(GetAbstractNode(nodeQueue));
+                        programTree.AddNode(AstFactory.GetAbstractNode(nodeQueue));
                         nodeQueue = new LinkedList<Token>();
                     }
                     if(parseStack.peek().equals("EPSILON"))
@@ -84,7 +86,7 @@ public class TableDrivenParser
         }
         if(nodeQueue.size() > 0)
         {
-            programTree.AddNode(GetAbstractNode(nodeQueue));
+            programTree.AddNode(AstFactory.GetAbstractNode(nodeQueue));
             nodeQueue = new LinkedList<Token>();
         }
 
@@ -92,30 +94,6 @@ public class TableDrivenParser
     }
 
     private List<String> terminals;
-
-    private AST GetAbstractNode(Queue<Token> terminals)
-    {
-        switch (terminals.peek().Value)
-        {
-            case "number":
-                terminals.remove();
-                return GetDclAST(Types.INT,terminals);
-
-        }
-        return null;
-    }
-    private AST GetDclAST(Types type, Queue<Token> terminals)
-    {
-        switch (terminals.peek().Type)
-        {
-            case IDENTIFIER:
-                String id = terminals.peek().Value;
-                terminals.remove();
-                if(terminals.size() == 0)
-                    return new VarDcl(type,id);
-        }
-        return null;
-    }
 
     private void Apply(ArrayList<String> productionRules)
     {
