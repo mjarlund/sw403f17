@@ -47,9 +47,7 @@ public class TableDrivenParser
 
         while (!accepted)
         {
-                if(CurrentToken.Type.equals(TokenType.EOF))
-                    accepted = true;
-                else if (terminals.contains(parseStack.peek()) || CurrentToken.Type.equals(TokenType.IDENTIFIER))
+                if (terminals.contains(parseStack.peek()) || CurrentToken.Type.equals(TokenType.IDENTIFIER))
                 {
                     nodeQueue.add(CurrentToken);
                     Match(parseStack.peek(), CurrentToken);
@@ -63,17 +61,20 @@ public class TableDrivenParser
                 {
                     if(nodeQueue.size() > 0)
                     {
-                        System.out.println(nodeQueue.peek().Value);
                         programTree.AddNode(AstFactory.GetAbstractNode(nodeQueue));
                         nodeQueue = new LinkedList<Token>();
                     }
-                    if(parseStack.peek().equals("EPSILON"))
+                    if(parseStack.peek() != null && parseStack.peek().equals("EPSILON"))
                     {
                         parseStack.pop();
-                        if(parseStack.size() == 0)
+                        if(parseStack.size() == 0 && !CurrentToken.Type.equals(TokenType.EOF))
                             throw new Error("lel");
+                        else if (parseStack.size() == 0)
+                        {
+                            accepted = true;
+                            break;
+                        }
                     }
-                    System.out.println(parseStack.peek());
                     ArrayList<String> productions = table.GetProductions(parseStack.peek(), CurrentToken.Type);
                     if (productions == null)
                         throw new Error("lel");
