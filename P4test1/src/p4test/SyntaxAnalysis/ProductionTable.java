@@ -71,7 +71,7 @@ public class ProductionTable
         rules[program][0] = programRules;
 
         ArrayList<String> StatementRules = new ArrayList<String>();
-        StatementRules.add("DclStatement");
+        StatementRules.add("DclStatement"); StatementRules.add("EOL");
         rules[Statement][0] = StatementRules;
 
         ArrayList<String> StatementsRules = new ArrayList<String>();

@@ -21,6 +21,7 @@ public class TableDrivenParser
     private Scanner input;
     private Stack<String> parseStack;
     private Queue<Token> nodeQueue;
+    private Stack<Token> semanticStack;
     private Token CurrentToken;
     private ASTFactory AstFactory;
 
@@ -31,6 +32,7 @@ public class TableDrivenParser
         terminals = new ArrayList<>();
         // terminal values in CFG
         terminals.add("Type"); terminals.add("Identifier");
+        terminals.add("EOL");
         CurrentToken = input.nextToken();
         table = new ProductionTable();
         table.initTable();
@@ -40,6 +42,7 @@ public class TableDrivenParser
     public AST ParseProgram()
     {
         parseStack = new Stack<String>();
+        semanticStack = new Stack<Token>();
         nodeQueue = new LinkedList<Token>();
         Apply(table.GetProductions("Program", null));
         boolean accepted = false;
@@ -47,34 +50,32 @@ public class TableDrivenParser
 
         while (!accepted)
         {
-                if (terminals.contains(parseStack.peek()) || CurrentToken.Type.equals(TokenType.IDENTIFIER))
+            if (terminals.contains(parseStack.peek()) || CurrentToken.Type.equals(TokenType.IDENTIFIER))
+            {
+                nodeQueue.add(CurrentToken);
+                semanticStack.add(CurrentToken);
+                Match(parseStack.peek(), CurrentToken);
+                if (parseStack.size() == 0 && CurrentToken.Type.equals(TokenType.EOF))
                 {
-                    nodeQueue.add(CurrentToken);
-                    Match(parseStack.peek(), CurrentToken);
-                    if (parseStack.size() == 0 && CurrentToken.Type.equals(TokenType.EOF))
+                    accepted = true;
+                }
+                parseStack.pop();
+            }
+            else
+            {
+                if(parseStack.peek() != null && parseStack.peek().equals("EPSILON"))
+                {
+                    parseStack.pop();
+                    if(parseStack.size() == 0 && !CurrentToken.Type.equals(TokenType.EOF))
+                        throw new Error("lel");
+                    else if (parseStack.size() == 0)
                     {
                         accepted = true;
+                        break;
                     }
-                    parseStack.pop();
                 }
                 else
                 {
-                    if(nodeQueue.size() > 0)
-                    {
-                        programTree.AddNode(AstFactory.GetAbstractNode(nodeQueue));
-                        nodeQueue = new LinkedList<Token>();
-                    }
-                    if(parseStack.peek() != null && parseStack.peek().equals("EPSILON"))
-                    {
-                        parseStack.pop();
-                        if(parseStack.size() == 0 && !CurrentToken.Type.equals(TokenType.EOF))
-                            throw new Error("lel");
-                        else if (parseStack.size() == 0)
-                        {
-                            accepted = true;
-                            break;
-                        }
-                    }
                     ArrayList<String> productions = table.GetProductions(parseStack.peek(), CurrentToken.Type);
                     if (productions == null)
                         throw new Error("lel");
@@ -84,11 +85,7 @@ public class TableDrivenParser
                         Apply(productions);
                     }
                 }
-        }
-        if(nodeQueue.size() > 0)
-        {
-            programTree.AddNode(AstFactory.GetAbstractNode(nodeQueue));
-            nodeQueue = new LinkedList<Token>();
+            }
         }
 
         return programTree;
@@ -128,6 +125,8 @@ public class TableDrivenParser
         {
             case "number":
                 return "Type";
+            case "\\n":
+                return "EOL";
         }
         switch (token.Type)
         {
