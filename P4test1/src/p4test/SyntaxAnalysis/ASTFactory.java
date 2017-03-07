@@ -22,7 +22,6 @@ public class ASTFactory
             case "number":
                 terminals.remove();
                 return GetDclAST(Types.INT,terminals);
-
         }
         return null;
     }
