@@ -20,10 +20,12 @@ public class TableDrivenParser
     private ProductionTable table;
     private Scanner input;
     private Stack<String> parseStack;
-    private Queue<Token> nodeQueue;
-    private Stack<Token> semanticStack;
+    private Stack<String> semanticStack;
     private Token CurrentToken;
     private ASTFactory AstFactory;
+
+    private List<String> terminals;
+    private List<String> semanticActions;
 
     public TableDrivenParser(Scanner input)
     {
@@ -33,6 +35,10 @@ public class TableDrivenParser
         // terminal values in CFG
         terminals.add("Type"); terminals.add("Identifier");
         terminals.add("EOL");
+
+        semanticActions = new ArrayList<>();
+        semanticActions.add("DclStatement");
+
         CurrentToken = input.nextToken();
         table = new ProductionTable();
         table.initTable();
@@ -42,18 +48,21 @@ public class TableDrivenParser
     public AST ParseProgram()
     {
         parseStack = new Stack<String>();
-        semanticStack = new Stack<Token>();
-        nodeQueue = new LinkedList<Token>();
+        semanticStack = new Stack<String>();
         Apply(table.GetProductions("Program", null));
         boolean accepted = false;
         AST programTree = new AST();
 
         while (!accepted)
         {
+            if (semanticActions.contains(parseStack.peek()))
+            {
+                semanticStack.push(parseStack.peek());
+            }
             if (terminals.contains(parseStack.peek()) || CurrentToken.Type.equals(TokenType.IDENTIFIER))
             {
-                nodeQueue.add(CurrentToken);
-                semanticStack.add(CurrentToken);
+                semanticStack.add(parseStack.peek());
+
                 Match(parseStack.peek(), CurrentToken);
                 if (parseStack.size() == 0 && CurrentToken.Type.equals(TokenType.EOF))
                 {
@@ -87,11 +96,9 @@ public class TableDrivenParser
                 }
             }
         }
-
+        System.out.println(semanticStack);
         return programTree;
     }
-
-    private List<String> terminals;
 
     private void Apply(ArrayList<String> productionRules)
     {

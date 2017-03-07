@@ -15,7 +15,7 @@ public class ASTFactory
     public ASTFactory()
     {
     }
-    public AST GetAbstractNode(Queue<Token> terminals)
+    public AST GetAbstractTree(Queue<Token> terminals)
     {
         switch (terminals.peek().Value)
         {
