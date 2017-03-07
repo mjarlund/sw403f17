@@ -1,4 +1,8 @@
-package p4test;
+package p4test.SyntaxAnalysis;
+
+import p4test.DefaultHashMap;
+import p4test.Token;
+import p4test.TokenType;
 
 /**
  * Created by Mysjkin on 24-02-2017.
@@ -11,7 +15,7 @@ public class Scanner
     public static final char EOF = (char)-1;
     public static final int EOF_TYPE = 1;
 
-    private static DefaultHashMap<String, TokenType> words =
+    public static DefaultHashMap<String, TokenType> words =
             new DefaultHashMap<String, TokenType>(TokenType.IDENTIFIER);
 
     protected String input;
@@ -107,7 +111,7 @@ public class Scanner
                         throw new Error("invalid char: "+currentChar);
             }
         }
-        return null;
+        return new Token("EOF", TokenType.EOF);
     }
 
     private boolean IsWS()

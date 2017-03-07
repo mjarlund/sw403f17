@@ -5,7 +5,7 @@ package p4test;
  */
 public enum TokenType
 {
-    SEPERATOR,
+    SEPARATOR,
     IDENTIFIER,
     INTEGER_LITERAL,
     FLOAT_LITERAL,
@@ -14,4 +14,5 @@ public enum TokenType
     CHAR_LITERAL,
     OPERATOR,
     KEYWORD,
+    EOF
 }
