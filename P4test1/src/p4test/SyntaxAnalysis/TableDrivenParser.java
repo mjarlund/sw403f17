@@ -37,7 +37,7 @@ public class TableDrivenParser
         terminals.add("EOL");
 
         semanticActions = new ArrayList<>();
-        semanticActions.add("DclStatement");
+        semanticActions.add("Some semantic action");
 
         CurrentToken = input.nextToken();
         table = new ProductionTable();
@@ -55,14 +55,8 @@ public class TableDrivenParser
 
         while (!accepted)
         {
-            if (semanticActions.contains(parseStack.peek()))
-            {
-                semanticStack.push(parseStack.peek());
-            }
             if (terminals.contains(parseStack.peek()) || CurrentToken.Type.equals(TokenType.IDENTIFIER))
             {
-                semanticStack.add(parseStack.peek());
-
                 Match(parseStack.peek(), CurrentToken);
                 if (parseStack.size() == 0 && CurrentToken.Type.equals(TokenType.EOF))
                 {
@@ -94,6 +88,10 @@ public class TableDrivenParser
                         Apply(productions);
                     }
                 }
+            }
+            if (semanticActions.contains(parseStack.peek()))
+            {
+                semanticStack.push(parseStack.peek());
             }
         }
         System.out.println(semanticStack);
