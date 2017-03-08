@@ -1,5 +1,9 @@
 package p4test.SyntaxAnalysis;
 
+import com.sun.xml.internal.messaging.saaj.packaging.mime.internet.ParameterList;
+
+import java.util.concurrent.locks.Condition;
+
 // Terminals start with lowercase and non-terminals uppercase
 public enum RuleType
 {
@@ -26,8 +30,8 @@ public enum RuleType
     above,
 
     // SelectionStatement specific terminals
-    if,
-    else,
+    ifLitteral,
+    elseLitteral,
 
     // Litteral values
     integerLiteral,
@@ -36,12 +40,12 @@ public enum RuleType
     booleanLitteral,
 
     // Types
-    void,
+    voidLitteral,
     text,
     number,
     fraction,
     character,
-    boolean,
+    booleanType,
     struct,
 
     // Misc
@@ -67,7 +71,6 @@ public enum RuleType
     ListDeclarationStatement,
     FormalParameterList,
     Block,
-    ParameterList,
     FormalParameterListBody,
 
     FormalParameterListBodyPrime,
@@ -108,7 +111,6 @@ public enum RuleType
 
     ExpressionStatementPrime,
     ExpressionStatementPrimePrime,
-    ParameterList,
 
     Parameter,
     ParameterList,
