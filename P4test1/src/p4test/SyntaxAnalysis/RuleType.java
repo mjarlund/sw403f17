@@ -1,6 +1,7 @@
 package p4test.SyntaxAnalysis;
 
 import com.sun.xml.internal.messaging.saaj.packaging.mime.internet.ParameterList;
+import jdk.nashorn.internal.ir.ExpressionStatement;
 
 import java.util.concurrent.locks.Condition;
 
@@ -10,6 +11,7 @@ public enum RuleType
     // Terminator rules
     EPSILON,
     EOF,
+    EOL,
 
     // Start rule
     Program,
@@ -123,8 +125,5 @@ public enum RuleType
 
     StructSpecifierPrime,
     StructDeclaration,
-
-
-
 
 }

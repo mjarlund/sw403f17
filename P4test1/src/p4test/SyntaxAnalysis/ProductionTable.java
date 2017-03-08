@@ -15,48 +15,47 @@ public class ProductionTable
 
     private Scanner input;
 
-    public ArrayList<String> GetProductions(String NonTerminal, TokenType type)
+
+    private int NOProductionRulesMax = 7;
+
+    public ArrayList<String> GetProductions(String NonTerminal, Token token)
     {
+        RuleType rule = null;
         int index = -1;
-        switch (NonTerminal)
-        {
-            case "Program":
-                index = program;
+
+        for(RuleType val : RuleType.values()) {
+            if(NonTerminal == val.name()) {
+                rule = val;
+                index = val.ordinal();
                 break;
-            case "Statement":
-                index = Statement;
-                break;
-            case "Statements":
-                index = Statements;
-                break;
-            case "DclStatement":
-                index = DclStatement;
-                break;
-            case "DclStatementPrime":
-                index = DclStatementPrime;
-                break;
+            }
         }
-        switch (index)
-        {
-            case 0:
-                return rules[program][0];
-            case 1:
-                return rules[Statement][0];
-            case 2:
-                if(IsStatement(type))
-                    return rules[Statements][0];
-                else
-                    return rules[Statements][1];
-            case 3:
-                if(type.equals(TokenType.KEYWORD))
-                    return rules[DclStatement][0];
-                else
+
+        if(rule == null) return null;
+
+        int subIndex = -1;
+
+        switch(rule.Type) {
+            case Program:
+
+            case Statement:
+                if()
+            case Statements:
+                if(!IsStatement(type))
+                    subIndex = 1;
+                break;
+            case DeclarationStatement:
+                if(!type.equals(TokenType.KEYWORD))
                     return null;
-            case 4:
-                return rules[DclStatementPrime][0];
+                break;
+
         }
-        return null;
+
+        if(subIndex == -1) return null;
+
+        return rules[index][subIndex];
     }
+
     private boolean IsStatement(TokenType type)
     {
         if(type.equals(TokenType.KEYWORD))
@@ -64,11 +63,25 @@ public class ProductionTable
         else
             return false;
     }
+
     public void initTable()
     {
-        ArrayList<String> programRules = new ArrayList<String>();
-        programRules.add("Statement"); programRules.add("Statements");
-        rules[program][0] = programRules;
+        // Rules for Program
+        rules[RuleType.Program.ordinal()][0] = new ArrayList<String>() {{
+            add(RuleType.Statement.name());
+            add(RuleType.Statements.name());
+        }};
+
+        // Rules for Program
+        rules[RuleType.Statement.ordinal()][0] = new ArrayList<String>() {{
+            add(RuleType.DeclarationStatement.name());
+            add(RuleType.EOL.name());
+        }};
+
+        rules[RuleType.Statement.ordinal()][1] = new ArrayList<String>() {{
+            add(RuleType.ExpressionStatement.name());
+            add(RuleType.EOL.name());
+        }};
 
         ArrayList<String> StatementRules = new ArrayList<String>();
         StatementRules.add("DclStatement"); StatementRules.add("EOL");
@@ -94,12 +107,6 @@ public class ProductionTable
 
     public DefaultHashMap<String, String> Keywords;
 
-    private int program = 0;
-    private int Statement = 1;
-    private int Statements = 2;
-    private int DclStatement = 3;
-    private int DclStatementPrime = 4;
-
-    private ArrayList<String> rules[][] = new ArrayList[5][3];
+    private ArrayList<String> rules[][] = new ArrayList[RuleType.values().length][NOProductionRulesMax];
 
 }
