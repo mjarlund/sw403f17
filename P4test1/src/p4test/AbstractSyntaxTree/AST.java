@@ -42,22 +42,22 @@ public class AST
         parent = par;
     }
 
-    public AST MakeSiblings(AST newSib){
+    public AST MakeSiblings(AST newSib) {
         AST theseSiblings = this;
         AST newSiblings = newSib;
 
         /* Find the head of list of siblings in this */
-        while (theseSiblings != null){
+        while (theseSiblings != null) {
             theseSiblings = theseSiblings.GetNextRightSibling();
         }
         /* Join the list of siblings */
         theseSiblings.SetNextRightSibling(newSiblings);
 
         /* Set pointers for the new siblings */
-        newSiblings.SetLeftMostSibling(theseSiblings.GetLeftMostSibling);
+        newSiblings.SetLeftMostSibling(theseSiblings.GetLeftMostSibling());
         newSiblings.SetParent(theseSiblings.GetParent());
 
-        while (newSiblings.GetNextRightSibling() != null){
+        while (newSiblings.GetNextRightSibling() != null) {
             newSiblings = newSiblings.GetNextRightSibling();
             newSiblings.SetLeftMostSibling(theseSiblings.GetLeftMostSibling());
             newSiblings.SetParent(theseSiblings.GetParent());
@@ -65,9 +65,8 @@ public class AST
         return newSiblings;
     }
 
-    public AST AdoptChildren(AST toAdopt){
+    public AST AdoptChildren(AST toAdopt) {
         AST newSiblings;
-
         if (GetLeftMostChild() != null)
             GetLeftMostChild().MakeSiblings(toAdopt);
         else {
@@ -77,11 +76,22 @@ public class AST
                 newSiblings.SetParent(this);
                 newSiblings = newSiblings.GetNextRightSibling();
             }
+            return newSiblings;
         }
-        return newSiblings;
+        return null;
     }
 
-    public AST MakeFamily(AST p, AST... kids){
-        /* Do magic */
+    /* First node is parent, all others are chained as
+    *  sibling children to parent. */
+    public AST MakeFamily(AST p, AST... kids) {
+        AST rightmost;
+        kids[0].SetParent(p);
+        p.SetLeftMostChild(kids[0]);
+        rightmost = kids[0];
+        for (int i = 1; i < kids.length; i++) {
+            rightmost.SetNextRightSibling(kids[i]);
+            rightmost = kids[i];
+        }
+        return p;
     }
 }
