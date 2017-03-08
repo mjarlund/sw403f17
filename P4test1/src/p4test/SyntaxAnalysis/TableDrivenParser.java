@@ -45,16 +45,20 @@ public class TableDrivenParser
 
     }
 
+    /* Parses the input program and returns the AST for the program */
     public AST ParseProgram()
     {
-        parseStack = new Stack<String>();
-        semanticStack = new Stack<String>();
-        Apply(table.GetProductions("Program", null));
+        parseStack = new Stack<String>(); /* RHS symbols for productions, and semantic actions. */
+        semanticStack = new Stack<String>(); /* Semantic actions */
+        Apply(table.GetProductions("Program", null)); /* Push RHS symbols for the productions of "Program". */
         boolean accepted = false;
         AST programTree = new AST();
 
         while (!accepted)
         {
+            /* If the next RHS symbol is a terminal, or if the current token is an identifier,
+             * try to match the symbol with the current token.
+             * If the parseStack is empty and the current token is EOF, end the parsing. */
             if (terminals.contains(parseStack.peek()) || CurrentToken.Type.equals(TokenType.IDENTIFIER))
             {
                 Match(parseStack.peek(), CurrentToken);
@@ -66,6 +70,9 @@ public class TableDrivenParser
             }
             else
             {
+                /* If the next right hand side symbol is the empty string, pop it, and
+                 * check for empty parseStack and EOF current token. End the parsing if
+                 * both of these are true. */
                 if(parseStack.peek() != null && parseStack.peek().equals("EPSILON"))
                 {
                     parseStack.pop();
@@ -79,16 +86,22 @@ public class TableDrivenParser
                 }
                 else
                 {
-                    ArrayList<String> productions = table.GetProductions(parseStack.peek(), CurrentToken.Type);
-                    if (productions == null)
+                    /* Acquire the RHS symbols for the production of the next RHS symbol
+                     * in the parseStack. If there are no productions, throw an error.
+                     * Otherwise, push the productions' RHS symbols to the parseStack. */
+                    ArrayList<String> RHSSymbols = table.GetProductions(parseStack.peek(), CurrentToken.Type);
+                    if (RHSSymbols == null)
                         throw new Error("lel");
                     else
                     {
                         parseStack.pop();
-                        Apply(productions);
+                        Apply(RHSSymbols);
                     }
                 }
             }
+
+            /* If the next symbol in the parseStack is a semanticAction,
+             * push this to the semanticStack. */
             if (semanticActions.contains(parseStack.peek()))
             {
                 semanticStack.push(parseStack.peek());
@@ -98,14 +111,20 @@ public class TableDrivenParser
         return programTree;
     }
 
-    private void Apply(ArrayList<String> productionRules)
+    /* Pushes the input list of productions onto the
+     * parseStack in reverse order, so that the first
+      * production rule in the list is the first one popped */
+    private void Apply(ArrayList<String> RHSSymbols)
     {
-        int iterations = productionRules.size();
+        int iterations = RHSSymbols.size();
         for(int i = iterations-1; i>=0; i--)
         {
-            parseStack.push(productionRules.get(i));
+            parseStack.push(RHSSymbols.get(i));
         }
     }
+
+    /* If the two input tokens match by type, retrieve
+     * the next token in the scanner */
     private void Match(TokenType type, Token token)
     {
         if(type.equals(token.Type))
@@ -113,6 +132,9 @@ public class TableDrivenParser
         else
             throw new Error("lel");
     }
+
+    /* If the given if the val and the string version of token
+     * are identical, retrieve the next token in the scanner */
     private void Match(String val, Token token)
     {
         String value = GetMatchVal(token);
@@ -124,6 +146,9 @@ public class TableDrivenParser
         else
             throw new Error("Got " + value + " expected " + val);
     }
+
+    /* Retrieves the string version of the given token
+     * Based on the value of the token */
     private String GetMatchVal(Token token)
     {
         switch (token.Value)
@@ -140,6 +165,8 @@ public class TableDrivenParser
         }
         return "sentinel";
     }
+
+    /* Sets current token to the next token found by the scanner */
     private void Consume()
     {
         CurrentToken = input.nextToken();
