@@ -6,34 +6,52 @@ import p4test.AbstractSyntaxTree.Types;
 import p4test.Token;
 
 import java.util.Queue;
+import java.util.Stack;
 
 /**
  * Created by mysjkin on 3/7/17.
  */
 public class ASTFactory
 {
-    public ASTFactory()
+    private enum SemanticActions
     {
+        BuildDCL
     }
-    public AST GetAbstractTree(Queue<Token> terminals)
+
+    private SemanticActions actions;
+    private Stack<RuleType> semanticStack;
+    private Queue<Token> terminals;
+
+
+    public ASTFactory(Stack<RuleType> semtanticStack, Queue<Token> terminals)
     {
-        switch (terminals.peek().Value)
+        this.semanticStack = semtanticStack;
+        this.terminals = terminals;
+    }
+
+    public void CreateAbstractTree()
+    {
+        switch (actions)
+        {
+            case BuildDCL:
+                CreateDclTree();
+        }
+    }
+    public void CreateDclTree()
+    {
+        Token type = terminals.remove();
+        Types primitiv = GetType(type);
+        Token id = terminals.remove();
+
+        VarDcl dcl = new VarDcl(primitiv, id.Value);
+    }
+
+    private Types GetType(Token token)
+    {
+        switch (token.Value)
         {
             case "number":
-                terminals.remove();
-                return GetDclAST(Types.INT,terminals);
-        }
-        return null;
-    }
-    private AST GetDclAST(Types type, Queue<Token> terminals)
-    {
-        switch (terminals.peek().Type)
-        {
-            case IDENTIFIER:
-                String id = terminals.peek().Value;
-                terminals.remove();
-                if(terminals.size() == 0)
-                    return new VarDcl(type,id);
+                return Types.INT;
         }
         return null;
     }
