@@ -48,7 +48,7 @@ public class TableDrivenParser
     /* Parses the input program and returns the AST for the program */
     public AST ParseProgram()
     {
-        parseStack = new Stack<String>(); /* RHS symbols for productions, and semantic actions. */
+        parseStack = new Stack<String>(); /* RHS symbols for productions and terminals */
         semanticStack = new Stack<String>(); /* Semantic actions */
         Apply(table.GetProductions("Program", null)); /* Push RHS symbols for the productions of "Program". */
         boolean accepted = false;
@@ -147,7 +147,7 @@ public class TableDrivenParser
             throw new Error("Got " + value + " expected " + val);
     }
 
-    /* Retrieves the string version of the given token
+    /* Retrieves the comparable version of the given token
      * Based on the value of the token */
     private String GetMatchVal(Token token)
     {
