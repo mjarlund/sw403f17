@@ -91,7 +91,7 @@ public class TableDrivenParser
                      * Otherwise, push the productions' RHS symbols to the parseStack. */
                     ArrayList<String> RHSSymbols = table.GetProductions(parseStack.peek(), CurrentToken.Type);
                     if (RHSSymbols == null)
-                        throw new Error("lel");
+                        throw new Error("No productions available.");
                     else
                     {
                         parseStack.pop();
@@ -100,7 +100,7 @@ public class TableDrivenParser
                 }
             }
 
-            /* If the next symbol in the parseStack is a semanticAction,
+            /* If the next symbol in the parseStack is a semantic action,
              * push this to the semanticStack. */
             if (semanticActions.contains(parseStack.peek()))
             {
