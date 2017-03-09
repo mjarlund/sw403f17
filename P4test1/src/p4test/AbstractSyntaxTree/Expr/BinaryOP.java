@@ -10,9 +10,7 @@ public class BinaryOP extends Expression
 {
     public BinaryOP(Expression expr1, Token operation, Expression expr2)
     {
-        AddNode(expr1);
         Operation = operation;
-        AddNode(expr2);
     }
     public void visit(Visitor v)
     {

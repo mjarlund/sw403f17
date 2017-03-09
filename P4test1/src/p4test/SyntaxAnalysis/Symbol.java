@@ -3,30 +3,10 @@ package p4test.SyntaxAnalysis;
 /**
  * Enum containing each symbol, terminal and non-terminal, in the CFG
  */
-public enum Symbols {
-    epsilon,
-    identifier,
-    end,
-    list,
-    of,
-    is,
-    parenthesisOpen,
-    parenthesisClose,
-    comma,
-    not,
-    or,
-    and,
-    equals,
-    below,
-    plus,
-    minus,
-    integerLiteral,
-    floatingPointLiteral,
-    stringLiteral,
-    booleanLiteral,
-    dotIdentfier,
-    
-
+public enum Symbol {
+    /**
+     * Non-terminals
+     */
     Program,
     Statements,
     Statement,
@@ -70,5 +50,48 @@ public enum Symbols {
     Type,
     StructSpecifier,
     StructSpecifierPrime,
-    StructDeclaration;
+    StructDeclaration,
+
+    /**
+     * Terminals
+     */
+    epsilon,
+    identifier,
+    end,
+    is,
+    list,
+    of,
+    parenthesisOpen,
+    parenthesisClose,
+    comma,
+    not,
+    or,
+    and,
+    equals,
+    below,
+    above,
+    plus,
+    minus,
+    multiply,
+    divide,
+    integerLiteral,
+    floatingPointLiteral,
+    stringLiteral,
+    booleanLiteral,
+    dotIdentfier,
+    squareBracketOpen,
+    squareBracketClose,
+    ifTerm,
+    elseTerm,
+    until,
+    foreach,
+    in,
+    text,
+    number,
+    fraction,
+    character,
+    booleanType,
+    voidType,
+    struct,
+
 }
