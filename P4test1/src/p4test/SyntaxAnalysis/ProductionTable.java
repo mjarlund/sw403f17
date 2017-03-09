@@ -1,8 +1,6 @@
 package p4test.SyntaxAnalysis;
 
-import p4test.DefaultHashMap;
 import p4test.Token;
-import p4test.TokenType;
 
 import java.util.ArrayList;
 
@@ -10,17 +8,17 @@ public class ProductionTable
 {
     // TODO: Should be optimized because there are many operations on strings
 
-    public ArrayList<Symbol> GetProductions(Symbol nonTerminalSymbol, Token token)
+    public ArrayList<Symbol> GetProductions(Symbol.NonTerminal nonTerminalSymbol, Token token)
     {
         // https://www.youtube.com/watch?v=igLolIFXkvo
         // Translate token into a terminal symbol
-        Symbol terminalSymbol = GetTerminalSymbol(token);
-        return ParsingTable[nonTerminalSymbol.ordinal()][terminalSymbol.ordinal()];
+        Symbol.Terminal terminalSymbol = GetTerminalSymbol(token);
+        return GetRule(nonTerminalSymbol, terminalSymbol);
     }
 
-    private Symbol GetTerminalSymbol(Token token) {
+    private Symbol.Terminal GetTerminalSymbol(Token token) {
 
-        for (Symbol s : Symbol.values()) {
+        for (Symbol.Terminal s : Symbol.Terminal.values()) {
             if(s.value == token.Value) {
                 return s;
             }
@@ -34,6 +32,14 @@ public class ProductionTable
 
     public void initTable()
     {
+        ConstructRule(
+                Symbol.NonTerminal.Program,
+                new Symbol.Terminal[] {Symbol.Terminal.text, Symbol.Terminal.number, Symbol.Terminal.fraction, Symbol.Terminal.character,
+                        Symbol.Terminal.booleanType, Symbol.Terminal.voidType, Symbol.Terminal.struct, Symbol.Terminal.list, Symbol.Terminal.ifTerm,
+                        Symbol.Terminal.identifier, Symbol.Terminal.until, Symbol.Terminal.foreach},
+                new Symbol[] {Symbol.NonTerminal.Statement, Symbol.NonTerminal.Statements}
+        );
+        /*
         ConstructRule(Symbol.Program.ordinal(), 0, Symbol.Statement, Symbol.Statements);
 
         ConstructRule(Symbol.Statements.ordinal(), 0, Symbol.Statement, Symbol.Statements);
@@ -169,32 +175,37 @@ public class ProductionTable
         ConstructRule(Symbol.StructDeclaration.ordinal(), 0, Symbol.DeclarationStatement, Symbol.StructDeclaration);
 
         ConstructRule(Symbol.StructDeclaration.ordinal(), 0, Symbol.epsilon);
+        */
     }
 
-    private void FillParsingTable(Symbol nonTerminalSymbol, ArrayList<Symbol> rule, Symbol ... terminalSymbols) {
-        for(Symbol ts : terminalSymbols) {
-            ParsingTable[nonTerminalSymbol.ordinal()][ts.ordinal()] = rule;
+
+    // Construct rule for non-terminal (x), applied at the terminals (y) containing the symbols (z)
+    private void ConstructRule(Symbol.NonTerminal nonTerminal, Symbol.Terminal[] terminals, Symbol ... symbols) {
+        int[] termTable = new int[terminals.length];
+        for (int i = 0; i < terminals.length; i++) termTable[i] = terminals[i].ordinal();
+        ConstructRule(nonTerminal.ordinal(), termTable, symbols);
+    }
+
+    private void ConstructRule(int nonterminal, int[] terminals, Symbol ... symbols) {
+        for(Symbol s : symbols) {
+            rules[ruleCount].add(s);
         }
+
+        for(int terminal : terminals) {
+            ParsingTable[nonterminal][terminal] = ruleCount;
+        }
+
+        ruleCount++;
     }
 
-    private ArrayList<Symbol> ConstructRule(Symbol ... symbols) {
-        return new ArrayList<Symbol>() {{
-            for (Symbol s : symbols) {
-                add(s);
-            }
-        }};
+    private ArrayList<Symbol> GetRule(Symbol.NonTerminal nonTerminal, Symbol.Terminal terminal) {
+        int ruleIndex = ParsingTable[nonTerminal.ordinal()][terminal.ordinal()];
+        return rules[ruleIndex];
     }
 
-    public void ConstructRule(int ruleIndex, int productionRuleIndex, Symbol ... symbols) {
-        rules[ruleIndex][productionRuleIndex] = new ArrayList<Symbol>() {{
-            for (Symbol s : symbols) {
-                add(s);
-            }
-        }};
-    }
+    private int ParsingTable[][] = new int[Symbol.NonTerminal.values().length][Symbol.Terminal.values().length];
 
-    private ArrayList<Symbol> ParsingTable[][] = new ArrayList[][];
-
-    private ArrayList<Symbol> rules[][] = new ArrayList[RuleType.values().length][NOProductionRulesMax];
-
+    // This will keep track of the number of rules constructed.
+    private int ruleCount = 0;
+    private ArrayList<Symbol> rules[] = new ArrayList[200];
 }

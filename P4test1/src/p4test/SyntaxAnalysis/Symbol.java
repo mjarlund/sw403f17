@@ -3,10 +3,111 @@ package p4test.SyntaxAnalysis;
 /**
  * Enum containing each symbol, terminal and non-terminal, in the CFG
  */
-public enum Symbol {
+public interface Symbol {
+
+    enum NonTerminal implements Symbol {
+        Program,
+        Statements,
+        Statement,
+        DeclarationStatement,
+        DeclarationStatementPrime,
+        ListDeclarationStatement,
+        FormalParameter,
+        FormalParameterList,
+        FormalParameterListBody,
+        FormalParameterListBodyPrime,
+        Expression,
+        AssignmentExpression,
+        AssignmentExpressionPrime,
+        NotExpression,
+        NotExpressionPrime,
+        OrExpression,
+        OrExpressionPrime,
+        AndExpression,
+        AndExpressionPrime,
+        EqualityExpression,
+        EqualityExpressionPrime,
+        RelationalExpression,
+        RelationalExpressionPrime,
+        AdditiveExpression,
+        AdditiveExpressionPrime,
+        MultiplicativeExpression,
+        PrimaryExpression,
+        ExpressionStatement,
+        ExpressionStatementPrime,
+        ExpressionStatementPrimePrime,
+        Parameter,
+        IdentifierAppendantOptional,
+        ParameterList,
+        ParameterListBody,
+        ParameterListBodyPrime,
+        SelectionStatement,
+        SelectionStatementPrime,
+        IterationStatement,
+        Condition,
+        Block,
+        Type,
+        StructSpecifier,
+        StructSpecifierPrime,
+        StructDeclaration;
+    }
+
+    enum Terminal implements Symbol {
+        epsilon,
+        identifier,
+        end,
+        is,
+        list,
+        of,
+        parenthesisOpen("("),
+        parenthesisClose(")"),
+        comma(","),
+        not,
+        or,
+        and,
+        equals,
+        below,
+        above,
+        plus("+"),
+        minus("-"),
+        multiply("*"),
+        divide("/"),
+        integerLiteral,
+        floatingPointLiteral,
+        stringLiteral,
+        booleanLiteral,
+        dotIdentfier(".identifier"),
+        squareBracketOpen("["),
+        squareBracketClose("]"),
+        ifTerm("if"),
+        elseTerm("else"),
+        until,
+        foreach,
+        in,
+        text,
+        number,
+        fraction,
+        character,
+        booleanType("boolean"),
+        voidType("void"),
+        struct;
+
+        Terminal() {
+            this.value = this.name();
+        }
+
+        Terminal(String value) {
+            this.value = value;
+        }
+
+        public final String value;
+
+
+    }
+
+
     /**
      * Non-terminals
-     */
     Program,
     Statements,
     Statement,
@@ -51,10 +152,11 @@ public enum Symbol {
     StructSpecifier,
     StructSpecifierPrime,
     StructDeclaration,
+     */
 
     /**
      * Terminals
-     */
+
     epsilon,
     identifier,
     end,
@@ -93,5 +195,6 @@ public enum Symbol {
     booleanType,
     voidType,
     struct,
+     */
 
 }
