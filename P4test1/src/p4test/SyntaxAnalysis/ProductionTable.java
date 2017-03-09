@@ -6,57 +6,30 @@ import p4test.TokenType;
 
 import java.util.ArrayList;
 
-/**
- * Created by mysjkin on 3/6/17.
- */
 public class ProductionTable
 {
     // TODO: Should be optimized because there are many operations on strings
 
-    private Scanner input;
-
-
-    private int NOProductionRulesMax = 7;
-
-    public ArrayList<String> GetProductions(Symbol nonTerminalSymbol, Token token)
+    public ArrayList<Symbol> GetProductions(Symbol nonTerminalSymbol, Token token)
     {
-        int index = inputSymbol.ordinal();
-
-        switch(nonTerminalSymbol) {
-            case AdditiveExpression:
-        }
-
-        if(inputSymbol == null) return null;
-
-        int subIndex = -1;
-
-        switch(rule.Type) {
-            case Program:
-
-            case Statement:
-                if()
-            case Statements:
-                if(!IsStatement(type))
-                    subIndex = 1;
-                break;
-            case DeclarationStatement:
-                if(!type.equals(TokenType.KEYWORD))
-                    return null;
-                break;
-
-        }
-
-        if(subIndex == -1) return null;
-
-        return rules[index][subIndex];
+        // https://www.youtube.com/watch?v=igLolIFXkvo
+        // Translate token into a terminal symbol
+        Symbol terminalSymbol = GetTerminalSymbol(token);
+        return ParsingTable[nonTerminalSymbol.ordinal()][terminalSymbol.ordinal()];
     }
 
-    private boolean IsStatement(TokenType type)
-    {
-        if(type.equals(TokenType.KEYWORD))
-            return true;
-        else
-            return false;
+    private Symbol GetTerminalSymbol(Token token) {
+
+        for (Symbol s : Symbol.values()) {
+            if(s.value == token.Value) {
+                return s;
+            }
+            else if(s.value == token.Type.name()) {
+                return s;
+            }
+        }
+        // No match
+        return null;
     }
 
     public void initTable()
@@ -198,6 +171,20 @@ public class ProductionTable
         ConstructRule(Symbol.StructDeclaration.ordinal(), 0, Symbol.epsilon);
     }
 
+    private void FillParsingTable(Symbol nonTerminalSymbol, ArrayList<Symbol> rule, Symbol ... terminalSymbols) {
+        for(Symbol ts : terminalSymbols) {
+            ParsingTable[nonTerminalSymbol.ordinal()][ts.ordinal()] = rule;
+        }
+    }
+
+    private ArrayList<Symbol> ConstructRule(Symbol ... symbols) {
+        return new ArrayList<Symbol>() {{
+            for (Symbol s : symbols) {
+                add(s);
+            }
+        }};
+    }
+
     public void ConstructRule(int ruleIndex, int productionRuleIndex, Symbol ... symbols) {
         rules[ruleIndex][productionRuleIndex] = new ArrayList<Symbol>() {{
             for (Symbol s : symbols) {
@@ -205,6 +192,8 @@ public class ProductionTable
             }
         }};
     }
+
+    private ArrayList<Symbol> ParsingTable[][] = new ArrayList[][];
 
     private ArrayList<Symbol> rules[][] = new ArrayList[RuleType.values().length][NOProductionRulesMax];
 
