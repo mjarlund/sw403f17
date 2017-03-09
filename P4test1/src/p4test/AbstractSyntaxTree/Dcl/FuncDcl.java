@@ -11,11 +11,9 @@ import p4test.AbstractSyntaxTree.Visitor;
  * Created by mysjkin on 3/5/17.
  */
 public class FuncDcl extends Declaration {
-    public FuncDcl(Types returnType, String ientifer, FormalParameters parameters, Block statements) {
+    public FuncDcl(Types returnType, String ientifer) {
         ReturnType = returnType;
         Identifier = ientifer;
-        AddNode(parameters);
-        AddNode(statements);
     }
     public void visit(Visitor v)
     {
