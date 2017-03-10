@@ -6,7 +6,7 @@ import p4test.AbstractSyntaxTree.Expr.Expression;
 /**
  * Created by mysjkin on 3/10/17.
  */
-public class Identifier extends Declaration
+public class Identifier extends Expression
 {
     public Identifier(String id)
     {

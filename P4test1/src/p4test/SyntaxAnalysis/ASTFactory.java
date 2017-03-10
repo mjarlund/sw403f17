@@ -3,9 +3,7 @@ package p4test.SyntaxAnalysis;
 import com.sun.deploy.security.BlacklistedCerts;
 import p4test.AbstractSyntaxTree.AST;
 import p4test.AbstractSyntaxTree.Dcl.*;
-import p4test.AbstractSyntaxTree.Expr.BoolExpr;
-import p4test.AbstractSyntaxTree.Expr.Expression;
-import p4test.AbstractSyntaxTree.Expr.ValExpr;
+import p4test.AbstractSyntaxTree.Expr.*;
 import p4test.AbstractSyntaxTree.Stmt.*;
 import p4test.AbstractSyntaxTree.Types;
 import p4test.Token;
@@ -21,11 +19,11 @@ public class ASTFactory
 {
     private enum SemanticActions
     {
-        BuildVarDCL, CombineAST, BuildFuncDcl, CombineUp, CombineDown, BuildValExpr, BuildAssign, BuildID, BuildBlock,
-        BuildFormalParameters, BuildIfStmt, BuildBoolExpr
+        BuildVarDCL, BuildFuncDcl, CombineUp, CombineDown, BuildValExpr, BuildAssign,
+        BuildID, BuildBlock, BuildFormalParameters, BuildIfStmt, BuildBoolExpr, ClearIfTerminals,
+        BuildBinaryExpr, BuildFuncCall, BuildActualParameters
     }
 
-    private SemanticActions actions;
     private Stack<RuleType> semanticStack;
     private Stack<AST> astStack;
     private Stack<Token> terminals;
@@ -41,9 +39,9 @@ public class ASTFactory
         program = new AST();
     }
 
-    public void CreateAbstractTree()
+    public void CreateAbstractTree(SemanticActions action)
     {
-        switch (actions)
+        switch (action)
         {
             case BuildVarDCL:
                 CreateDclTree();
@@ -60,9 +58,22 @@ public class ASTFactory
             case BuildValExpr:
                 CreateValExprTree();
             case CombineUp:
-                CombineAST(actions);
+                CombineAST(action);
             case CombineDown:
-                CombineAST(actions);
+                CombineAST(action);
+            case ClearIfTerminals:
+                // remove 'end' 'if'
+                terminals.pop(); terminals.pop();
+            case BuildIfStmt:
+                CreateIfStmt();
+            case BuildBoolExpr:
+                CreateBoolExpr();
+            case BuildBinaryExpr:
+                CreateBinaryExpr();
+            case BuildFuncCall:
+                CreateFuncCall();
+            case BuildActualParameters:
+                CreateActualParameters();
         }
     }
     private void CombineAST(SemanticActions action)
@@ -71,11 +82,15 @@ public class ASTFactory
         {
             if(action.equals(SemanticActions.CombineUp))
             {
-
+                AST parent = astStack.pop();
+                AST subtree = astStack.pop();
+                parent.AdoptChildren(subtree);
+                astStack.push(parent);
             }
             else
             {
-
+                AST subtree = astStack.pop();
+                astStack.peek().AdoptChildren(subtree);
             }
         }
         else
@@ -83,6 +98,38 @@ public class ASTFactory
             AST subtree = astStack.pop();
             program.AdoptChildren(subtree);
         }
+    }
+    private void CreateFuncCall()
+    {
+        FuncCall funcid = new FuncCall(new Identifier(terminals.pop().Value));
+    }
+    private void CreateActualParameters()
+    {
+        Token endPara = terminals.pop();
+        ArrayList<Argument> parameters = new ArrayList<>();
+        while (! endPara.Value.equals("("))
+        {
+            if (! terminals.peek().Type.SEPARATOR.equals(TokenType.SEPARATOR))
+            {
+                Token id = terminals.pop();
+                endPara = terminals.pop();
+                parameters.add(new Argument(id));
+            }
+        }
+        Arguments astParameters = new Arguments();
+        for (Argument parameter : parameters)
+        {
+            astParameters.AdoptChildren(parameter);
+        }
+        astStack.push(astParameters);
+    }
+    private void CreateBinaryExpr()
+    {
+        Expression right = (Expression) astStack.pop();
+        Expression left = (Expression)astStack.pop();
+        Token op = terminals.pop();
+        BinaryOP binaryOP = new BinaryOP(left,op,right);
+        astStack.push(binaryOP);
     }
     private void CreateIfStmt()
     {
@@ -165,7 +212,7 @@ public class ASTFactory
         terminals.pop();
         // Either a VarDCL or an identifier
         Assignment assign = astStack.peek().getClass().equals(Declaration.class) ?
-                new Assignment((Declaration) astStack.pop(), right) :
+                new Assignment((VarDcl) astStack.pop(), right) :
                 new Assignment((Identifier) astStack.pop(), right);
         astStack.push(assign);
     }
@@ -194,6 +241,10 @@ public class ASTFactory
         {
             case "number":
                 return Types.INT;
+            case "fraction":
+                return Types.FLOAT;
+            case "void":
+                return Types.VOID;
         }
         return null;
     }

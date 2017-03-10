@@ -14,7 +14,7 @@ public class Assignment extends Statement
     public Assignment(VarDcl var, Expression expr)
     {
     }
-    public Assignment(Declaration identifier, Expression expr)
+    public Assignment(Identifier identifier, Expression expr)
     {
     }
     public void visit(Visitor v)
