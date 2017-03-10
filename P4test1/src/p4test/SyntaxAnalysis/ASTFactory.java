@@ -1,12 +1,12 @@
 package p4test.SyntaxAnalysis;
 
+import com.sun.deploy.security.BlacklistedCerts;
 import p4test.AbstractSyntaxTree.AST;
 import p4test.AbstractSyntaxTree.Dcl.*;
+import p4test.AbstractSyntaxTree.Expr.BoolExpr;
 import p4test.AbstractSyntaxTree.Expr.Expression;
 import p4test.AbstractSyntaxTree.Expr.ValExpr;
-import p4test.AbstractSyntaxTree.Stmt.Assignment;
-import p4test.AbstractSyntaxTree.Stmt.Block;
-import p4test.AbstractSyntaxTree.Stmt.Statement;
+import p4test.AbstractSyntaxTree.Stmt.*;
 import p4test.AbstractSyntaxTree.Types;
 import p4test.Token;
 import p4test.TokenType;
@@ -21,7 +21,7 @@ public class ASTFactory
 {
     private enum SemanticActions
     {
-        BuildVarDCL, CombineAST, BuildFuncDcl, Combine, BuildValExpr, BuildAssign, BuildID, BuildBlock,
+        BuildVarDCL, CombineAST, BuildFuncDcl, CombineUp, CombineDown, BuildValExpr, BuildAssign, BuildID, BuildBlock,
         BuildFormalParameters, BuildIfStmt, BuildBoolExpr
     }
 
@@ -47,8 +47,6 @@ public class ASTFactory
         {
             case BuildVarDCL:
                 CreateDclTree();
-            case CombineAST:
-                CombineAST();
             case BuildFuncDcl:
                 CreateFuncDclTree();
             case BuildBlock:
@@ -61,22 +59,71 @@ public class ASTFactory
                 CreateIdentifierTree();
             case BuildValExpr:
                 CreateValExprTree();
-            case Combine:
-                CombineAST();
+            case CombineUp:
+                CombineAST(actions);
+            case CombineDown:
+                CombineAST(actions);
         }
     }
-    private void CombineAST()
+    private void CombineAST(SemanticActions action)
     {
-        AST subtree = astStack.pop();
-        program.AdoptChildren(subtree);
+        if (astStack.size() > 1)
+        {
+            if(action.equals(SemanticActions.CombineUp))
+            {
+
+            }
+            else
+            {
+
+            }
+        }
+        else
+        {
+            AST subtree = astStack.pop();
+            program.AdoptChildren(subtree);
+        }
     }
+    private void CreateIfStmt()
+    {
+        Block block = (Block) astStack.pop();
+        BoolExpr condition = (BoolExpr) astStack.pop();
+        // remove 'if' terminal
+        terminals.pop();
+        IfStmt ifstmt = new IfStmt(condition,block);
+        astStack.push(ifstmt);
+    }
+    private void CreateElse()
+    {
+        Block elseBlock = (Block) astStack.pop();
+        // pop 'end' 'else' 'if'
+        terminals.pop();
+        terminals.pop();
+        terminals.pop();
+        ElseStmt elseStmt = new ElseStmt(elseBlock);
+        astStack.push(elseStmt);
+    }
+    private void CreateBoolExpr()
+    {
+        Expression right = (Expression)astStack.pop();
+        Expression left = (Expression)astStack.pop();
+        // remove ')'
+        terminals.pop();
+        // get operand
+        Token op = terminals.pop();
+        // remove '('
+        terminals.pop();
+        BoolExpr expr = new BoolExpr(left, op, right);
+        astStack.push(expr);
+    }
+    // expect terminalStack to start with ')' and end with '(' in between are the parameters
     private void CreateFormalParametersTree()
     {
         Token endPara = terminals.pop();
         ArrayList<FormalParameter> parameters = new ArrayList<>();
-        while(!endPara.Value.equals("("))
+        while (! endPara.Value.equals("("))
         {
-            if(!terminals.peek().Type.SEPARATOR.equals(TokenType.SEPARATOR))
+            if (! terminals.peek().Type.SEPARATOR.equals(TokenType.SEPARATOR))
             {
                 Token id = terminals.pop();
                 Token type = terminals.pop();
@@ -94,33 +141,32 @@ public class ASTFactory
     private void CreateBlockTree()
     {
         Block block = new Block();
-        if(!astStack.peek().getClass().equals(Statement.class))
-        {
-            return;
-        }
-        else
-        {
-            while(astStack.peek().getClass().equals(Statement.class))
-            {
-                block.AdoptChildren(astStack.pop());
-            }
-        }
         astStack.push(block);
     }
     private void CreateFuncDclTree()
     {
         Block block = (Block) astStack.pop();
         FormalParameters parameters = (FormalParameters) astStack.pop();
-        Token id = terminals.pop();
-        Types returntype = GetType(terminals.pop());
-        FuncDcl function = new FuncDcl(returntype, id.Value, parameters, block);
+        VarDcl dcl = (VarDcl) astStack.pop();
+
+        // remove 'end' 'id' from terminal stack
+        terminals.pop();
+        terminals.pop();
+
+        FuncDcl function = new FuncDcl(dcl,parameters,block);
         astStack.push(function);
     }
+    // Expecting an expr and identifier or dcl on astStack and an is terminal on terminal stack
     private void CreateAssignTree()
     {
-        Declaration left = (Declaration) astStack.pop();
+        // expr is top of astStack at this point
         Expression right = (Expression) astStack.pop();
-        Assignment assign = new Assignment(left, right);
+        // pop 'is' terminal from terminal stack
+        terminals.pop();
+        // Either a VarDCL or an identifier
+        Assignment assign = astStack.peek().getClass().equals(Declaration.class) ?
+                new Assignment((Declaration) astStack.pop(), right) :
+                new Assignment((Identifier) astStack.pop(), right);
         astStack.push(assign);
     }
     private void CreateIdentifierTree()
