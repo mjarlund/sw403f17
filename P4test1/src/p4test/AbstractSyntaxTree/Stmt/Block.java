@@ -13,9 +13,10 @@ public class Block extends Statement
     {
         for(Statement stmt : statements)
         {
-            AddNode(stmt);
         }
     }
+    public Block()
+    {}
     public void visit(Visitor v)
     {
         v.visit(this);

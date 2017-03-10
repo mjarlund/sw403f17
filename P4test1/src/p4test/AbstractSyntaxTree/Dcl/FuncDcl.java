@@ -11,7 +11,7 @@ import p4test.AbstractSyntaxTree.Visitor;
  * Created by mysjkin on 3/5/17.
  */
 public class FuncDcl extends Declaration {
-    public FuncDcl(Types returnType, String ientifer) {
+    public FuncDcl(Types returnType, String ientifer, FormalParameters parameters, Block block) {
         ReturnType = returnType;
         Identifier = ientifer;
     }
