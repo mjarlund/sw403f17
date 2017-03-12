@@ -14,6 +14,7 @@ public class BoolExpr extends Expression
         Operator = operator;
         AddNode(expr2);
     }
+
     public void visit(Visitor v)
     {
         v.visit(this);
