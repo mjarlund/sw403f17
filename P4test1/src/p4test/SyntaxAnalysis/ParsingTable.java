@@ -27,6 +27,13 @@ public class ParsingTable {
         if(Grammar.Terminals.contains(s)) return true;
         return false;
     }
+    // TODO: THIS IS BADNESS SOMEONE PLZ SEND HELP
+    public boolean IncludesEPSILON(String s)
+    {
+        if(Grammar.First(s,true).contains("EPSILON"))
+            return true;
+        return false;
+    }
 
     private String GetTerminalSymbol(Token token) {
 

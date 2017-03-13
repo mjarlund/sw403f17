@@ -213,7 +213,8 @@ public class Grammar {
         Grammar cfg = fromFile("src/CFG");
         //for(String v : cfg.Symbols) System.out.println(cfg.Epsilon.get(v).toString());
         // for(String s : cfg.NonTerminals) System.out.println(s + " -> " +  cfg.Epsilon.get(s));
-        for(String s : cfg.Terminals) System.out.println(s);
+        System.out.println(cfg.First("DeclarationStatementPrime",true));
+        //for(String s : cfg.Terminals) System.out.println(s);
 
         /*
         Set<String> first = cfg.First("IdentifierAppendantOptional", true);

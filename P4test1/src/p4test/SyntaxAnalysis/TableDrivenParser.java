@@ -48,10 +48,18 @@ public class TableDrivenParser
 
         while (!accepted)
         {
+            if(parseStack.peek() != null && parseStack.peek().equals("$"))
+            {
+                if(CurrentToken.Type.equals(TokenType.EOF))
+                    accepted = true;
+                else
+                    throw new Error("not completed");
+            }
             /* If the next RHS symbol is a terminal, or if the current token is an identifier,
              * try to match the symbol with the current token.
              * If the parseStack is empty and the current token is EOF, end the parsing. */
-            if (table.IsTerminal(parseStack.peek()) || CurrentToken.Type.equals(TokenType.IDENTIFIER))
+            else if (table.IsTerminal(parseStack.peek()) ||
+                    CurrentToken.Type.equals(TokenType.IDENTIFIER))
             {
                 terminalsStack.push(CurrentToken);
                 Match(parseStack.peek(), CurrentToken);
@@ -66,7 +74,7 @@ public class TableDrivenParser
                 /* If the next right hand side symbol is the empty string, pop it, and
                  * check for empty parseStack and EOF current token. End the parsing if
                  * both of these are true. */
-                if(parseStack.peek() != null && parseStack.peek().equals("EPSILON"))
+                if(parseStack.peek() != null && parseStack.peek().equals("epsilon"))
                 {
                     parseStack.pop();
                     if(parseStack.size() == 0 && !CurrentToken.Type.equals(TokenType.EOF))
@@ -85,8 +93,13 @@ public class TableDrivenParser
                     Production productions = table.GetPrediction(parseStack.peek(), CurrentToken);
                     String[] RHSSymbols = productions != null ? productions.Right : null;
                     if (RHSSymbols == null)
-                    {
-                        throw new Error("No productions available.");
+                    {   if(!table.IncludesEPSILON(parseStack.peek()))
+                            throw new Error("No productions available.");
+                        else
+                        {
+                            parseStack.pop();
+                            parseStack.push("epsilon");
+                        }
                     }
                     else
                     {

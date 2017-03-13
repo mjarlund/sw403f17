@@ -10,7 +10,7 @@ public class Test
 {
     public static void main(String args[])
     {
-        String code = "number b\n";
+        String code = "number b is a";
         Scanner sc = new Scanner(code);
         /*while(!sc.IsEOF())
             System.out.println(sc.nextToken());*/
