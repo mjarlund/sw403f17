@@ -10,8 +10,6 @@ public class IfStmt extends Statement
 {
     public IfStmt(BoolExpr expr, Block statements)
     {
-        AddNode(expr);
-        AddNode(statements);
     }
     public void visit(Visitor v)
     {

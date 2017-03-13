@@ -11,7 +11,6 @@ public class ProcedureCall extends Statement
     public ProcedureCall(String funcIdentifier, Arguments args)
     {
         FunctionIdentifier = funcIdentifier;
-        AddNode(args);
     }
     public void visit(Visitor v)
     {

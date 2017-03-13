@@ -211,7 +211,7 @@ public class ASTFactory
         // pop 'is' terminal from terminal stack
         terminals.pop();
         // Either a VarDCL or an identifier
-        Assignment assign = astStack.peek().getClass().equals(Declaration.class) ?
+        Assignment assign = astStack.peek() instanceof Declaration ?
                 new Assignment((VarDcl) astStack.pop(), right) :
                 new Assignment((Identifier) astStack.pop(), right);
         astStack.push(assign);
