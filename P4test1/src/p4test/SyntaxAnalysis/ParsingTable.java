@@ -3,6 +3,8 @@ package p4test.SyntaxAnalysis;
 import p4test.Token;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
+import java.nio.file.Paths;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -15,8 +17,10 @@ public class ParsingTable {
 
     public ParsingTable() {
         try {
-            this.Grammar = Grammar.fromFile("src/CFG");
+            this.Grammar = Grammar.fromFile(Paths.get(getClass().getResource("/"+"CFG").toURI()).toString());
         } catch (IOException e) {
+            e.printStackTrace();
+        } catch (URISyntaxException e) {
             e.printStackTrace();
         }
 
