@@ -1,6 +1,7 @@
 package p4test.SyntaxAnalysis;
 
 import p4test.Token;
+import p4test.TokenType;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -48,8 +49,10 @@ public class ParsingTable {
         return token.Value;
     }
 
-    public Production GetPrediction(String nonTerminal, Token token) {
-        String terminal = GetTerminalSymbol(token);
+    public Production GetPrediction(String nonTerminal, Token token)
+    {
+        String terminal = TypeConverter.TypeToTerminal(token);
+        terminal = terminal != null ? terminal : GetTerminalSymbol(token);
         return GetPrediction(nonTerminal, terminal);
     }
 
@@ -95,8 +98,9 @@ public class ParsingTable {
 
     public static void main(String[] args) throws IOException {
         ParsingTable p = new ParsingTable();
-        for(Production product : p.ProductionRules) System.out.println(product);
-        //System.out.println(p.GetPrediction("Program", "$"));
+        //for(Production product : p.ProductionRules) System.out.println(product);
+        System.out.println(p.GetPrediction("Expression", "IntegerLiteral"));
+        System.out.println(p.GetPrediction("Expression", new Token("2", TokenType.INTEGER_LITERAL)));
 
 
         /*

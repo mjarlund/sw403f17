@@ -55,8 +55,7 @@ public class TableDrivenParser
             /* If the next RHS symbol is a terminal, or if the current token is an identifier,
              * try to match the symbol with the current token.
              * If the parseStack is empty and the current token is EOF, end the parsing. */
-            else if (table.IsTerminal(parseStack.peek()) ||
-                    CurrentToken.Type.equals(TokenType.IDENTIFIER))
+            else if (table.IsTerminal(parseStack.peek()))
             {
                 terminalsStack.push(CurrentToken);
                 Match(parseStack.peek(), CurrentToken);
@@ -91,7 +90,10 @@ public class TableDrivenParser
                     String[] RHSSymbols = productions != null ? productions.Right : null;
                     if (RHSSymbols == null)
                     {   if(!table.IsEpsilon(parseStack.peek()))
+                        {
+                            System.out.println(parseStack.peek());
                             throw new Error("No productions available.");
+                        }
                         else
                         {
                             parseStack.pop();
@@ -135,33 +137,15 @@ public class TableDrivenParser
      * are identical, retrieve the next token in the scanner */
     private void Match(String val, Token token)
     {
-        //String value = GetMatchVal(token);
-        if(val.equals(val))
+        String value = TypeConverter.TypeToTerminal(token);
+        value = value != null ? value : token.Value;
+        if(val.equals(value))
         {
             System.out.println("matched " + val);
             Consume();
         }
         else
-            throw new Error("Got " + val + " expected " + val);
-    }
-
-    /* Retrieves the comparable version of the given token
-     * Based on the value of the token */
-    private String GetMatchVal(Token token)
-    {
-        switch (token.Value)
-        {
-            case "number":
-                return "Type";
-            case "\\n":
-                return "EOL";
-        }
-        switch (token.Type)
-        {
-            case IDENTIFIER:
-                return "Identifier";
-        }
-        return "sentinel";
+            throw new Error("Got " + value + " expected " + val);
     }
 
     /* Sets current token to the next token found by the scanner */
