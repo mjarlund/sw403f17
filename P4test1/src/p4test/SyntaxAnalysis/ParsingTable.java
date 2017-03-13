@@ -32,7 +32,7 @@ public class ParsingTable {
         return false;
     }
     // TODO: THIS IS BADNESS SOMEONE PLZ SEND HELP
-    public boolean IncludesEPSILON(String s)
+    public boolean IsEpsilon(String s)
     {
         if(Grammar.First(s,true).contains("EPSILON"))
             return true;

@@ -1,9 +1,6 @@
 package p4test.SyntaxAnalysis;
 
 import p4test.AbstractSyntaxTree.AST;
-import p4test.AbstractSyntaxTree.Dcl.VarDcl;
-import p4test.AbstractSyntaxTree.Types;
-import p4test.DefaultHashMap;
 import p4test.Token;
 import p4test.TokenType;
 
@@ -93,7 +90,7 @@ public class TableDrivenParser
                     Production productions = table.GetPrediction(parseStack.peek(), CurrentToken);
                     String[] RHSSymbols = productions != null ? productions.Right : null;
                     if (RHSSymbols == null)
-                    {   if(!table.IncludesEPSILON(parseStack.peek()))
+                    {   if(!table.IsEpsilon(parseStack.peek()))
                             throw new Error("No productions available.");
                         else
                         {
