@@ -7,10 +7,6 @@ public class test
 {
     public static void main(String args[])
     {
-        ProductionTable pt = new ProductionTable();
-        pt.initTable();
-        Token t = new Token("text", TokenType.KEYWORD);
-        System.out.println(pt.GetProductions(Symbol.NonTerminal.Program, t));
     }
 
     /*public static void main(String args[])

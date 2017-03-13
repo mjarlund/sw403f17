@@ -24,16 +24,14 @@ public class ASTFactory
         BuildBinaryExpr, BuildFuncCall, BuildActualParameters
     }
 
-    private Stack<RuleType> semanticStack;
     private Stack<AST> astStack;
     private Stack<Token> terminals;
 
-    private AST program;
+    public AST program;
 
 
-    public ASTFactory(Stack<RuleType> semtanticStack, Stack<Token> terminals)
+    public ASTFactory(Stack<Token> terminals)
     {
-        this.semanticStack = semtanticStack;
         this.astStack = new Stack<AST>();
         this.terminals = terminals;
         program = new AST();

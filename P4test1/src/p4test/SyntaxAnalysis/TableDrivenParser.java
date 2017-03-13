@@ -20,25 +20,17 @@ public class TableDrivenParser
     private ParsingTable table;
     private Scanner input;
     private Stack<String> parseStack;
-    private Stack<String> semanticStack;
+    private Stack<Token> terminalsStack;
     private Token CurrentToken;
     private ASTFactory AstFactory;
 
     private List<String> terminals;
-    private List<String> semanticActions;
 
     public TableDrivenParser(Scanner input)
     {
         this.input = input;
         this.table = new ParsingTable();
-        //AstFactory = new ASTFactory();
         terminals = new ArrayList<>();
-        // terminal values in CFG
-        terminals.add("Type"); terminals.add("Identifier");
-        terminals.add("EOL");
-
-        semanticActions = new ArrayList<>();
-        semanticActions.add("Some semantic action");
 
         CurrentToken = input.nextToken();
 
@@ -48,7 +40,8 @@ public class TableDrivenParser
     public AST ParseProgram()
     {
         parseStack = new Stack<String>(); /* RHS symbols for productions and terminals */
-        semanticStack = new Stack<String>(); /* Semantic actions */
+        terminalsStack = new Stack<Token>();
+        AstFactory = new ASTFactory(terminalsStack);
         Apply(table.GetPrediction("Program", "$").Right); /* Push RHS symbols for the productions of "Program". */
         boolean accepted = false;
         AST programTree = new AST();
@@ -60,6 +53,7 @@ public class TableDrivenParser
              * If the parseStack is empty and the current token is EOF, end the parsing. */
             if (terminals.contains(parseStack.peek()) || CurrentToken.Type.equals(TokenType.IDENTIFIER))
             {
+                terminalsStack.push(CurrentToken);
                 Match(parseStack.peek(), CurrentToken);
                 if (parseStack.size() == 0 && CurrentToken.Type.equals(TokenType.EOF))
                 {
@@ -98,16 +92,8 @@ public class TableDrivenParser
                     }
                 }
             }
-
-            /* If the next symbol in the parseStack is a semantic action,
-             * push this to the semanticStack. */
-            if (semanticActions.contains(parseStack.peek()))
-            {
-                semanticStack.push(parseStack.peek());
-            }
         }
-        System.out.println(semanticStack);
-        return programTree;
+        return AstFactory.program;
     }
 
     /* Pushes the input list of productions onto the
