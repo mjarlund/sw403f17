@@ -17,7 +17,7 @@ public class TableDrivenParser
     // Can be optimized to use integers instead of strings
     private Stack<String> ParseStack;
 
-    private ProductionTable table;
+    private ParsingTable table;
     private Scanner input;
     private Stack<String> parseStack;
     private Stack<String> semanticStack;
@@ -30,7 +30,8 @@ public class TableDrivenParser
     public TableDrivenParser(Scanner input)
     {
         this.input = input;
-        AstFactory = new ASTFactory();
+        this.table = new ParsingTable();
+        //AstFactory = new ASTFactory();
         terminals = new ArrayList<>();
         // terminal values in CFG
         terminals.add("Type"); terminals.add("Identifier");
@@ -40,8 +41,6 @@ public class TableDrivenParser
         semanticActions.add("Some semantic action");
 
         CurrentToken = input.nextToken();
-        table = new ProductionTable();
-        table.initTable();
 
     }
 
@@ -50,7 +49,7 @@ public class TableDrivenParser
     {
         parseStack = new Stack<String>(); /* RHS symbols for productions and terminals */
         semanticStack = new Stack<String>(); /* Semantic actions */
-        Apply(table.GetProductions("Program", null)); /* Push RHS symbols for the productions of "Program". */
+        Apply(table.GetPrediction("Program", "$").Right); /* Push RHS symbols for the productions of "Program". */
         boolean accepted = false;
         AST programTree = new AST();
 
@@ -89,7 +88,7 @@ public class TableDrivenParser
                     /* Acquire the RHS symbols for the production of the next RHS symbol
                      * in the parseStack. If there are no productions, throw an error.
                      * Otherwise, push the productions' RHS symbols to the parseStack. */
-                    ArrayList<String> RHSSymbols = table.GetProductions(parseStack.peek(), CurrentToken.Type);
+                    String[] RHSSymbols = table.GetPrediction(parseStack.peek(), CurrentToken).Right;
                     if (RHSSymbols == null)
                         throw new Error("No productions available.");
                     else
@@ -114,12 +113,12 @@ public class TableDrivenParser
     /* Pushes the input list of productions onto the
      * parseStack in reverse order, so that the first
       * production rule in the list is the first one popped */
-    private void Apply(ArrayList<String> RHSSymbols)
+    private void Apply(String[] RHSSymbols)
     {
-        int iterations = RHSSymbols.size();
+        int iterations = RHSSymbols.length;
         for(int i = iterations-1; i>=0; i--)
         {
-            parseStack.push(RHSSymbols.get(i));
+            parseStack.push(RHSSymbols[i]);
         }
     }
 

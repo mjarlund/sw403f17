@@ -1,5 +1,7 @@
 package p4test.SyntaxAnalysis;
 
+import p4test.Token;
+
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
@@ -19,6 +21,20 @@ public class ParsingTable {
         }
 
         init();
+    }
+
+    private String GetTerminalSymbol(Token token) {
+
+        for (String s : Grammar.Terminals) {
+            if(token.Type.name().equals(s)) return s;
+        }
+
+        return token.Value;
+    }
+
+    public Production GetPrediction(String nonTerminal, Token token) {
+        String terminal = GetTerminalSymbol(token);
+        return GetPrediction(nonTerminal, terminal);
     }
 
     public Production GetPrediction(String nonterminal, String terminal) {

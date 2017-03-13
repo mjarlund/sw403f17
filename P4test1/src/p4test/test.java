@@ -7,6 +7,14 @@ public class test
 {
     public static void main(String args[])
     {
+        ProductionTable pt = new ProductionTable();
+        pt.initTable();
+        Token t = new Token("text", TokenType.KEYWORD);
+        System.out.println(pt.GetProductions(Symbol.NonTerminal.Program, t));
+    }
+
+    /*public static void main(String args[])
+    {
         String input =
                 "void FirstMission (string person, number speed) " +
                     "number target is speed " +
@@ -18,7 +26,6 @@ public class test
         ParserMikkel bla = new ParserMikkel(new Scanner(input));
         bla.Parse();
 
-        /*
         // Run scanner on test string
         Scanner scanner = new Scanner(input);
         try
@@ -33,6 +40,6 @@ public class test
         {
             System.out.println(e);
         }
-        */
     }
+        */
 }
