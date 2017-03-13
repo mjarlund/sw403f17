@@ -23,6 +23,11 @@ public class ParsingTable {
         init();
     }
 
+    public boolean IsTerminal(String s) {
+        if(Grammar.Terminals.contains(s)) return true;
+        return false;
+    }
+
     private String GetTerminalSymbol(Token token) {
 
         for (String s : Grammar.Terminals) {
@@ -79,8 +84,8 @@ public class ParsingTable {
 
     public static void main(String[] args) throws IOException {
         ParsingTable p = new ParsingTable();
-
-        System.out.println(p.GetPrediction("Statement", "until"));
+        for(Production product : p.ProductionRules) System.out.println(product);
+        //System.out.println(p.GetPrediction("Program", "$"));
 
 
         /*

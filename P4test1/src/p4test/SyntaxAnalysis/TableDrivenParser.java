@@ -42,7 +42,7 @@ public class TableDrivenParser
         parseStack = new Stack<String>(); /* RHS symbols for productions and terminals */
         terminalsStack = new Stack<Token>();
         AstFactory = new ASTFactory(terminalsStack);
-        Apply(table.GetPrediction("Program", "$").Right); /* Push RHS symbols for the productions of "Program". */
+        Apply(table.GetPrediction("Program", CurrentToken).Right); /* Push RHS symbols for the productions of "Program". */
         boolean accepted = false;
         AST programTree = new AST();
 
@@ -51,7 +51,7 @@ public class TableDrivenParser
             /* If the next RHS symbol is a terminal, or if the current token is an identifier,
              * try to match the symbol with the current token.
              * If the parseStack is empty and the current token is EOF, end the parsing. */
-            if (terminals.contains(parseStack.peek()) || CurrentToken.Type.equals(TokenType.IDENTIFIER))
+            if (table.IsTerminal(parseStack.peek()) || CurrentToken.Type.equals(TokenType.IDENTIFIER))
             {
                 terminalsStack.push(CurrentToken);
                 Match(parseStack.peek(), CurrentToken);
@@ -82,9 +82,12 @@ public class TableDrivenParser
                     /* Acquire the RHS symbols for the production of the next RHS symbol
                      * in the parseStack. If there are no productions, throw an error.
                      * Otherwise, push the productions' RHS symbols to the parseStack. */
-                    String[] RHSSymbols = table.GetPrediction(parseStack.peek(), CurrentToken).Right;
+                    Production productions = table.GetPrediction(parseStack.peek(), CurrentToken);
+                    String[] RHSSymbols = productions != null ? productions.Right : null;
                     if (RHSSymbols == null)
+                    {
                         throw new Error("No productions available.");
+                    }
                     else
                     {
                         parseStack.pop();
@@ -122,14 +125,14 @@ public class TableDrivenParser
      * are identical, retrieve the next token in the scanner */
     private void Match(String val, Token token)
     {
-        String value = GetMatchVal(token);
-        if(val.equals(value))
+        //String value = GetMatchVal(token);
+        if(val.equals(val))
         {
-            System.out.println("matched " + value);
+            System.out.println("matched " + val);
             Consume();
         }
         else
-            throw new Error("Got " + value + " expected " + val);
+            throw new Error("Got " + val + " expected " + val);
     }
 
     /* Retrieves the comparable version of the given token

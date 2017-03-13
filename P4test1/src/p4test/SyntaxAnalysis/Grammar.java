@@ -213,7 +213,9 @@ public class Grammar {
         Grammar cfg = fromFile("src/CFG");
         //for(String v : cfg.Symbols) System.out.println(cfg.Epsilon.get(v).toString());
         // for(String s : cfg.NonTerminals) System.out.println(s + " -> " +  cfg.Epsilon.get(s));
+        for(String s : cfg.Terminals) System.out.println(s);
 
+        /*
         Set<String> first = cfg.First("IdentifierAppendantOptional", true);
 
         Set<String> follow = cfg.Follow("IdentifierAppendantOptional");
@@ -226,5 +228,6 @@ public class Grammar {
 
         System.out.println("\n\n"+ "Follow set(" + follow.size() + ")");
         for(String s : follow) System.out.print(s + " ");
+        */
     }
 }
