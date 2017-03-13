@@ -5,7 +5,7 @@ Statement -> DeclarationStatement
 Statement -> ExpressionStatement
 Statement -> SelectionStatement
 Statement -> IterationStatement
-DeclarationStatement -> Type Identifier DeclarationStatementPrime
+DeclarationStatement -> Type Identifier BuildVarDCL CombineDown DeclarationStatementPrime
 DeclarationStatement -> ListDeclarationStatement
 DeclarationStatementPrime -> FormalParameterList Block end Identifier
 DeclarationStatementPrime -> is Expression

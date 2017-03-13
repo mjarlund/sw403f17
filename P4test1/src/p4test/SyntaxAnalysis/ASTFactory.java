@@ -6,6 +6,7 @@ import p4test.AbstractSyntaxTree.Dcl.*;
 import p4test.AbstractSyntaxTree.Expr.*;
 import p4test.AbstractSyntaxTree.Stmt.*;
 import p4test.AbstractSyntaxTree.Types;
+import p4test.DefaultHashMap;
 import p4test.Token;
 import p4test.TokenType;
 
@@ -24,6 +25,7 @@ public class ASTFactory
         BuildBinaryExpr, BuildFuncCall, BuildActualParameters
     }
 
+    public DefaultHashMap<String, Runnable> SemanticAction = new DefaultHashMap<String, Runnable>(null);
     private Stack<AST> astStack;
     private Stack<Token> terminals;
 
@@ -36,43 +38,17 @@ public class ASTFactory
         this.terminals = terminals;
         program = new AST();
     }
-
-    public void CreateAbstractTree(SemanticActions action)
+    public void initFactory()
     {
-        switch (action)
-        {
-            case BuildVarDCL:
-                CreateDclTree();
-            case BuildFuncDcl:
-                CreateFuncDclTree();
-            case BuildBlock:
-                CreateBlockTree();
-            case BuildFormalParameters:
-                CreateFormalParametersTree();
-            case BuildAssign:
-                CreateAssignTree();
-            case BuildID:
-                CreateIdentifierTree();
-            case BuildValExpr:
-                CreateValExprTree();
-            case CombineUp:
-                CombineAST(action);
-            case CombineDown:
-                CombineAST(action);
-            case ClearIfTerminals:
-                // remove 'end' 'if'
-                terminals.pop(); terminals.pop();
-            case BuildIfStmt:
-                CreateIfStmt();
-            case BuildBoolExpr:
-                CreateBoolExpr();
-            case BuildBinaryExpr:
-                CreateBinaryExpr();
-            case BuildFuncCall:
-                CreateFuncCall();
-            case BuildActualParameters:
-                CreateActualParameters();
-        }
+        SemanticAction.put("BuildVarDCL", ASTFactory.this::CreateDclTree);
+        SemanticAction.put("CombineDown", ASTFactory.this::CombineDown);
+    }
+    public void CreateAbstractTree(String action)
+    {
+        Runnable method = SemanticAction.get(action);
+        if (method!=null)method.run();
+        else
+            throw new Error("Semantic action not found please come again (indian accent)");
     }
     private void CombineAST(SemanticActions action)
     {
@@ -95,6 +71,19 @@ public class ASTFactory
         {
             AST subtree = astStack.pop();
             program.AdoptChildren(subtree);
+        }
+    }
+    private void CombineDown()
+    {
+        if (astStack.size() > 1)
+        {
+            AST subtree = astStack.pop();
+            astStack.peek().AdoptChildren(subtree);
+        }
+        else
+        {
+            AST subtree = astStack.pop();
+            program.SetParent(subtree);
         }
     }
     private void CreateFuncCall()

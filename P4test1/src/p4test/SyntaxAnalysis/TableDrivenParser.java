@@ -39,6 +39,7 @@ public class TableDrivenParser
         parseStack = new Stack<String>(); /* RHS symbols for productions and terminals */
         terminalsStack = new Stack<Token>();
         AstFactory = new ASTFactory(terminalsStack);
+        AstFactory.initFactory();
         Apply(table.GetPrediction("Program", CurrentToken).Right); /* Push RHS symbols for the productions of "Program". */
         boolean accepted = false;
         AST programTree = new AST();
@@ -57,11 +58,14 @@ public class TableDrivenParser
              * If the parseStack is empty and the current token is EOF, end the parsing. */
             else if (table.IsTerminal(parseStack.peek()))
             {
-                terminalsStack.push(CurrentToken);
-                Match(parseStack.peek(), CurrentToken);
-                if (parseStack.size() == 0 && CurrentToken.Type.equals(TokenType.EOF))
+                if(AstFactory.SemanticAction.get(parseStack.peek())!=null)
                 {
-                    accepted = true;
+                    AstFactory.CreateAbstractTree(parseStack.peek());
+                }
+                else
+                {
+                    terminalsStack.push(CurrentToken);
+                    Match(parseStack.peek(), CurrentToken);
                 }
                 parseStack.pop();
             }
