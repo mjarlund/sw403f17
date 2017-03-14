@@ -1,6 +1,5 @@
 package p4test.SyntaxAnalysis;
 
-import com.sun.deploy.security.BlacklistedCerts;
 import p4test.AbstractSyntaxTree.AST;
 import p4test.AbstractSyntaxTree.Dcl.*;
 import p4test.AbstractSyntaxTree.Expr.*;
@@ -42,6 +41,14 @@ public class ASTFactory
     {
         SemanticAction.put("BuildVarDCL", ASTFactory.this::CreateDclTree);
         SemanticAction.put("CombineDown", ASTFactory.this::CombineDown);
+        SemanticAction.put("BuildAssign", ASTFactory.this::CreateAssignTree);
+        SemanticAction.put("BuildValExpr", ASTFactory.this::CreateValExprTree);
+        SemanticAction.put("BuildIdentifier", ASTFactory.this::CreateIdentifierTree);
+        SemanticAction.put("BuildBinaryExpr", ASTFactory.this::CreateBinaryExpr);
+        SemanticAction.put("BuildBoolExpr", ASTFactory.this::CreateBoolExpr);
+        SemanticAction.put("BuildBlock", ASTFactory.this::CreateBlockTree);
+        SemanticAction.put("BuildFuncDcl", ASTFactory.this::CreateFuncDclTree);
+        SemanticAction.put("BuildFormalParams", ASTFactory.this::CreateFormalParametersTree);
     }
     public void CreateAbstractTree(String action)
     {
@@ -73,17 +80,18 @@ public class ASTFactory
             program.AdoptChildren(subtree);
         }
     }
+    /* Combines the top of the tree stack with the one below it */
     private void CombineDown()
     {
         if (astStack.size() > 1)
         {
             AST subtree = astStack.pop();
-            astStack.peek().AdoptChildren(subtree);
+            astStack.peek().children.add(subtree);
         }
         else
         {
             AST subtree = astStack.pop();
-            program.SetParent(subtree);
+            program.children.add(subtree);
         }
     }
     private void CreateFuncCall()
@@ -157,13 +165,13 @@ public class ASTFactory
         ArrayList<FormalParameter> parameters = new ArrayList<>();
         while (! endPara.Value.equals("("))
         {
-            if (! terminals.peek().Type.SEPARATOR.equals(TokenType.SEPARATOR))
+            if (!terminals.peek().Type.SEPARATOR.equals(TokenType.SEPARATOR))
             {
                 Token id = terminals.pop();
                 Token type = terminals.pop();
-                endPara = terminals.pop();
                 parameters.add(new FormalParameter(GetType(type),id.Value));
             }
+            endPara = terminals.pop();
         }
         FormalParameters astParameters = new FormalParameters();
         for (FormalParameter parameter : parameters)

@@ -10,16 +10,21 @@ public class Test
 {
     public static void main(String args[])
     {
-        String code = "number b";
+        String code = "void func1() number b is 2 + 2 number a is 2 * 2 + 3 - 4 / 5 end func1";
         Scanner sc = new Scanner(code);
         /*while(!sc.IsEOF())
             System.out.println(sc.nextToken());*/
         TableDrivenParser parser = new TableDrivenParser(sc);
         AST programTree = parser.ParseProgram();
         System.out.println("............");
-        System.out.println(programTree.toString());
-        System.out.println(programTree.GetLeftMostSibling());
-        System.out.println(programTree.GetLeftMostChild());
-        System.out.println(programTree.GetParent());
+        printtree(programTree);
+    }
+
+    private static void printtree(AST tree)
+    {
+        System.out.println(tree);
+        System.out.println(tree.children);
+        for (AST c : tree.children)
+            printtree(c);
     }
 }

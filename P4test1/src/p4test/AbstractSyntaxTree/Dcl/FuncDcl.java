@@ -13,6 +13,9 @@ import p4test.AbstractSyntaxTree.Visitor;
 public class FuncDcl extends Declaration {
     public FuncDcl(VarDcl dcl, FormalParameters parameters, Block block)
     {
+        children.add(dcl);
+        children.add(parameters);
+        children.add(block);
     }
     public void visit(Visitor v)
     {

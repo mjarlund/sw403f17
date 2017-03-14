@@ -5,50 +5,50 @@ Statement -> DeclarationStatement
 Statement -> ExpressionStatement
 Statement -> SelectionStatement
 Statement -> IterationStatement
-DeclarationStatement -> Type Identifier BuildVarDCL CombineDown DeclarationStatementPrime
+DeclarationStatement -> Type Identifier BuildVarDCL DeclarationStatementPrime
 DeclarationStatement -> ListDeclarationStatement
-DeclarationStatementPrime -> FormalParameterList Block end Identifier
-DeclarationStatementPrime -> is Expression
+DeclarationStatementPrime -> FormalParameterList BuildBlock Block end Identifier BuildFuncDcl CombineDown
+DeclarationStatementPrime -> is Expression BuildAssign CombineDown
 DeclarationStatementPrime -> EPSILON
 ListDeclarationStatement -> list of Type Identifier is ParameterList
 FormalParameter -> Type Identifier
-FormalParameterList -> ( FormalParameterListBody )
+FormalParameterList -> ( FormalParameterListBody ) BuildFormalParams
 FormalParameterListBody -> FormalParameter FormalParameterListBodyPrime
 FormalParameterListBody -> EPSILON
 FormalParameterListBodyPrime -> , FormalParameterListBody
 FormalParameterListBodyPrime -> EPSILON
 Expression -> AssignmentExpressionPrime AssignmentExpression
-AssignmentExpression -> is AssignmentExpressionPrime AssignmentExpression
+AssignmentExpression -> is AssignmentExpressionPrime BuildAssign AssignmentExpression
 AssignmentExpression -> EPSILON
 AssignmentExpressionPrime -> NotExpressionPrime NotExpression
-NotExpression -> not NotExpressionPrime NotExpression
+NotExpression -> not NotExpressionPrime BuildBoolExpr NotExpression
 NotExpression -> EPSILON
 NotExpressionPrime -> OrExpressionPrime OrExpression
-OrExpression -> or OrExpressionPrime OrExpression
+OrExpression -> or OrExpressionPrime BuildBoolExpr OrExpression
 OrExpression -> EPSILON
 OrExpressionPrime -> AndExpressionPrime AndExpression
-AndExpression -> and AndExpressionPrime AndExpression
+AndExpression -> and AndExpressionPrime BuildBoolExpr AndExpression
 AndExpression -> EPSILON
 AndExpressionPrime -> EqualityExpressionPrime EqualityExpression
-EqualityExpression -> equals EqualityExpressionPrime EqualityExpression
+EqualityExpression -> equals EqualityExpressionPrime BuildBoolExpr EqualityExpression
 EqualityExpression -> EPSILON
 EqualityExpressionPrime -> RelationalExpressionPrime RelationalExpression
-RelationalExpression -> below RelationalExpressionPrime RelationalExpression
-RelationalExpression -> above RelationalExpressionPrime RelationalExpression
+RelationalExpression -> below RelationalExpressionPrime BuildBoolExpr RelationalExpression
+RelationalExpression -> above RelationalExpressionPrime BuildBoolExpr RelationalExpression
 RelationalExpression -> EPSILON
 RelationalExpressionPrime -> AdditiveExpressionPrime AdditiveExpression
-AdditiveExpression -> + AdditiveExpressionPrime AdditiveExpression
-AdditiveExpression -> - AdditiveExpressionPrime AdditiveExpression
+AdditiveExpression -> + AdditiveExpressionPrime BuildBinaryExpr AdditiveExpression
+AdditiveExpression -> - AdditiveExpressionPrime BuildBinaryExpr AdditiveExpression
 AdditiveExpression -> EPSILON
 AdditiveExpressionPrime -> PrimaryExpression MultiplicativeExpression
-MultiplicativeExpression -> * PrimaryExpression MultiplicativeExpression
-MultiplicativeExpression -> / PrimaryExpression MultiplicativeExpression
+MultiplicativeExpression -> * PrimaryExpression BuildBinaryExpr MultiplicativeExpression
+MultiplicativeExpression -> / PrimaryExpression BuildBinaryExpr MultiplicativeExpression
 MultiplicativeExpression -> EPSILON
-PrimaryExpression -> Identifier IdentifierAppendantOptional
-PrimaryExpression -> IntegerLiteral
-PrimaryExpression -> FloatingPointLiteral
-PrimaryExpression -> StringLiteral
-PrimaryExpression -> BooleanLiteral
+PrimaryExpression -> Identifier BuildIdentifier IdentifierAppendantOptional
+PrimaryExpression -> IntegerLiteral BuildValExpr
+PrimaryExpression -> FloatingPointLiteral BuildValExpr
+PrimaryExpression -> StringLiteral BuildValExpr
+PrimaryExpression -> BooleanLiteral BuildValExpr
 PrimaryExpression -> ( Expression )
 ExpressionStatement -> Identifier ExpressionStatementPrime
 ExpressionStatementPrime -> ExpressionStatementPrimePrime is Expression
