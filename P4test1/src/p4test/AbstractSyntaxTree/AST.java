@@ -34,6 +34,9 @@ public class AST
         leftMostChild = child;
     }
 
+    // TODO Remove only a test
+    public ArrayList<AST> children = new ArrayList<AST>();
+
     private AST parent;
     public AST GetParent(){
         return parent;

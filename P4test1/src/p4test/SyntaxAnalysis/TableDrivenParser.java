@@ -34,6 +34,7 @@ public class TableDrivenParser
     }
 
     /* Parses the input program and returns the AST for the program */
+    // TODO PARSER SKAL SKRIVES PÆNERE MEN IKKE NU!!!!
     public AST ParseProgram()
     {
         parseStack = new Stack<String>(); /* RHS symbols for productions and terminals */
@@ -46,6 +47,7 @@ public class TableDrivenParser
 
         while (!accepted)
         {
+            //System.out.println(parseStack);
             if(parseStack.peek() != null && parseStack.peek().equals("$"))
             {
                 if(CurrentToken.Type.equals(TokenType.EOF))
@@ -58,7 +60,18 @@ public class TableDrivenParser
              * If the parseStack is empty and the current token is EOF, end the parsing. */
             else if (table.IsTerminal(parseStack.peek()))
             {
-                if(AstFactory.SemanticAction.get(parseStack.peek())!=null)
+                if(parseStack.peek() != null && parseStack.peek().equals("epsilon") ||
+                        parseStack.peek().equals("EPSILON"))
+                {
+                    if(parseStack.size() == 0 && !CurrentToken.Type.equals(TokenType.EOF))
+                        throw new Error("lel");
+                    else if (parseStack.size() == 0)
+                    {
+                        accepted = true;
+                        break;
+                    }
+                }
+                else if(AstFactory.SemanticAction.get(parseStack.peek())!=null)
                 {
                     AstFactory.CreateAbstractTree(parseStack.peek());
                 }
@@ -74,7 +87,8 @@ public class TableDrivenParser
                 /* If the next right hand side symbol is the empty string, pop it, and
                  * check for empty parseStack and EOF current token. End the parsing if
                  * both of these are true. */
-                if(parseStack.peek() != null && parseStack.peek().equals("epsilon"))
+                if(parseStack.peek() != null && parseStack.peek().equals("epsilon") ||
+                        parseStack.peek().equals("EPSILON"))
                 {
                     parseStack.pop();
                     if(parseStack.size() == 0 && !CurrentToken.Type.equals(TokenType.EOF))
@@ -145,7 +159,7 @@ public class TableDrivenParser
         value = value != null ? value : token.Value;
         if(val.equals(value))
         {
-            System.out.println("matched " + val);
+            System.out.println("matched " + value);
             Consume();
         }
         else

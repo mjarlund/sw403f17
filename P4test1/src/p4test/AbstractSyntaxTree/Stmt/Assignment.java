@@ -13,9 +13,13 @@ public class Assignment extends Statement
 {
     public Assignment(VarDcl var, Expression expr)
     {
+        children.add(var);
+        children.add(expr);
     }
     public Assignment(Identifier identifier, Expression expr)
     {
+        children.add(identifier);
+        children.add(expr);
     }
     public void visit(Visitor v)
     {
