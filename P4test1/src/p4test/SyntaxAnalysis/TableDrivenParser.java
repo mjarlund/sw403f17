@@ -71,12 +71,14 @@ public class TableDrivenParser
                         break;
                     }
                 }
+                // Terminal might be a semantic actions
                 else if(AstFactory.SemanticAction.get(parseStack.peek())!=null)
                 {
                     AstFactory.CreateAbstractTree(parseStack.peek());
                 }
                 else
                 {
+                    // terminal stack is used when processing semantic actions
                     terminalsStack.push(CurrentToken);
                     Match(parseStack.peek(), CurrentToken);
                 }

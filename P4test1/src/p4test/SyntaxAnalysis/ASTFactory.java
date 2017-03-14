@@ -49,6 +49,8 @@ public class ASTFactory
         SemanticAction.put("BuildBlock", ASTFactory.this::CreateBlockTree);
         SemanticAction.put("BuildFuncDcl", ASTFactory.this::CreateFuncDclTree);
         SemanticAction.put("BuildFormalParams", ASTFactory.this::CreateFormalParametersTree);
+        SemanticAction.put("BuildIfStmt", ASTFactory.this::CreateIfStmt);
+        SemanticAction.put("BuildUntilStmt", ASTFactory.this::CreateUntilStmtTree);
     }
     public void CreateAbstractTree(String action)
     {
@@ -94,6 +96,15 @@ public class ASTFactory
             program.children.add(subtree);
         }
     }
+    private void CreateUntilStmtTree()
+    {
+        Block block = (Block) astStack.pop();
+        BoolExpr condition = (BoolExpr) astStack.pop();
+        // remove 'until' terminal
+        terminals.pop();
+        UntilStmt untilStmt = new UntilStmt(condition,block);
+        astStack.push(untilStmt);
+    }
     private void CreateFuncCall()
     {
         FuncCall funcid = new FuncCall(new Identifier(terminals.pop().Value));
@@ -107,9 +118,9 @@ public class ASTFactory
             if (! terminals.peek().Type.SEPARATOR.equals(TokenType.SEPARATOR))
             {
                 Token id = terminals.pop();
-                endPara = terminals.pop();
                 parameters.add(new Argument(id));
             }
+            endPara = terminals.pop();
         }
         Arguments astParameters = new Arguments();
         for (Argument parameter : parameters)
@@ -149,12 +160,12 @@ public class ASTFactory
     {
         Expression right = (Expression)astStack.pop();
         Expression left = (Expression)astStack.pop();
-        // remove ')'
-        terminals.pop();
+        if(terminals.peek().equals(")")) // remove ')'
+            terminals.pop();
         // get operand
         Token op = terminals.pop();
-        // remove '('
-        terminals.pop();
+        if(terminals.peek().equals(")")) // remove '('
+            terminals.pop();
         BoolExpr expr = new BoolExpr(left, op, right);
         astStack.push(expr);
     }

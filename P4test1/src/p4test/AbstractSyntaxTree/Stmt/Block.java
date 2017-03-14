@@ -13,6 +13,7 @@ public class Block extends Statement
     {
         for(Statement stmt : statements)
         {
+            children.add(stmt);
         }
     }
     public Block()

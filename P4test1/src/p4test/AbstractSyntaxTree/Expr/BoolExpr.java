@@ -11,6 +11,8 @@ public class BoolExpr extends Expression
     public BoolExpr(Expression expr1, Token operator, Expression expr2)
     {
         Operator = operator;
+        children.add(expr1);
+        children.add(expr2);
     }
 
     public void visit(Visitor v)

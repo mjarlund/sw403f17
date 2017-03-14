@@ -51,7 +51,7 @@ PrimaryExpression -> StringLiteral BuildValExpr
 PrimaryExpression -> BooleanLiteral BuildValExpr
 PrimaryExpression -> ( Expression )
 ExpressionStatement -> Identifier ExpressionStatementPrime
-ExpressionStatementPrime -> ExpressionStatementPrimePrime is Expression
+ExpressionStatementPrime -> ExpressionStatementPrimePrime is Expression BuildAssign CombineDown
 ExpressionStatementPrime -> ParameterList
 ExpressionStatementPrimePrime -> .Identifier
 ExpressionStatementPrimePrime -> EPSILON
@@ -68,11 +68,11 @@ ParameterListBody -> Parameter ParameterListBodyPrime
 ParameterListBody -> EPSILON
 ParameterListBodyPrime -> , ParameterListBody
 ParameterListBodyPrime -> EPSILON
-SelectionStatement -> if Condition Block SelectionStatementPrime
-SelectionStatementPrime -> else Block end else if
+SelectionStatement -> if Condition BuildBlock Block BuildIfStmt SelectionStatementPrime CombineDown
+SelectionStatementPrime -> else BuildBlock Block end else if
 SelectionStatementPrime -> end if
-IterationStatement -> until Condition Block end until
-IterationStatement -> foreach ( FormalParameter in Parameter ) Block end foreach
+IterationStatement -> until Condition BuildBlock Block BuildUntilStmt end until CombineDown
+IterationStatement -> foreach ( FormalParameter in Parameter ) BuildBlock Block end foreach
 Condition -> ( Expression )
 Block -> Statements
 Type -> text

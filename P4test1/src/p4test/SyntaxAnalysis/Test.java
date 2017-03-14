@@ -10,7 +10,7 @@ public class Test
 {
     public static void main(String args[])
     {
-        String code = "void func1() number b is 2 + 2 number a is 2 * 2 + 3 - 4 / 5 end func1";
+        String code = "void func1() until(a and b) number a is 2 end until end func1";
         Scanner sc = new Scanner(code);
         /*while(!sc.IsEOF())
             System.out.println(sc.nextToken());*/
