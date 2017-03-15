@@ -60,8 +60,7 @@ public class TableDrivenParser
              * If the parseStack is empty and the current token is EOF, end the parsing. */
             else if (table.IsTerminal(parseStack.peek()))
             {
-                if(parseStack.peek() != null && parseStack.peek().equals("epsilon") ||
-                        parseStack.peek().equals("EPSILON"))
+                if(parseStack.peek() != null && parseStack.peek().equals("EPSILON"))
                 {
                     if(parseStack.size() == 0 && !CurrentToken.Type.equals(TokenType.EOF))
                         throw new Error("lel");
@@ -117,7 +116,6 @@ public class TableDrivenParser
                         else
                         {
                             parseStack.pop();
-                            parseStack.push("epsilon");
                         }
                     }
                     else

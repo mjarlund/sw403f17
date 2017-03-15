@@ -296,20 +296,5 @@ public class Grammar {
 
     public static void main(String[] args) throws IOException {
         Grammar cfg = new ParsingTable().Grammar;
-
-        long startTime = System.currentTimeMillis();
-        for(int i = 0; i < 10000; i++) {
-            cfg.Follow("DeclarationStatementPrime");
-        }
-        long totalTime = System.currentTimeMillis() - startTime;
-        NumberFormat formatter = new DecimalFormat("#0.000000");
-        System.out.println("Execution time is " + formatter.format(totalTime / 1000d) + " seconds (Follow set)");
-
-        startTime = System.currentTimeMillis();
-        for(int i = 0; i < 10000; i++) {
-            cfg.First("DeclarationStatementPrime",true);
-        }
-        totalTime = System.currentTimeMillis() - startTime;
-        System.out.println("Execution time is " + formatter.format(totalTime / 1000d) + " seconds (First set)");
     }
 }

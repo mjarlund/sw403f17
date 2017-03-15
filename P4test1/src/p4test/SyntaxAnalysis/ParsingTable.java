@@ -32,7 +32,7 @@ public class ParsingTable {
         if(Grammar.Terminals.contains(s)) return true;
         return false;
     }
-    
+    // TODO: THIS IS BADNESS SOMEONE PLZ SEND HELP
     public boolean IsEpsilon(String s)
     {
         return Grammar.Epsilon.get(s);
