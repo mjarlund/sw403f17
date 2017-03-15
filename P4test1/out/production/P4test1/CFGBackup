@@ -51,8 +51,10 @@ PrimaryExpression -> StringLiteral BuildValExpr
 PrimaryExpression -> BooleanLiteral BuildValExpr
 PrimaryExpression -> ( Expression )
 ExpressionStatement -> Identifier BuildIdentifier ExpressionStatementPrime
-ExpressionStatementPrime -> is Expression BuildAssign CombineDown
+ExpressionStatementPrime -> ExpressionStatementPrimePrime is Expression BuildAssign CombineDown
 ExpressionStatementPrime -> ParameterList BuildFuncCall CombineDown
+ExpressionStatementPrimePrime -> .Identifier
+ExpressionStatementPrimePrime -> EPSILON
 Parameter -> Identifier
 Parameter -> IntegerLiteral
 Parameter -> FloatingPointLiteral

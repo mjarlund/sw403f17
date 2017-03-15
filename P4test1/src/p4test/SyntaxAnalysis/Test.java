@@ -10,7 +10,7 @@ public class Test
 {
     public static void main(String args[])
     {
-        String code = "void func1() func(2,3) end func1";
+        String code = "void func1() a is func(1,2,3) b is 2 number a is 2 end func1";
         Scanner sc = new Scanner(code);
         /*while(!sc.IsEOF())
             System.out.println(sc.nextToken());*/
