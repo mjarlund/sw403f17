@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * Created by mysjkin on 3/5/17.
  */
-public class Arguments extends AST
+public class Arguments extends Expression
 {
     public Arguments()
     {

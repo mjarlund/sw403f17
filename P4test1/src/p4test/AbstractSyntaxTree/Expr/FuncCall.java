@@ -10,8 +10,10 @@ import p4test.AbstractSyntaxTree.Visitor;
  */
 public class FuncCall extends Expression
 {
-    public FuncCall(Identifier funcIdentifier)
+    public FuncCall(Identifier funcIdentifier, Arguments args)
     {
+        children.add(funcIdentifier);
+        children.add(args);
     }
     public void visit(Visitor v)
     {

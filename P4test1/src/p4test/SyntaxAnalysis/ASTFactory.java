@@ -45,6 +45,8 @@ public class ASTFactory
         SemanticAction.put("BuildIfStmt", ASTFactory.this::CreateIfStmt);
         SemanticAction.put("BuildUntilStmt", ASTFactory.this::CreateUntilStmtTree);
         SemanticAction.put("BuildElseStmt", ASTFactory.this::CreateElse);
+        SemanticAction.put("BuildActualParams", ASTFactory.this::CreateActualParameters);
+        SemanticAction.put("BuildFuncCall", ASTFactory.this::CreateFuncCall);
     }
     public void CreateAbstractTree(String action)
     {
@@ -78,7 +80,10 @@ public class ASTFactory
     }
     private void CreateFuncCall()
     {
-        FuncCall funcid = new FuncCall(new Identifier(terminals.pop().Value));
+        Arguments args = (Arguments) astStack.pop();
+        Identifier id = (Identifier) astStack.pop();
+        FuncCall funcCall = new FuncCall(id,args);
+        astStack.push(funcCall);
     }
     private void CreateActualParameters()
     {
@@ -86,17 +91,21 @@ public class ASTFactory
         ArrayList<Argument> parameters = new ArrayList<>();
         while (! endPara.Value.equals("("))
         {
-            if (! terminals.peek().Type.SEPARATOR.equals(TokenType.SEPARATOR))
+            if (! terminals.peek().Type.equals(TokenType.SEPARATOR))
             {
                 Token id = terminals.pop();
-                parameters.add(new Argument(id));
+                Argument arg = id.Type.equals(TokenType.IDENTIFIER) ?
+                        new Argument(new Identifier(id.Value)) :
+                        new Argument(new ValExpr(id));
+                parameters.add(arg);
             }
             endPara = terminals.pop();
         }
         Arguments astParameters = new Arguments();
         for (Argument parameter : parameters)
         {
-            astParameters.AdoptChildren(parameter);
+            System.out.println("asdassdas " + parameter);
+            astParameters.children.add(parameter);
         }
         astStack.push(astParameters);
     }
@@ -113,7 +122,7 @@ public class ASTFactory
         Block block = (Block) astStack.pop();
         BoolExpr condition = (BoolExpr) astStack.pop();
         // remove 'if' terminal
-        terminals.pop();
+        //terminals.pop();
         IfStmt ifstmt = new IfStmt(condition,block);
         astStack.push(ifstmt);
     }
@@ -186,7 +195,7 @@ public class ASTFactory
         // Either a VarDCL or an identifier
         Assignment assign = astStack.peek() instanceof Declaration ?
                 new Assignment((VarDcl) astStack.pop(), right) :
-                new Assignment((Identifier) astStack.pop(), right);
+                new Assignment((Expression) astStack.pop(), right);
         astStack.push(assign);
     }
     private void CreateIdentifierTree()
@@ -218,6 +227,10 @@ public class ASTFactory
                 return Types.FLOAT;
             case "void":
                 return Types.VOID;
+            case "character":
+                return Types.CHAR;
+            case "text":
+                return Types.STRING;
         }
         return null;
     }
