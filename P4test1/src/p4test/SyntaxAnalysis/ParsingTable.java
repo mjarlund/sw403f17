@@ -32,12 +32,10 @@ public class ParsingTable {
         if(Grammar.Terminals.contains(s)) return true;
         return false;
     }
-    // TODO: THIS IS BADNESS SOMEONE PLZ SEND HELP
+    
     public boolean IsEpsilon(String s)
     {
-        if(Grammar.First(s,true).contains("EPSILON"))
-            return true;
-        return false;
+        return Grammar.Epsilon.get(s);
     }
 
     private String GetTerminalSymbol(Token token) {
@@ -78,7 +76,7 @@ public class ParsingTable {
             String alpha = Grammar.Productions[i].Right[0];
             String left = Grammar.Productions[i].Left;
 
-            Set<String> t = Grammar.First(alpha, false);
+            Set<String> t = Grammar.First(alpha, true);
             Set<String> predictSet = new HashSet();
 
             predictSet.addAll(t);
@@ -98,6 +96,7 @@ public class ParsingTable {
 
     public static void main(String[] args) throws IOException {
         ParsingTable p = new ParsingTable();
+        System.out.println(p.GetPrediction("DeclarationStatementPrime", "EPSILON"));
         //for(Production product : p.ProductionRules) System.out.println(product);
         System.out.println(p.GetPrediction("Expression", "IntegerLiteral"));
         System.out.println(p.GetPrediction("Expression", new Token("2", TokenType.INTEGER_LITERAL)));

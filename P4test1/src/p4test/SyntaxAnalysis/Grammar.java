@@ -41,7 +41,7 @@ public class Grammar {
     /**
      The erasable symbols.
      */
-    public Map Epsilon;
+    public Map<String, Boolean> Epsilon;
 
     /**
      * The initial production.
