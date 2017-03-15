@@ -1,5 +1,6 @@
 package p4test;
 import p4test.SyntaxAnalysis.Scanner;
+import p4test.SyntaxAnalysis.TableDrivenParser;
 
 import java.io.*;
 import java.nio.charset.*;
@@ -27,11 +28,8 @@ public class InputTester {
     		    	scanner = new Scanner(currentFile);
     		        try 
     		        {
-    		            long i = currentFile.length();
-    		            while(!scanner.IsEOF())
-    		                System.out.println(scanner.nextToken());
-    		            //ParserIaro parserIaro = new ParserIaro(scanner);
-    		            //parserIaro.Run();
+						TableDrivenParser parser = new TableDrivenParser(scanner);
+						parser.ParseProgram();
     		        }
     		        catch (Exception e)//catch exception if any
     		        {
