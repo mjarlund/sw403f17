@@ -17,13 +17,6 @@ import java.util.Stack;
  */
 public class ASTFactory
 {
-    private enum SemanticActions
-    {
-        BuildVarDCL, BuildFuncDcl, CombineUp, CombineDown, BuildValExpr, BuildAssign,
-        BuildID, BuildBlock, BuildFormalParameters, BuildIfStmt, BuildBoolExpr, ClearIfTerminals,
-        BuildBinaryExpr, BuildFuncCall, BuildActualParameters
-    }
-
     public DefaultHashMap<String, Runnable> SemanticAction = new DefaultHashMap<String, Runnable>(null);
     private Stack<AST> astStack;
     private Stack<Token> terminals;
@@ -51,6 +44,7 @@ public class ASTFactory
         SemanticAction.put("BuildFormalParams", ASTFactory.this::CreateFormalParametersTree);
         SemanticAction.put("BuildIfStmt", ASTFactory.this::CreateIfStmt);
         SemanticAction.put("BuildUntilStmt", ASTFactory.this::CreateUntilStmtTree);
+        SemanticAction.put("BuildElseStmt", ASTFactory.this::CreateElse);
     }
     public void CreateAbstractTree(String action)
     {
@@ -58,29 +52,6 @@ public class ASTFactory
         if (method!=null)method.run();
         else
             throw new Error("Semantic action not found please come again (indian accent)");
-    }
-    private void CombineAST(SemanticActions action)
-    {
-        if (astStack.size() > 1)
-        {
-            if(action.equals(SemanticActions.CombineUp))
-            {
-                AST parent = astStack.pop();
-                AST subtree = astStack.pop();
-                parent.AdoptChildren(subtree);
-                astStack.push(parent);
-            }
-            else
-            {
-                AST subtree = astStack.pop();
-                astStack.peek().AdoptChildren(subtree);
-            }
-        }
-        else
-        {
-            AST subtree = astStack.pop();
-            program.AdoptChildren(subtree);
-        }
     }
     /* Combines the top of the tree stack with the one below it */
     private void CombineDown()
@@ -149,10 +120,6 @@ public class ASTFactory
     private void CreateElse()
     {
         Block elseBlock = (Block) astStack.pop();
-        // pop 'end' 'else' 'if'
-        terminals.pop();
-        terminals.pop();
-        terminals.pop();
         ElseStmt elseStmt = new ElseStmt(elseBlock);
         astStack.push(elseStmt);
     }

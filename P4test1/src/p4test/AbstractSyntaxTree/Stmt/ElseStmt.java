@@ -7,6 +7,6 @@ public class ElseStmt extends Statement
 {
     public ElseStmt(Block block)
     {
-
+        children.add(block);
     }
 }

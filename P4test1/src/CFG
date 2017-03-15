@@ -69,7 +69,7 @@ ParameterListBody -> EPSILON
 ParameterListBodyPrime -> , ParameterListBody
 ParameterListBodyPrime -> EPSILON
 SelectionStatement -> if Condition BuildBlock Block BuildIfStmt SelectionStatementPrime CombineDown
-SelectionStatementPrime -> else BuildBlock Block end else if
+SelectionStatementPrime -> else BuildBlock Block BuildElseStmt CombineDown end else if
 SelectionStatementPrime -> end if
 IterationStatement -> until Condition BuildBlock Block BuildUntilStmt end until CombineDown
 IterationStatement -> foreach ( FormalParameter in Parameter ) BuildBlock Block end foreach
