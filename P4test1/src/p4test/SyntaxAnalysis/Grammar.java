@@ -2,6 +2,9 @@ package p4test.SyntaxAnalysis;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.*;
 
 /**
@@ -14,7 +17,7 @@ public class Grammar {
     public Production[] Productions;
 
     /**
-     * Construct a grammar with n productions
+     * Construct a grammar with n productions.
      */
     public Grammar(int n) {
         Productions = new Production[n];
@@ -44,6 +47,16 @@ public class Grammar {
      * The initial production.
      */
     public String initialP;
+
+    /**
+     * Memoization map of the first sets.
+     */
+    private Map<String, Set> firstMap;
+
+    /**
+     * Memoization map of the follow sets.
+     */
+    private Map<String, Set> followMap;
 
     /**
      *  Construct grammar from file
@@ -121,6 +134,10 @@ public class Grammar {
      * @return
      */
     public Set First(String v, Boolean inclEpsilon) {
+        // Retrieve memoized value, if it exists.
+        if(firstMap.get(v) != null) return firstMap.get(v);
+
+        // Initialize variables
         Set<String> s = new HashSet(), visited = new HashSet<>();
 
         // Explore the first child of v and add it's children to the visit set.
@@ -136,6 +153,8 @@ public class Grammar {
 
             }
         }
+
+        firstMap.put(v, s);
         return s;
     }
 
@@ -204,6 +223,10 @@ public class Grammar {
      * @return
      */
     public Set Follow(String v) {
+        // Retrieve memoized value, if it exists.
+        if(followMap.get(v) != null) return followMap.get(v);
+
+        // Initialize variables
         Set<String> s = new HashSet(), visited = new HashSet<>();
 
         // If the symbol is the initial non-terminal add $ to its follow set
@@ -216,6 +239,8 @@ public class Grammar {
         for(String symbol : visited) {
             if(Terminals.contains(symbol)) s.add(symbol);
         }
+
+        followMap.put(v, s);
         return s;
     }
 
@@ -263,12 +288,28 @@ public class Grammar {
     public void init() {
         initializeSymbols();
         Epsilon = new HashMap<String, Boolean>();
+        firstMap = new HashMap<>();
+        followMap = new HashMap<>();
         for(String s : Symbols) Epsilon.put(s, false);
         initEpsilon();
     }
 
     public static void main(String[] args) throws IOException {
-        Grammar cfg = fromFile("src/CFG");
-        System.out.println(cfg.First("DeclarationStatementPrime",true));
+        Grammar cfg = new ParsingTable().Grammar;
+
+        long startTime = System.currentTimeMillis();
+        for(int i = 0; i < 10000; i++) {
+            cfg.Follow("DeclarationStatementPrime");
+        }
+        long totalTime = System.currentTimeMillis() - startTime;
+        NumberFormat formatter = new DecimalFormat("#0.000000");
+        System.out.println("Execution time is " + formatter.format(totalTime / 1000d) + " seconds (Follow set)");
+
+        startTime = System.currentTimeMillis();
+        for(int i = 0; i < 10000; i++) {
+            cfg.First("DeclarationStatementPrime",true);
+        }
+        totalTime = System.currentTimeMillis() - startTime;
+        System.out.println("Execution time is " + formatter.format(totalTime / 1000d) + " seconds (First set)");
     }
 }
