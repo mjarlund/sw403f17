@@ -24,6 +24,8 @@ public class TypeConverter
                 return "FloatingLiteral";
             case STRING_LITERAL:
                 return "StringLiteral";
+            case EOF:
+                return "$";
             default:
                 return null;
         }
