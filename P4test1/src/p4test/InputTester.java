@@ -1,4 +1,6 @@
 package p4test;
+import p4test.SyntaxAnalysis.Scanner;
+
 import java.io.*;
 import java.nio.charset.*;
 import java.nio.file.Files;
@@ -26,10 +28,10 @@ public class InputTester {
     		        try 
     		        {
     		            long i = currentFile.length();
-    		            while(scanner.index < scanner.inputLen)
+    		            while(!scanner.IsEOF())
     		                System.out.println(scanner.nextToken());
-    		            ParserIaro parserIaro = new ParserIaro(scanner);
-    		            parserIaro.Run();    		            
+    		            //ParserIaro parserIaro = new ParserIaro(scanner);
+    		            //parserIaro.Run();
     		        }
     		        catch (Exception e)//catch exception if any
     		        {

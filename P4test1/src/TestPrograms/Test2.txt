@@ -6,10 +6,12 @@ void MissionOne ()
      MissionTwo(target)
 end MissionOne 
 
-string MissionTwo(number target)
+text MissionTwo(number target)
     string text
     if(target above 2)
-    text is hej
-    end if 
-    return text
+    text is "lol"
+    else
+    text is "not lol"
+    end else if 
+    return "text"
 end MissionTwo
