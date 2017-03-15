@@ -10,6 +10,8 @@ public class Identifier extends Expression
 {
     public Identifier(String id)
     {
-
+        ID = id;
     }
+    public String ID;
 }
+

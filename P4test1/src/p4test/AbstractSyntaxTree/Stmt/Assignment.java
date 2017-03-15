@@ -16,7 +16,7 @@ public class Assignment extends Statement
         children.add(var);
         children.add(expr);
     }
-    public Assignment(Identifier identifier, Expression expr)
+    public Assignment(Expression identifier, Expression expr)
     {
         children.add(identifier);
         children.add(expr);

@@ -10,7 +10,7 @@ public class Test
 {
     public static void main(String args[])
     {
-        String code = "void func1() if(a or b) number a is 2 else number b is 3 end else if end func1";
+        String code = "void func1() func(2,3) end func1";
         Scanner sc = new Scanner(code);
         /*while(!sc.IsEOF())
             System.out.println(sc.nextToken());*/
@@ -20,7 +20,7 @@ public class Test
         printtree(programTree);
     }
 
-    private static void printtree(AST tree)
+    public static void printtree(AST tree)
     {
         System.out.println(tree);
         System.out.println(tree.children);
