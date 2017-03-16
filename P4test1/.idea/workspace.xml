@@ -1219,18 +1219,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/p4test/SyntaxAnalysis/TableDrivenParser.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3542">
-          <caret line="165" column="9" lean-forward="false" selection-start-line="165" selection-start-column="9" selection-end-line="165" selection-end-column="9" />
-          <folding>
-            <element signature="imports" expanded="false" />
-            <element signature="e#6207#6208#0" expanded="false" />
-            <element signature="e#6255#6256#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/p4test/SyntaxAnalysis/ASTFactory.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="472">
@@ -1244,7 +1232,7 @@
     <entry file="file://$PROJECT_DIR$/src/p4test/AbstractSyntaxTree/Visualizing/VisualNode.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="484">
-          <caret line="22" column="0" lean-forward="true" selection-start-line="22" selection-start-column="0" selection-end-line="22" selection-end-column="0" />
+          <caret line="22" column="0" lean-forward="false" selection-start-line="22" selection-start-column="0" selection-end-line="22" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
