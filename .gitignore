@@ -1,9 +1,15 @@
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
 
+<<<<<<< HEAD
 # IntelliJ
 P4test1/out/
 .idea/
+=======
+# Package Files #
+*.war
+*.ear
+>>>>>>> refs/remotes/origin/master
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
