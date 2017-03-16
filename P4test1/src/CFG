@@ -9,7 +9,7 @@ DeclarationStatement -> Type Identifier BuildVarDCL DeclarationStatementPrime
 DeclarationStatement -> ListDeclarationStatement
 DeclarationStatementPrime -> FormalParameterList BuildBlock Block end Identifier BuildFuncDcl CombineDown
 DeclarationStatementPrime -> is Expression BuildAssign CombineDown
-DeclarationStatementPrime -> EPSILON
+DeclarationStatementPrime -> EPSILON CombineDown
 ListDeclarationStatement -> list of Type Identifier is ParameterList
 FormalParameter -> Type Identifier
 FormalParameterList -> ( FormalParameterListBody ) BuildFormalParams

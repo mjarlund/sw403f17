@@ -1,0 +1,1 @@
+void FirstMission () number target is 10 end FirstMission
