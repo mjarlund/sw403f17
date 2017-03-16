@@ -96,9 +96,13 @@ public class ASTFactory
             if (! terminals.peek().Type.equals(TokenType.SEPARATOR))
             {
                 Token id = terminals.pop();
-                Argument arg = id.Type.equals(TokenType.IDENTIFIER) ?
-                        new Argument(new Identifier(id.Value)) :
-                        new Argument(new ValExpr(id));
+                Argument arg;
+                if (id.Type.equals(TokenType.IDENTIFIER)){
+                    arg = new Argument(new Identifier(id.Value));
+                    arg.SetValue(id.Value);
+                } else
+                    arg = new Argument(new ValExpr(id));
+
                 parameters.add(arg);
             }
             endPara = terminals.pop();
