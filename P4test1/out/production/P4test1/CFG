@@ -50,6 +50,8 @@ PrimaryExpression -> FloatingPointLiteral BuildValExpr
 PrimaryExpression -> StringLiteral BuildValExpr
 PrimaryExpression -> BooleanLiteral BuildValExpr
 PrimaryExpression -> ( Expression )
+PrimaryExpression -> ExpressionStatement
+ExpressionStatement -> Identifier ExpressionStatementPrime
 ExpressionStatement -> Identifier BuildIdentifier ExpressionStatementPrime
 ExpressionStatementPrime -> is Expression BuildAssign CombineDown
 ExpressionStatementPrime -> ParameterList BuildFuncCall CombineDown

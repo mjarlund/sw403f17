@@ -1,1 +1,6 @@
-void FirstMission () number target is 10 end FirstMission
+void FirstMission (string person, number speed)
+    number target is speed
+    until(true)
+        string turn is target
+    end until
+end FirstMission
