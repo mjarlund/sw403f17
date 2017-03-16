@@ -23,7 +23,7 @@ public class Visualizer extends PApplet {
 
     public void setup(){
         /* Visualizer settings */
-        textSize(18);
+        textSize(12);
 
         /* Scanner and parser */
         String code = "void func1()\n number b is a\n if (a equals b)\n number b is a+1\n end if\n end func1 \n";
@@ -44,8 +44,9 @@ public class Visualizer extends PApplet {
 
     /* Builds the visual tree from an AST */
     public void BuildVisualTree(AST tree){
-        visTree = new VisualNode(tree, new PVector(500, 50)); //Root in the top-middle of the screen
-        visTree.AssignPositionsToChildren();
+        visTree = new VisualNode(tree, new PVector(400, 50)); //Root in the top-middle of the screen
+        ArrayList<VisualNode> visTreeList = new ArrayList<VisualNode>();
+        visTree.AssignPositionsToChildren(visTreeList);
     }
 
     void AdjustPositions(){

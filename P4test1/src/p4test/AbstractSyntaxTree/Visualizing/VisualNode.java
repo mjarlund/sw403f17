@@ -12,8 +12,11 @@ import java.util.ArrayList;
 public class VisualNode extends PApplet {
     AST base;
     PVector pos;
+    PVector textPos;
     ArrayList<VisualNode> children;
     int bubbleWidth = 0;
+    int defaultXOffset = 100;
+    int defaultYOffset = 50;
 
     public VisualNode(AST node, PVector position){
         pos = position;
@@ -23,17 +26,33 @@ public class VisualNode extends PApplet {
 
     /* Assings positions to the nodes based on the
      * number of children a given node has */
-    public void AssignPositionsToChildren(){
-        int numChildren = base.children.size();
-        int childPosX = (int)( pos.x - ( numChildren * 100 * 0.5) + 50); //Don't ask
-        int childPosY = (int)(pos.y + 100);
+    public void AssignPositionsToChildren(ArrayList<VisualNode> tree){
+        int currentXOffset = -defaultXOffset;
 
-        for (AST currentChild : base.children){
-            PVector newPos = new PVector(childPosX, childPosY);
-            VisualNode visChild = new VisualNode(currentChild, newPos);
-            childPosX += 120;
-            children.add(visChild);
-            visChild.AssignPositionsToChildren();
+        if (base.GetValue() != null){
+            bubbleWidth = base.GetValue().length() * 12;
+        }
+
+        textPos = new PVector((int)(pos.x-bubbleWidth*0.25) , pos.y+5);
+
+        for (AST n : base.children){
+
+            PVector visPos = new PVector(pos.x+currentXOffset, pos.y + defaultYOffset);
+            VisualNode visNode = new VisualNode(n, visPos);
+
+            for (VisualNode node : tree){
+                if ( visNode.pos.x == node.pos.x && visNode.pos.y == node.pos.y ){
+                    visNode.pos.x += defaultXOffset;
+                    currentXOffset += defaultXOffset;
+                    break;
+                }
+            }
+
+            tree.add(visNode);
+            children.add(visNode);
+            visNode.AssignPositionsToChildren(tree);
+
+            currentXOffset += defaultXOffset;
         }
     }
 
@@ -41,17 +60,15 @@ public class VisualNode extends PApplet {
     public void Show(PApplet ProcessingInstance){
 
         if (base.GetValue() != null){
-            bubbleWidth = base.GetValue().length() * 18;
+            ProcessingInstance.ellipse(pos.x, pos.y, bubbleWidth, 30);
+            ProcessingInstance.fill(0); //Black draw color (for the text)
+            ProcessingInstance.text(base.GetValue(), textPos.x, textPos.y);
+            ProcessingInstance.fill(255); //White draw color (for everything else)
         }
 
-        ProcessingInstance.ellipse(pos.x, pos.y, bubbleWidth, 30);
-        ProcessingInstance.fill(0); //Black
-        if (base.GetValue() != null) ProcessingInstance.text(base.GetValue(),
-                (int)(pos.x-bubbleWidth*0.25) , pos.y+5); //Just so it looks good
-        ProcessingInstance.fill(255); //White
 
         for (VisualNode n : children){
-            ProcessingInstance.line(pos.x, pos.y+15, n.pos.x, n.pos.y);
+            ProcessingInstance.line(pos.x, pos.y+15, n.pos.x, n.pos.y-15);
             n.Show(ProcessingInstance);
         }
     }
