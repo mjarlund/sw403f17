@@ -10,6 +10,14 @@ import java.util.List;
  */
 public class AST
 {
+    private String value;
+    public String GetValue(){
+        return value;
+    }
+    public void SetValue(String val){
+        value = val;
+    }
+
     private AST nextRightSibling;
     public AST GetNextRightSibling(){
         return nextRightSibling;
@@ -33,6 +41,9 @@ public class AST
     public void SetLeftMostChild(AST child){
         leftMostChild = child;
     }
+
+    // TODO Remove only a test
+    public ArrayList<AST> children = new ArrayList<AST>();
 
     private AST parent;
     public AST GetParent(){
@@ -63,6 +74,17 @@ public class AST
             newSiblings.SetParent(theseSiblings.GetParent());
         }
         return newSiblings;
+    }
+
+    public int CountChildren(){
+        int numChildren = 0;
+        AST currentChild = GetLeftMostChild();
+        while (currentChild != null){
+            numChildren++;
+            currentChild = currentChild.GetNextRightSibling();
+        }
+
+        return numChildren;
     }
 
     public AST AdoptChildren(AST toAdopt) {

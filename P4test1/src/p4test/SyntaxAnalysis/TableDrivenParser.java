@@ -1,9 +1,6 @@
 package p4test.SyntaxAnalysis;
 
 import p4test.AbstractSyntaxTree.AST;
-import p4test.AbstractSyntaxTree.Dcl.VarDcl;
-import p4test.AbstractSyntaxTree.Types;
-import p4test.DefaultHashMap;
 import p4test.Token;
 import p4test.TokenType;
 
@@ -17,54 +14,72 @@ public class TableDrivenParser
     // Can be optimized to use integers instead of strings
     private Stack<String> ParseStack;
 
-    private ProductionTable table;
+    private ParsingTable table;
     private Scanner input;
     private Stack<String> parseStack;
-    private Stack<String> semanticStack;
+    private Stack<Token> terminalsStack;
     private Token CurrentToken;
     private ASTFactory AstFactory;
 
     private List<String> terminals;
-    private List<String> semanticActions;
 
     public TableDrivenParser(Scanner input)
     {
         this.input = input;
-        AstFactory = new ASTFactory();
+        this.table = new ParsingTable();
         terminals = new ArrayList<>();
-        // terminal values in CFG
-        terminals.add("Type"); terminals.add("Identifier");
-        terminals.add("EOL");
-
-        semanticActions = new ArrayList<>();
-        semanticActions.add("Some semantic action");
 
         CurrentToken = input.nextToken();
-        table = new ProductionTable();
-        table.initTable();
 
     }
 
     /* Parses the input program and returns the AST for the program */
+    // TODO PARSER SKAL SKRIVES PÆNERE MEN IKKE NU!!!!
     public AST ParseProgram()
     {
         parseStack = new Stack<String>(); /* RHS symbols for productions and terminals */
-        semanticStack = new Stack<String>(); /* Semantic actions */
-        Apply(table.GetProductions("Program", null)); /* Push RHS symbols for the productions of "Program". */
+        terminalsStack = new Stack<Token>();
+        AstFactory = new ASTFactory(terminalsStack);
+        AstFactory.initFactory();
+        Apply(table.GetPrediction("Program", CurrentToken).Right); /* Push RHS symbols for the productions of "Program". */
         boolean accepted = false;
         AST programTree = new AST();
 
         while (!accepted)
         {
+            //System.out.println(parseStack);
+            if(parseStack.peek() != null && parseStack.peek().equals("$"))
+            {
+                if(CurrentToken.Type.equals(TokenType.EOF))
+                    accepted = true;
+                else
+                    throw new Error("not completed");
+            }
             /* If the next RHS symbol is a terminal, or if the current token is an identifier,
              * try to match the symbol with the current token.
              * If the parseStack is empty and the current token is EOF, end the parsing. */
-            if (terminals.contains(parseStack.peek()) || CurrentToken.Type.equals(TokenType.IDENTIFIER))
+            else if (table.IsTerminal(parseStack.peek()))
             {
-                Match(parseStack.peek(), CurrentToken);
-                if (parseStack.size() == 0 && CurrentToken.Type.equals(TokenType.EOF))
+                if(parseStack.peek() != null && parseStack.peek().equals("EPSILON"))
                 {
-                    accepted = true;
+                    if(parseStack.size() == 0 && !CurrentToken.Type.equals(TokenType.EOF))
+                        throw new Error("lel");
+                    else if (parseStack.size() == 0)
+                    {
+                        accepted = true;
+                        break;
+                    }
+                }
+                // Terminal might be a semantic actions
+                else if(AstFactory.SemanticAction.get(parseStack.peek())!=null)
+                {
+                    AstFactory.CreateAbstractTree(parseStack.peek());
+                }
+                else
+                {
+                    // terminal stack is used when processing semantic actions
+                    terminalsStack.push(CurrentToken);
+                    Match(parseStack.peek(), CurrentToken);
                 }
                 parseStack.pop();
             }
@@ -73,7 +88,8 @@ public class TableDrivenParser
                 /* If the next right hand side symbol is the empty string, pop it, and
                  * check for empty parseStack and EOF current token. End the parsing if
                  * both of these are true. */
-                if(parseStack.peek() != null && parseStack.peek().equals("EPSILON"))
+                if(parseStack.peek() != null && parseStack.peek().equals("epsilon") ||
+                        parseStack.peek().equals("EPSILON"))
                 {
                     parseStack.pop();
                     if(parseStack.size() == 0 && !CurrentToken.Type.equals(TokenType.EOF))
@@ -89,9 +105,19 @@ public class TableDrivenParser
                     /* Acquire the RHS symbols for the production of the next RHS symbol
                      * in the parseStack. If there are no productions, throw an error.
                      * Otherwise, push the productions' RHS symbols to the parseStack. */
-                    ArrayList<String> RHSSymbols = table.GetProductions(parseStack.peek(), CurrentToken.Type);
+                    Production productions = table.GetPrediction(parseStack.peek(), CurrentToken);
+                    String[] RHSSymbols = productions != null ? productions.Right : null;
                     if (RHSSymbols == null)
-                        throw new Error("lel");
+                    {   if(!table.IsEpsilon(parseStack.peek()))
+                        {
+                            System.out.println(parseStack.peek());
+                            throw new Error("No productions available.");
+                        }
+                        else
+                        {
+                            parseStack.pop();
+                        }
+                    }
                     else
                     {
                         parseStack.pop();
@@ -99,27 +125,19 @@ public class TableDrivenParser
                     }
                 }
             }
-
-            /* If the next symbol in the parseStack is a semanticAction,
-             * push this to the semanticStack. */
-            if (semanticActions.contains(parseStack.peek()))
-            {
-                semanticStack.push(parseStack.peek());
-            }
         }
-        System.out.println(semanticStack);
-        return programTree;
+        return AstFactory.program;
     }
 
     /* Pushes the input list of productions onto the
      * parseStack in reverse order, so that the first
       * production rule in the list is the first one popped */
-    private void Apply(ArrayList<String> RHSSymbols)
+    private void Apply(String[] RHSSymbols)
     {
-        int iterations = RHSSymbols.size();
+        int iterations = RHSSymbols.length;
         for(int i = iterations-1; i>=0; i--)
         {
-            parseStack.push(RHSSymbols.get(i));
+            parseStack.push(RHSSymbols[i]);
         }
     }
 
@@ -137,7 +155,8 @@ public class TableDrivenParser
      * are identical, retrieve the next token in the scanner */
     private void Match(String val, Token token)
     {
-        String value = GetMatchVal(token);
+        String value = TypeConverter.TypeToTerminal(token);
+        value = value != null ? value : token.Value;
         if(val.equals(value))
         {
             System.out.println("matched " + value);
@@ -145,25 +164,6 @@ public class TableDrivenParser
         }
         else
             throw new Error("Got " + value + " expected " + val);
-    }
-
-    /* Retrieves the comparable version of the given token
-     * Based on the value of the token */
-    private String GetMatchVal(Token token)
-    {
-        switch (token.Value)
-        {
-            case "number":
-                return "Type";
-            case "\\n":
-                return "EOL";
-        }
-        switch (token.Type)
-        {
-            case IDENTIFIER:
-                return "Identifier";
-        }
-        return "sentinel";
     }
 
     /* Sets current token to the next token found by the scanner */

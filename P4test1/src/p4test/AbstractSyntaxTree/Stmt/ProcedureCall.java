@@ -1,5 +1,6 @@
 package p4test.AbstractSyntaxTree.Stmt;
 
+import p4test.AbstractSyntaxTree.Dcl.Identifier;
 import p4test.AbstractSyntaxTree.Expr.Arguments;
 import p4test.AbstractSyntaxTree.Visitor;
 
@@ -8,14 +9,13 @@ import p4test.AbstractSyntaxTree.Visitor;
  */
 public class ProcedureCall extends Statement
 {
-    public ProcedureCall(String funcIdentifier, Arguments args)
+    public ProcedureCall(Identifier funcIdentifier, Arguments args)
     {
-        FunctionIdentifier = funcIdentifier;
-        AddNode(args);
+        children.add(funcIdentifier);
+        children.add(args);
     }
     public void visit(Visitor v)
     {
         v.visit(this);
     }
-    public final String FunctionIdentifier;
 }

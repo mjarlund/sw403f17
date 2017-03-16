@@ -10,8 +10,8 @@ public class UntilStmt extends Statement
 {
     public UntilStmt(BoolExpr condition, Block statements)
     {
-        AddNode(condition);
-        AddNode(statements);
+        children.add(condition);
+        children.add(statements);
     }
     public void visit(Visitor v)
     {

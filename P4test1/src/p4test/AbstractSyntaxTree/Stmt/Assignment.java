@@ -1,6 +1,7 @@
 package p4test.AbstractSyntaxTree.Stmt;
 
 import p4test.AbstractSyntaxTree.Dcl.Declaration;
+import p4test.AbstractSyntaxTree.Dcl.Identifier;
 import p4test.AbstractSyntaxTree.Dcl.VarDcl;
 import p4test.AbstractSyntaxTree.Expr.Expression;
 import p4test.AbstractSyntaxTree.Visitor;
@@ -12,19 +13,17 @@ public class Assignment extends Statement
 {
     public Assignment(VarDcl var, Expression expr)
     {
-        AddNode(var);
-        AddNode(expr);
-        Identifier = var.Identifier;
+        children.add(var);
+        children.add(expr);
     }
-    public Assignment(String identifier, Expression expr)
+    public Assignment(Expression identifier, Expression expr)
     {
-        Identifier = identifier;
-        AddNode(expr);
+        children.add(identifier);
+        children.add(expr);
     }
     public void visit(Visitor v)
     {
         v.visit(this);
     }
-    public final String Identifier;
 
 }

@@ -1,5 +1,6 @@
 package p4test.AbstractSyntaxTree.Expr;
 
+import p4test.AbstractSyntaxTree.Dcl.Identifier;
 import p4test.AbstractSyntaxTree.Expr.Arguments;
 import p4test.AbstractSyntaxTree.Expr.Expression;
 import p4test.AbstractSyntaxTree.Visitor;
@@ -9,14 +10,13 @@ import p4test.AbstractSyntaxTree.Visitor;
  */
 public class FuncCall extends Expression
 {
-    public FuncCall(String funcIdentifier, Arguments args)
+    public FuncCall(Identifier funcIdentifier, Arguments args)
     {
-        Identifier = funcIdentifier;
-        AddNode(args);
+        children.add(funcIdentifier);
+        children.add(args);
     }
     public void visit(Visitor v)
     {
         v.visit(this);
     }
-    public final String Identifier;
 }

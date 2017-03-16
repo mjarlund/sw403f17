@@ -1,18 +1,23 @@
 package p4test.AbstractSyntaxTree.Expr;
 
 import p4test.AbstractSyntaxTree.AST;
+import p4test.AbstractSyntaxTree.Dcl.Identifier;
 import p4test.AbstractSyntaxTree.Visitor;
+import p4test.Token;
 
 /**
  * Created by mysjkin on 3/5/17.
  */
-public class Argument extends AST
+public class Argument extends Expression
 {
-    public Argument(String value)
+    public Argument(ValExpr value)
     {
-        Value = value;
+        children.add(value);
     }
-    public final String Value;
+    public Argument(Identifier id)
+    {
+        children.add(id);
+    }
     public void visit(Visitor v)
     {
         v.visit(this);
