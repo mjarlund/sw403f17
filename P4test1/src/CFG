@@ -1,13 +1,13 @@
 Program -> Statement Statements $
 Statements -> Statement Statements
 Statements -> EPSILON
-Statement -> DeclarationStatement
-Statement -> ExpressionStatement
-Statement -> SelectionStatement
-Statement -> IterationStatement
+Statement -> DeclarationStatement EOL
+Statement -> ExpressionStatement EOL
+Statement -> SelectionStatement EOL
+Statement -> IterationStatement EOL
 DeclarationStatement -> Type Identifier BuildVarDCL DeclarationStatementPrime
 DeclarationStatement -> ListDeclarationStatement
-DeclarationStatementPrime -> FormalParameterList BuildBlock Block end Identifier BuildFuncDcl CombineDown
+DeclarationStatementPrime -> FormalParameterList BuildBlock EOL Block end Identifier BuildFuncDcl CombineDown
 DeclarationStatementPrime -> is Expression BuildAssign CombineDown
 DeclarationStatementPrime -> EPSILON CombineDown
 ListDeclarationStatement -> list of Type Identifier is ParameterList
@@ -66,11 +66,11 @@ ParameterListBody -> Parameter ParameterListBodyPrime
 ParameterListBody -> EPSILON
 ParameterListBodyPrime -> , ParameterListBody
 ParameterListBodyPrime -> EPSILON
-SelectionStatement -> if Condition BuildBlock Block BuildIfStmt SelectionStatementPrime CombineDown
-SelectionStatementPrime -> else BuildBlock Block BuildElseStmt CombineDown end else if
+SelectionStatement -> if Condition BuildBlock EOL Block BuildIfStmt SelectionStatementPrime CombineDown
+SelectionStatementPrime -> else BuildBlock EOL Block BuildElseStmt CombineDown end else if
 SelectionStatementPrime -> end if
-IterationStatement -> until Condition BuildBlock Block BuildUntilStmt end until CombineDown
-IterationStatement -> foreach ( FormalParameter in Parameter ) BuildBlock Block end foreach
+IterationStatement -> until Condition BuildBlock EOL Block BuildUntilStmt end until CombineDown
+IterationStatement -> foreach ( FormalParameter in Parameter ) BuildBlock EOL Block end foreach
 Condition -> ( Expression )
 Block -> Statements
 Type -> text

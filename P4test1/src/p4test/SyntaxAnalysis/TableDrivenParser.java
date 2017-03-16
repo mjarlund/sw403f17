@@ -30,7 +30,6 @@ public class TableDrivenParser
         terminals = new ArrayList<>();
 
         CurrentToken = input.nextToken();
-
     }
 
     /* Parses the input program and returns the AST for the program */
