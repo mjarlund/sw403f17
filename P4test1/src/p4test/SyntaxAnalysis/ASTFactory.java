@@ -202,19 +202,23 @@ public class ASTFactory
     {
         Token id = terminals.pop();
         Identifier identifier = new Identifier(id.Value);
+        identifier.SetValue("Id");
         astStack.push(identifier);
     }
     private void CreateValExprTree()
     {
         Token value = terminals.pop();
         ValExpr val = new ValExpr(value);
+        val.SetValue("ValExpr");
         astStack.push(val);
     }
     private void CreateDclTree()
     {
         String id = terminals.pop().Value;
         Types type = GetType(terminals.pop());
-        astStack.push(new VarDcl(type, id));
+        VarDcl dcl = new VarDcl(type, id);
+        dcl.SetValue("VarDcl");
+        astStack.push(dcl);
     }
 
     private Types GetType(Token token)
