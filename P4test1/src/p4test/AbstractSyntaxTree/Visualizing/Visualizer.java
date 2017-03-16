@@ -4,7 +4,6 @@ import p4test.AbstractSyntaxTree.AST;
 import p4test.SyntaxAnalysis.Scanner;
 import p4test.SyntaxAnalysis.TableDrivenParser;
 import processing.core.PApplet;
-import processing.core.PFont;
 import processing.core.PVector;
 
 import java.util.ArrayList;
@@ -27,7 +26,7 @@ public class Visualizer extends PApplet {
         textSize(18);
 
         /* Scanner and parser */
-        String code = "void func1() number b is a if (a equals b) number b is a+1 end if end func1";
+        String code = "void func1()\n number b is a\n if (a equals b)\n number b is a+1\n end if\n end func1 \n";
         sc = new p4test.SyntaxAnalysis.Scanner(code);
         parser = new TableDrivenParser(sc);
         AST programTree = parser.ParseProgram();
