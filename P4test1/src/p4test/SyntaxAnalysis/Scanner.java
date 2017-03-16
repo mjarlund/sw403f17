@@ -34,7 +34,7 @@ public class Scanner
         words.put("or", TokenType.OPERATOR); words.put("and", TokenType.OPERATOR);
         words.put("equals", TokenType.OPERATOR); words.put("is", TokenType.OPERATOR);
         words.put("not", TokenType.OPERATOR); words.put("above", TokenType.OPERATOR);
-        words.put("under", TokenType.OPERATOR);
+        words.put("below", TokenType.OPERATOR);
 
         // Keywords
         words.put("until", TokenType.KEYWORD); words.put("end", TokenType.KEYWORD);
