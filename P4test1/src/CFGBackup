@@ -9,7 +9,7 @@ DeclarationStatement -> Type Identifier BuildVarDCL DeclarationStatementPrime
 DeclarationStatement -> ListDeclarationStatement
 DeclarationStatementPrime -> FormalParameterList BuildBlock Block end Identifier BuildFuncDcl CombineDown
 DeclarationStatementPrime -> is Expression BuildAssign CombineDown
-DeclarationStatementPrime -> EPSILON CombineDown
+DeclarationStatementPrime -> EPSILON
 ListDeclarationStatement -> list of Type Identifier is ParameterList
 FormalParameter -> Type Identifier
 FormalParameterList -> ( FormalParameterListBody ) BuildFormalParams
@@ -51,8 +51,10 @@ PrimaryExpression -> StringLiteral BuildValExpr
 PrimaryExpression -> BooleanLiteral BuildValExpr
 PrimaryExpression -> ( Expression )
 ExpressionStatement -> Identifier BuildIdentifier ExpressionStatementPrime
-ExpressionStatementPrime -> is Expression BuildAssign CombineDown
+ExpressionStatementPrime -> ExpressionStatementPrimePrime is Expression BuildAssign CombineDown
 ExpressionStatementPrime -> ParameterList BuildFuncCall CombineDown
+ExpressionStatementPrimePrime -> .Identifier
+ExpressionStatementPrimePrime -> EPSILON
 Parameter -> Identifier
 Parameter -> IntegerLiteral
 Parameter -> FloatingPointLiteral
