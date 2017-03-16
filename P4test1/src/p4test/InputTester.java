@@ -22,6 +22,7 @@ public class InputTester {
     		File[] listOfFiles = folder.listFiles();
 
     		for (File file : listOfFiles) {
+    			System.out.println("----------------" + file.getName() + "----------------");
     		    if (file.isFile()) {
     		        currentFile = "";
     		    	currentFile = readFile(System.getProperty("user.dir") + "/src/TestPrograms/" + file.getName());

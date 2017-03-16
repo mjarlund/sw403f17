@@ -13,6 +13,7 @@ public class VisualNode extends PApplet {
     AST base;
     PVector pos;
     ArrayList<VisualNode> children;
+    int bubbleWidth = 0;
 
     public VisualNode(AST node, PVector position){
         pos = position;
@@ -20,6 +21,8 @@ public class VisualNode extends PApplet {
         children = new ArrayList<VisualNode>();
     }
 
+    /* Assings positions to the nodes based on the
+     * number of children a given node has */
     public void AssignPositionsToChildren(){
         int numChildren = base.children.size();
         int childPosX = (int)( pos.x - ( numChildren * 100 * 0.5) + 50); //Don't ask
@@ -28,19 +31,27 @@ public class VisualNode extends PApplet {
         for (AST currentChild : base.children){
             PVector newPos = new PVector(childPosX, childPosY);
             VisualNode visChild = new VisualNode(currentChild, newPos);
-            childPosX += 100;
+            childPosX += 120;
             children.add(visChild);
             visChild.AssignPositionsToChildren();
         }
     }
 
+    /* Recursively displays all nodes in the tree */
     public void Show(PApplet ProcessingInstance){
-        ProcessingInstance.ellipse(pos.x+5, pos.y-5, 50, 50);
+
+        if (base.GetValue() != null){
+            bubbleWidth = base.GetValue().length() * 18;
+        }
+
+        ProcessingInstance.ellipse(pos.x, pos.y, bubbleWidth, 30);
         ProcessingInstance.fill(0); //Black
-        if (base.GetValue() != null) ProcessingInstance.text(base.GetValue(), pos.x, pos.y);
+        if (base.GetValue() != null) ProcessingInstance.text(base.GetValue(),
+                (int)(pos.x-bubbleWidth*0.25) , pos.y+5); //Just so it looks good
         ProcessingInstance.fill(255); //White
+
         for (VisualNode n : children){
-            ProcessingInstance.line(pos.x, pos.y, n.pos.x, n.pos.y);
+            ProcessingInstance.line(pos.x, pos.y+15, n.pos.x, n.pos.y);
             n.Show(ProcessingInstance);
         }
     }

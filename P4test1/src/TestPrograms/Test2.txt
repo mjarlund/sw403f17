@@ -1,0 +1,6 @@
+void func1 ()
+     number target is 0
+     until(target equals 10)
+        target is target + 1
+     end until
+end func1

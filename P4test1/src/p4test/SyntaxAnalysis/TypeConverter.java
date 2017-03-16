@@ -26,6 +26,9 @@ public class TypeConverter
                 return "StringLiteral";
             case EOF:
                 return "$";
+            case SEPARATOR:
+                if (token.Value.equals("\\n"))
+                    return "EOL";
             default:
                 return null;
         }
