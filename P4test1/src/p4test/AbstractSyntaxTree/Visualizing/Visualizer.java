@@ -44,7 +44,8 @@ public class Visualizer extends PApplet {
 
     /* Builds the visual tree from an AST */
     public void BuildVisualTree(AST tree){
-        visTree = new VisualNode(tree, new PVector(400, 50)); //Root in the top-middle of the screen
+        visTree = new VisualNode(tree, new PVector(900, 50)); //Root in the top-middle of the screen
+        visTree.defaultXOffset = 400;
         ArrayList<VisualNode> visTreeList = new ArrayList<VisualNode>();
         visTree.AssignPositionsToChildren(visTreeList);
     }

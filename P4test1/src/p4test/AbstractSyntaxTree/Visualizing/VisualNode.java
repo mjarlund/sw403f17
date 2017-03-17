@@ -24,7 +24,7 @@ public class VisualNode extends PApplet {
         children = new ArrayList<VisualNode>();
     }
 
-    /* Assings positions to the nodes based on the
+    /* Assigns positions to the nodes based on the
      * number of children a given node has */
     public void AssignPositionsToChildren(ArrayList<VisualNode> tree){
         int currentXOffset = -defaultXOffset;
