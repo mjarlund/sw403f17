@@ -26,9 +26,25 @@ public class Visualizer extends PApplet {
         textSize(12);
 
         /* Scanner and parser */
-        String code = "void func1()\n number b is a\n if (a equals b)\n number b is a+1\n func() \n end if\n end func1 \n " +
-                "void func2(number a, number b)\n a is a + b\n end func2\n " +
-                "character func(character a, character b) \n func1() \n func2(a,a) \n if (a above a) \n func2(a,a)\n end if \n return 2 \n end func \n ";
+        String code = "void func1()\n" +
+                        "number b is a\n" +
+                        "if (a equals b)\n " +
+                            "number b is a+1\n" +
+                            "func()\n"+
+                            "end if\n"+
+                        "end func1 \n " +
+                      "void func2(number a, number b)\n"+
+                        "a is a + b\n"+
+                        "end func2\n " +
+                      "character func(character a, character b)\n"+
+                        " func1()\n"+" " +
+                        "func2(a,a)\n"+
+                        "if (a above a)\n"+
+                            "func2(a,a)\n"+
+                            "end if \n"+
+                        " return 2 \n"+
+                        "end func \n ";
+
         sc = new p4test.SyntaxAnalysis.Scanner(code);
         parser = new TableDrivenParser(sc);
         AST programTree = parser.ParseProgram();
