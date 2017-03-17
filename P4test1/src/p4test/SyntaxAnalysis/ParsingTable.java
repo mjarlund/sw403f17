@@ -18,7 +18,7 @@ public class ParsingTable {
 
     public ParsingTable() {
         try {
-            this.Grammar = Grammar.fromFile(Paths.get(getClass().getResource("/"+"CFG").toURI()).toString());
+            this.Grammar = Grammar.FromFile(Paths.get(getClass().getResource("/"+"CFG").toURI()).toString());
         } catch (IOException e) {
             e.printStackTrace();
         } catch (URISyntaxException e) {
