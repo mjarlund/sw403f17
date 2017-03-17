@@ -49,7 +49,7 @@
         </entry>
       </file>
       <file leaf-file-name="TableDrivenParserTest.java" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/p4test/JUnit/SyntaxAnalysisTest/TableDrivenParserTest.java">
+        <entry file="file://$PROJECT_DIR$/src/p4test/JUnit/Test/TableDrivenParserTest.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="68">
               <caret line="6" column="13" lean-forward="false" selection-start-line="6" selection-start-column="13" selection-end-line="6" selection-end-column="13" />
@@ -178,7 +178,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/p4test/ParserIaro.java" />
         <option value="$PROJECT_DIR$/src/p4test/MatchType.java" />
         <option value="$PROJECT_DIR$/src/p4test/Match.java" />
         <option value="$PROJECT_DIR$/src/p4test/TokenType.java" />
@@ -229,6 +228,7 @@
         <option value="$PROJECT_DIR$/src/p4test/AbstractSyntaxTree/Visualizing/Visualizer.java" />
         <option value="$PROJECT_DIR$/src/p4test/JUnit/SyntaxAnalysisTest/ScannerTest.java" />
         <option value="$PROJECT_DIR$/src/p4test/JUnit/SyntaxAnalysisTest/TableDrivenParserTest.java" />
+        <option value="$PROJECT_DIR$/src/p4test/JUnit/Test/TableDrivenParserTest.java" />
       </list>
     </option>
   </component>
@@ -345,6 +345,10 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="JUnit" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Test" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -610,7 +614,7 @@
     <configuration default="false" name="ScannerTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
         <pattern>
-          <option name="PATTERN" value="p4test.JUnit.SyntaxAnalysisTest.*" />
+          <option name="PATTERN" value="p4test.JUnit.Test.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -1045,7 +1049,7 @@
       <workItem from="1489565136831" duration="16871000" />
       <workItem from="1489651689985" duration="8289000" />
       <workItem from="1489662463753" duration="13266000" />
-      <workItem from="1489738579732" duration="412000" />
+      <workItem from="1489738579732" duration="826000" />
     </task>
     <servers />
   </component>
@@ -1053,12 +1057,15 @@
     <history-entry file="ScannerTest - 2017.03.17 at 09h 23m 10s.xml">
       <configuration name="ScannerTest" configurationId="JUnit" />
     </history-entry>
+    <history-entry file="ScannerTest - 2017.03.17 at 09h 30m 04s.xml">
+      <configuration name="ScannerTest" configurationId="JUnit" />
+    </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="44302000" />
+    <option name="totallyTimeSpent" value="44716000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1616" height="876" extended-state="7" />
+    <frame x="-8" y="-8" width="1616" height="876" extended-state="6" />
     <editor active="false" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -1366,7 +1373,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/p4test/JUnit/SyntaxAnalysisTest/TableDrivenParserTest.java">
+    <entry file="file://$PROJECT_DIR$/src/p4test/JUnit/Test/TableDrivenParserTest.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="68">
           <caret line="6" column="13" lean-forward="false" selection-start-line="6" selection-start-column="13" selection-end-line="6" selection-end-column="13" />

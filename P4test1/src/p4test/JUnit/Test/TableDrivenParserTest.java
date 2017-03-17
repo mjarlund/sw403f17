@@ -1,4 +1,4 @@
-package p4test.JUnit.SyntaxAnalysisTest;
+package p4test.JUnit.Test;
 
 import static org.junit.Assert.*;
 
