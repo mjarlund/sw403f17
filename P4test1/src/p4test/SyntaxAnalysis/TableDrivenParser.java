@@ -2,7 +2,6 @@ package p4test.SyntaxAnalysis;
 
 import p4test.AbstractSyntaxTree.AST;
 import p4test.Token;
-import p4test.TokenType;
 
 import java.util.*;
 
@@ -21,7 +20,7 @@ public class TableDrivenParser
         this.scanner = input;
         this.table = new ParsingTable();
 
-        currentToken = input.nextToken();
+        currentToken = input.NextToken();
     }
 
     /* Parses the input program and returns the AST for the program */
@@ -115,6 +114,6 @@ public class TableDrivenParser
     /* Sets current token to the next token found by the scanner */
     private void Consume ()
     {
-        currentToken = scanner.nextToken();
+        currentToken = scanner.NextToken();
     }
 }

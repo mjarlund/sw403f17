@@ -11,7 +11,7 @@ public class ScannerTest {
 	
 	@Test
 	public void NextTokenTest() {
-    assertEquals("Result Keyword", TokenType.KEYWORD, scanner.nextToken().Type);
-    assertEquals("Result Identifier", TokenType.IDENTIFIER, scanner.nextToken().Type);
+    assertEquals("Result Keyword", TokenType.KEYWORD, scanner.NextToken().Type);
+    assertEquals("Result Identifier", TokenType.IDENTIFIER, scanner.NextToken().Type);
 	}
 }

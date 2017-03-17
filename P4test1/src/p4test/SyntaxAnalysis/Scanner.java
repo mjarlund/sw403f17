@@ -1,19 +1,12 @@
 package p4test.SyntaxAnalysis;
-
 import p4test.DefaultHashMap;
 import p4test.Token;
 import p4test.TokenType;
 
-/**
- * Created by Mysjkin on 24-02-2017.
- */
 public class Scanner
 {
     /* Uses string builder maybe more effective without */
-
-
     public static final char EOF = (char)-1;
-    public static final int EOF_TYPE = 1;
 
     public static DefaultHashMap<String, TokenType> words =
             new DefaultHashMap<String, TokenType>(TokenType.IDENTIFIER);
@@ -48,17 +41,7 @@ public class Scanner
         // Other
         words.put("false", TokenType.BOOLEAN_LITERAL); words.put("true", TokenType.BOOLEAN_LITERAL);
     }
-    public boolean IsEOF()
-    {
-        boolean ans;
-        return ans = currentChar == EOF ? true : false;
-    }
-    protected void PushBack()
-    {
-        index = previousIndex;
-        currentChar = input.charAt(index);
-    }
-    public void Consume(){Advance(); WhiteSpace();}
+
     public void Advance()
     {
         previousIndex = index;
@@ -69,31 +52,18 @@ public class Scanner
             currentChar = input.charAt(index);
     }
 
-    // Useful for parser, maybe?!?
-    public void Match(char x)
-    {
-        if(x == currentChar)
-            Consume();
-        else
-            throw new Error("expecting "+x+"; found "+currentChar);
-    }
-
-    public Token nextToken()
+    public Token NextToken()
     {
         while(currentChar != EOF)
         {
             switch (currentChar)
             {
-                case '\n':case '(':case ')':case ',':
-                    if(currentChar=='\n') {
-                        Advance();
-                        return new Token("\\n", TokenType.SEPARATOR);
-                    }
-                    else
-                    {
-                        Advance();
-                        return new Token(Character.toString(input.charAt(previousIndex)), TokenType.SEPARATOR);
-                    }
+                case '\n':
+                    Advance();
+                    return new Token("\\n", TokenType.SEPARATOR);
+                case '(':case ')':case ',':
+                    Advance();
+                    return new Token(Character.toString(input.charAt(previousIndex)), TokenType.SEPARATOR);
                 case '+':case '-':case '/':case '*':
                     Advance();
                     return new Token(Character.toString(input.charAt(previousIndex)), TokenType.OPERATOR);
@@ -101,12 +71,14 @@ public class Scanner
                     return ScanChar();
                 case '\"':
                     return ScanString();
-                case ' ':case '\t':case '\r': WhiteSpace(); continue;
+                //case ' ':case '\t':case '\r': WhiteSpace(); continue;
                 default:
                     if(IsLetter())
                         return ScanLetters();
                     else if(Character.isDigit(currentChar))
                         return ScanDigit();
+                    else if(IsWS())
+                        Advance();
                     else
                         throw new Error("invalid char: "+currentChar);
             }
@@ -116,16 +88,13 @@ public class Scanner
 
     private boolean IsWS()
     {
-        boolean ans = (currentChar == ' ' || currentChar == '\t' ||
-                currentChar == '\r' || currentChar == ' ');
-        return ans;
+        return (currentChar == ' ' || currentChar == '\t' || currentChar == '\r');
     }
 
     private boolean IsLetter()
     {
-        boolean ans = (currentChar >= 'a' && currentChar <= 'z') ||
+        return (currentChar >= 'a' && currentChar <= 'z') ||
                 (currentChar >= 'A' && currentChar <= 'Z');
-        return  ans;
     }
     private Token ScanChar()
     {
@@ -167,7 +136,6 @@ public class Scanner
                 Advance();
             }
         } while(Character.isDigit(currentChar));
-        //PushBack();
         return new Token(sb.toString(), type);
     }
 
@@ -179,7 +147,6 @@ public class Scanner
             sb.append(currentChar);
             Letter();
         } while((IsLetter() || Character.isDigit(currentChar)) && !IsWS());
-        //PushBack(); // pushback to previous char, because moved to fare in the do while
 
         String val = sb.toString();
         TokenType type = words.get(val);
@@ -194,14 +161,5 @@ public class Scanner
             Advance();
         else
             throw new Error("expecting letter but found: "+currentChar);
-    }
-
-    public void WhiteSpace()
-    {
-        while(currentChar == '\t' || currentChar == ' '||
-                currentChar == '\r')
-        {
-            Advance();
-        }
     }
 }
