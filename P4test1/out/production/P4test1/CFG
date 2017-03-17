@@ -7,9 +7,11 @@ Statement -> SelectionStatement NewLine
 Statement -> IterationStatement NewLine
 DeclarationStatement -> Type Identifier BuildVarDCL DeclarationStatementPrime
 DeclarationStatement -> ListDeclarationStatement
-DeclarationStatementPrime -> FormalParameterList BuildBlock NewLine Block end Identifier BuildFuncDcl CombineDown
+DeclarationStatementPrime -> FormalParameterList BuildBlock NewLine Block ReturnStatement end Identifier BuildFuncDcl CombineDown
 DeclarationStatementPrime -> is Expression BuildAssign CombineDown
 DeclarationStatementPrime -> EPSILON CombineDown
+ReturnStatement -> return Expression BuildReturnStmt CombineDown NewLine
+ReturnStatement -> EPSILON
 ListDeclarationStatement -> list of Type Identifier is ParameterList
 FormalParameter -> Type Identifier
 FormalParameterList -> ( FormalParameterListBody ) BuildFormalParams
