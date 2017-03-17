@@ -71,7 +71,6 @@ public class Scanner
                     return ScanChar();
                 case '\"':
                     return ScanString();
-                //case ' ':case '\t':case '\r': WhiteSpace(); continue;
                 default:
                     if(IsLetter())
                         return ScanLetters();
