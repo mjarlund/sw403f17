@@ -56,6 +56,6 @@ public class Visualizer extends PApplet {
 
     /* Called from Test.Main(), initializes the Processing Unit */
     public void Show(){
-        PApplet.main(new String[] {"--present", Visualizer.class.getName()});
+        PApplet.main(Visualizer.class.getName());
     }
 }
