@@ -25,14 +25,13 @@ public class ParsingTable {
             e.printStackTrace();
         }
 
-        init();
+        InitProductionRules();
     }
 
     public boolean IsTerminal(String s) {
-        if(Grammar.Terminals.contains(s)) return true;
-        return false;
+        return (Grammar.Terminals.contains(s));
     }
-    // TODO: THIS IS BADNESS SOMEONE PLZ SEND HELP
+
     public boolean IsEpsilon(String s)
     {
         return Grammar.Epsilon.get(s);
@@ -69,7 +68,7 @@ public class ParsingTable {
         return null;
     }
 
-    public void initProductionRules() {
+    public void InitProductionRules() {
         int nbProductions = Grammar.Productions.length;
         ProductionRules = new Production[nbProductions];
         for(int i = 0; i < nbProductions; i++) {
@@ -88,10 +87,6 @@ public class ParsingTable {
 
             ProductionRules[i] = new Production(Grammar.Productions[i].Left, predictSet.toArray(new String[0]));
         }
-    }
-
-    public void init() {
-        initProductionRules();
     }
 
     public static void main(String[] args) throws IOException {
