@@ -18,6 +18,14 @@
         <SOURCES />
       </library>
     </orderEntry>
-    <orderEntry type="library" name="processingCore" level="application" />
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/libraries/core.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
   </component>
 </module>
