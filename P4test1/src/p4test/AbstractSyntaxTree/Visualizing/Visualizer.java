@@ -18,7 +18,7 @@ public class Visualizer extends PApplet {
     TableDrivenParser parser;
 
     public void settings(){
-        size(1000,800); //Because for some reason this has to be here
+        size(1920,1080); //Because for some reason this has to be here
     }
 
     public void setup(){
@@ -26,7 +26,7 @@ public class Visualizer extends PApplet {
         textSize(12);
 
         /* Scanner and parser */
-        String code = "void func1()\n number b is a\n if (a equals b)\n number b is a+1\n end if\n end func1 \n";
+        String code = "void func1()\n number b is a\n if (a equals b)\n number b is a+1\n func() \n end if\n end func1 \n void func2(number a, number b)\n a is a + b\n end func2\n character func(character a, character b) \n func1() \n func2(a,a) \n if (a above a) \n func2(a,a)\n end if \n end func \n ";
         sc = new p4test.SyntaxAnalysis.Scanner(code);
         parser = new TableDrivenParser(sc);
         AST programTree = parser.ParseProgram();
@@ -44,7 +44,8 @@ public class Visualizer extends PApplet {
 
     /* Builds the visual tree from an AST */
     public void BuildVisualTree(AST tree){
-        visTree = new VisualNode(tree, new PVector(400, 50)); //Root in the top-middle of the screen
+        visTree = new VisualNode(tree, new PVector(900, 50)); //Root in the top-middle of the screen
+        visTree.defaultXOffset = 400;
         ArrayList<VisualNode> visTreeList = new ArrayList<VisualNode>();
         visTree.AssignPositionsToChildren(visTreeList);
     }
@@ -55,6 +56,6 @@ public class Visualizer extends PApplet {
 
     /* Called from Test.Main(), initializes the Processing Unit */
     public void Show(){
-        PApplet.main(Visualizer.class.getName());
+        PApplet.main(new String[] {"--present", Visualizer.class.getName()});
     }
 }
