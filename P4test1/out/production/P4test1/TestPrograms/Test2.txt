@@ -5,8 +5,16 @@ void func1 ()
         func2()
      end until
 end func1
-void func2(number target)
+
+
+
+
+
+
+
+number func2(number target)
     number test is target
     test is test * 2
     test is test / 2
+    return 2
 end func2

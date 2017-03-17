@@ -203,9 +203,14 @@ public class Grammar {
 
         for(String symbol : s) {
 
-            // If Sibling is a non-terminal explore its siblings
-            if(NonTerminals.contains(symbol)) {
-                ExploreSibling(symbol, visited);
+            // If Sibling is not already in the visit set, add to the visit set
+            if(!visited.contains(symbol)) {
+                visited.add(symbol);
+
+                // If Sibling is a non-terminal explore its siblings
+                if(NonTerminals.contains(symbol)) {
+                    ExploreSibling(symbol, visited);
+                }
             }
         }
     }
