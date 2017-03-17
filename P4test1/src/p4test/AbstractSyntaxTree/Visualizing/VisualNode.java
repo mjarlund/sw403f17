@@ -15,7 +15,7 @@ public class VisualNode extends PApplet {
     PVector textPos;
     ArrayList<VisualNode> children;
     int bubbleWidth = 0;
-    int defaultXOffset = 85;
+    int defaultXOffset = 95;
     int defaultYOffset = 50;
 
     public VisualNode(AST node, PVector position){
