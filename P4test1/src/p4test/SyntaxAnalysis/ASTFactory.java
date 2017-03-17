@@ -47,6 +47,7 @@ public class ASTFactory
         SemanticAction.put("BuildElseStmt", ASTFactory.this::CreateElse);
         SemanticAction.put("BuildActualParams", ASTFactory.this::CreateActualParameters);
         SemanticAction.put("BuildFuncCall", ASTFactory.this::CreateFuncCall);
+        SemanticAction.put("BuildReturnStmt", ASTFactory.this::CreateReturnStmt);
     }
     public void CreateAbstractTree(String action)
     {
@@ -68,6 +69,13 @@ public class ASTFactory
             AST subtree = astStack.pop();
             program.children.add(subtree);
         }
+    }
+    private void CreateReturnStmt()
+    {
+        Expression returnval = (Expression)astStack.pop();
+        ReturnStmt stmt = new ReturnStmt(returnval);
+        stmt.SetValue("Return");
+        astStack.push(stmt);
     }
     private void CreateUntilStmtTree()
     {

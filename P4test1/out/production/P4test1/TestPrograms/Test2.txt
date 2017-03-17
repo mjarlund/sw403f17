@@ -2,5 +2,19 @@ void func1 ()
      number target is 0
      until(target equals 10)
         target is target + 1
+        func2()
      end until
 end func1
+
+
+
+
+
+
+
+number func2(number target)
+    number test is target
+    test is test * 2
+    test is test / 2
+    return 2
+end func2
