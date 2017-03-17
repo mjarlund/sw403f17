@@ -11,154 +11,101 @@ import java.util.*;
  */
 public class TableDrivenParser
 {
-    // Can be optimized to use integers instead of strings
-    private Stack<String> ParseStack;
-
     private ParsingTable table;
-    private Scanner input;
-    private Stack<String> parseStack;
-    private Stack<Token> terminalsStack;
-    private Token CurrentToken;
-    private ASTFactory AstFactory;
+    private Scanner scanner;
+    private Stack<String> parseStack; /* RHS symbols for productions and terminals */
+    private Token currentToken;
 
-    private List<String> terminals;
-
-    public TableDrivenParser(Scanner input)
+    public TableDrivenParser (Scanner input)
     {
-        this.input = input;
+        this.scanner = input;
         this.table = new ParsingTable();
-        terminals = new ArrayList<>();
 
-        CurrentToken = input.nextToken();
+        currentToken = input.nextToken();
     }
 
     /* Parses the input program and returns the AST for the program */
-    // TODO PARSER SKAL SKRIVES PÆNERE MEN IKKE NU!!!!
-    public AST ParseProgram()
+    public AST ParseProgram ()
     {
-        parseStack = new Stack<String>(); /* RHS symbols for productions and terminals */
-        terminalsStack = new Stack<Token>();
-        AstFactory = new ASTFactory(terminalsStack);
-        AstFactory.initFactory();
-        Apply(table.GetPrediction("Program", CurrentToken).Right); /* Push RHS symbols for the productions of "Program". */
-        boolean accepted = false;
-        AST programTree = new AST();
+        parseStack = new Stack<String>();
+        Stack<Token> terminalStack = new Stack<Token>();
+        ASTFactory ASTFactory = new ASTFactory(terminalStack);
+        ASTFactory.initFactory();
 
-        while (!accepted)
+        ApplyProduction("Program");
+
+        while (parseStack.size() > 0)
         {
             //System.out.println(parseStack);
-            if(parseStack.peek() != null && parseStack.peek().equals("$"))
+            String parseTop = parseStack.pop();
+
+            /* If the next RHS symbol is a terminal
+             * try to match the symbol with the current token */
+            if (table.IsTerminal(parseTop))
             {
-                if(CurrentToken.Type.equals(TokenType.EOF))
-                    accepted = true;
-                else
-                    throw new Error("not completed");
-            }
-            /* If the next RHS symbol is a terminal, or if the current token is an identifier,
-             * try to match the symbol with the current token.
-             * If the parseStack is empty and the current token is EOF, end the parsing. */
-            else if (table.IsTerminal(parseStack.peek()))
-            {
-                if(parseStack.peek() != null && parseStack.peek().equals("EPSILON"))
+                // Hvis dette slettes, så virker skidtet ikke. Wat 2 do
+                if (parseTop.equals("EPSILON"))
                 {
-                    if(parseStack.size() == 0 && !CurrentToken.Type.equals(TokenType.EOF))
-                        throw new Error("lel");
-                    else if (parseStack.size() == 0)
-                    {
-                        accepted = true;
-                        break;
-                    }
+                    // Do nothing??
                 }
                 // Terminal might be a semantic actions
-                else if(AstFactory.SemanticAction.get(parseStack.peek())!=null)
+                else if (ASTFactory.SemanticAction.get(parseTop) != null)
                 {
-                    AstFactory.CreateAbstractTree(parseStack.peek());
+                    ASTFactory.CreateAbstractTree(parseTop);
                 }
                 else
                 {
-                    // terminal stack is used when processing semantic actions
-                    terminalsStack.push(CurrentToken);
-                    Match(parseStack.peek(), CurrentToken);
+                    // Terminal stack is used when processing semantic actions
+                    terminalStack.push(currentToken);
+                    Match(parseTop, currentToken);
                 }
-                parseStack.pop();
             }
             else
             {
-                /* If the next right hand side symbol is the empty string, pop it, and
-                 * check for empty parseStack and EOF current token. End the parsing if
-                 * both of these are true. */
-                if(parseStack.peek() != null && parseStack.peek().equals("epsilon") ||
-                        parseStack.peek().equals("EPSILON"))
-                {
-                    parseStack.pop();
-                    if(parseStack.size() == 0 && !CurrentToken.Type.equals(TokenType.EOF))
-                        throw new Error("lel");
-                    else if (parseStack.size() == 0)
-                    {
-                        accepted = true;
-                        break;
-                    }
-                }
-                else
-                {
-                    /* Acquire the RHS symbols for the production of the next RHS symbol
-                     * in the parseStack. If there are no productions, throw an error.
-                     * Otherwise, push the productions' RHS symbols to the parseStack. */
-                    Production productions = table.GetPrediction(parseStack.peek(), CurrentToken);
-                    String[] RHSSymbols = productions != null ? productions.Right : null;
-                    if (RHSSymbols == null)
-                    {   if(!table.IsEpsilon(parseStack.peek()))
-                        {
-                            System.out.println(parseStack.peek());
-                            throw new Error("No productions available.");
-                        }
-                        else
-                        {
-                            parseStack.pop();
-                        }
-                    }
-                    else
-                    {
-                        parseStack.pop();
-                        Apply(RHSSymbols);
-                    }
-                }
+                ApplyProduction(parseTop);
             }
         }
-        return AstFactory.program;
+
+        return ASTFactory.program;
     }
 
-    /* Pushes the input list of productions onto the
-     * parseStack in reverse order, so that the first
-      * production rule in the list is the first one popped */
-    private void Apply(String[] RHSSymbols)
+    // Applies the production
+    private void ApplyProduction (String value)
     {
-        int iterations = RHSSymbols.length;
-        for(int i = iterations-1; i>=0; i--)
+        Production production = table.GetPrediction(value, currentToken);
+
+        // If there are no productions, thrown an error.
+        if (production == null)
         {
-            parseStack.push(RHSSymbols[i]);
+            if (table.IsEpsilon(value))
+                parseStack.push("EPSILON");
+            else
+                throw new Error("No productions available for " + value);
+        }
+        else
+        {
+            String[] RHSSymbols = production.Right;
+
+            /* Pushes the input list of productions onto the
+            * parseStack in reverse order, so that the first
+            * production rule in the list is the first one popped */
+            int iterations = RHSSymbols.length;
+            for (int i = iterations - 1; i >= 0; i--) {
+                parseStack.push(RHSSymbols[i]);
+            }
         }
     }
 
-    /* If the two input tokens match by type, retrieve
-     * the next token in the scanner */
-    private void Match(TokenType type, Token token)
-    {
-        if(type.equals(token.Type))
-            Consume();
-        else
-            throw new Error("lel");
-    }
-
-    /* If the given if the val and the string version of token
+    /* If the given val and the string version of token
      * are identical, retrieve the next token in the scanner */
-    private void Match(String val, Token token)
+    private void Match (String val, Token token)
     {
         String value = TypeConverter.TypeToTerminal(token);
         value = value != null ? value : token.Value;
-        if(val.equals(value))
+
+        if (val.equals(value))
         {
-            System.out.println("matched " + value);
+            System.out.println("Matched " + value);
             Consume();
         }
         else
@@ -166,8 +113,8 @@ public class TableDrivenParser
     }
 
     /* Sets current token to the next token found by the scanner */
-    private void Consume()
+    private void Consume ()
     {
-        CurrentToken = input.nextToken();
+        currentToken = scanner.nextToken();
     }
 }

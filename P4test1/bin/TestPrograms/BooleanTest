@@ -7,10 +7,8 @@ void func1()
     else
         number n is 10
     end else if
-    if(one below 11)
+    if(a or b)
     end if
     if(a and b)
-    end if
-    if(a or b)
     end if
 end func1
