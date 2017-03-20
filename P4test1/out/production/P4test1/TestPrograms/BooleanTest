@@ -1,0 +1,16 @@
+void func1()
+    number one is 10
+    boolean a is true
+    boolean b is true
+    if(one above 9)
+        text t is "dab"
+    else
+        number n is 10
+    end else if
+    if(one below 11)
+    end if
+    if(a and b)
+    end if
+    if(a or b)
+    end if
+end func1
