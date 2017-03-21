@@ -42,10 +42,12 @@ RelationalExpressionPrime -> AdditiveExpressionPrime AdditiveExpression
 AdditiveExpression -> + AdditiveExpressionPrime BuildBinaryExpr AdditiveExpression
 AdditiveExpression -> - AdditiveExpressionPrime BuildBinaryExpr AdditiveExpression
 AdditiveExpression -> EPSILON
-AdditiveExpressionPrime -> PrimaryExpression MultiplicativeExpression
+AdditiveExpressionPrime -> UnaryExpression MultiplicativeExpression
 MultiplicativeExpression -> * PrimaryExpression BuildBinaryExpr MultiplicativeExpression
 MultiplicativeExpression -> / PrimaryExpression BuildBinaryExpr MultiplicativeExpression
 MultiplicativeExpression -> EPSILON
+UnaryExpression -> - PrimaryExpression BuildUnaryExpr
+UnaryExpression -> PrimaryExpression
 PrimaryExpression -> Identifier BuildIdentifier IdentifierAppendantOptional
 PrimaryExpression -> IntegerLiteral BuildValExpr
 PrimaryExpression -> FloatingPointLiteral BuildValExpr

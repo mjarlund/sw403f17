@@ -28,7 +28,7 @@ public class Visualizer extends PApplet {
 
         /* Scanner and parser */
         String code = "void func1()\n" +
-                        "number a is 2\n" +
+                        "number a is -2\n" +
                         "number b is a\n" +
                         "if (a equals b)\n " +
                             "b is a+1\n" +
