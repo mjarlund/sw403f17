@@ -39,8 +39,8 @@ public class ScopeManager {
 
     /* Open a new scope in every block. No FuncDcls allowed past global,
      * so only need to worry about VarDcls. Called recursively for all
-     * nodes, opening and closing scopes every time a Block is entered
-     * or exited, respectively. */
+     * nodes, opening and closing scopes every time a code-block or a
+     * function declaration is entered or exited, respectively. */
     public void Scopify(AST root){
         for (AST child : root.children){
 
@@ -79,11 +79,15 @@ public class ScopeManager {
                             throw new Error(argID + " not declared, but is used as an argument. ");
                         }
                     } break;
-                case "FuncDcl": /* Only in global scope. */
+                case "FuncDcl": /* Only in global scope. Open scope so its formal parameters
+                                 * are not seen as symbols in the global scope. */
                     if (currentScope.Depth != 0){
                         throw new Error(
                                 child.GetValue() + ": functions can only be declared in global scope. ");
                     }
+                    OpenScope();
+                    Scopify(child);
+                    CloseScope();
 
                 default:
                     Scopify(child);
