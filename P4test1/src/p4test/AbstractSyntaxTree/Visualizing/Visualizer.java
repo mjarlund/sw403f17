@@ -39,10 +39,10 @@ public class Visualizer extends PApplet {
                         "end func2\n "+
                       "character func(character x, character y)\n"+
                         "func1()\n"+
-                        "func2(x,y)\n"+
+                        /*"func2(x,y)\n"+
                         "if (x above x)\n"+
                             "func2(y,x)\n"+
-                            "end if \n"+
+                            "end if \n"+*/
                         " return 2 \n"+
                         "end func \n " ;
 
