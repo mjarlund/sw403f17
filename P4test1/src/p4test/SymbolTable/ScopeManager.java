@@ -1,9 +1,6 @@
 package p4test.SymbolTable;
 import p4test.AbstractSyntaxTree.AST;
-import p4test.AbstractSyntaxTree.Dcl.FormalParameter;
-import p4test.AbstractSyntaxTree.Dcl.FormalParameters;
-import p4test.AbstractSyntaxTree.Dcl.Identifier;
-import p4test.AbstractSyntaxTree.Dcl.VarDcl;
+import p4test.AbstractSyntaxTree.Dcl.*;
 import p4test.AbstractSyntaxTree.Expr.Argument;
 import p4test.AbstractSyntaxTree.Expr.Arguments;
 import p4test.AbstractSyntaxTree.Types;
@@ -49,50 +46,73 @@ public class ScopeManager {
 
             switch (switchValue){
                 case "VarDcl": /* Add it to this scope (works for FuncDcls too) */
-                    String varID  = ((VarDcl)child).Identifier;
-                    Types varType = ((VarDcl)child).Type;
-                    currentScope.AddSymbol(new Symbol(varID, varType));
+                    VisitVarDcl((VarDcl) child);
                     break;
                 case "Id": /* Just check whether or not it's there */
-                    String id = ((Identifier)child).ID;
-                    if (FindSymbol(id) == null)
-                        throw new Error(id + " not declared.");
+                    VisitId((Identifier) child);
                     break;
                 case "Block": /* Open a new scope, continue */
-                    OpenScope();
-                    Scopify(child);
-                    CloseScope();
+                    EnterScope(child);
                     break;
                 case "FParams": /* Used as declarations, add them to that scope */
-                    ArrayList<AST> params = ((FormalParameters)child).children;
-                    for (AST param : params){
-                        String paramID  = ((FormalParameter)param).Identifier;
-                        Types paramType = ((FormalParameter)param).Type;
-                        currentScope.AddSymbol(new Symbol(paramID, paramType));
-                    }
+                    VisitFParams((FormalParameters) child);
                     break;
                 case "AParams": /* Not much different from IDs */
-                    ArrayList<AST> args = ((Arguments)child).children;
-                    for (AST arg : args) {
-                        String argID = arg.GetValue();
-                        if (FindSymbol(argID) == null) {
-                            throw new Error(argID + " not declared, but is used as an argument. ");
-                        }
-                    } break;
+                    VisitAParams((Arguments) child);
+                    break;
                 case "FuncDcl": /* Only in global scope. Open scope so its formal parameters
                                  * are not seen as symbols in the global scope. */
-                    if (currentScope.Depth != 0){
-                        throw new Error(
-                                child.GetValue() + ": functions can only be declared in global scope. ");
-                    }
-                    OpenScope();
-                    Scopify(child);
-                    CloseScope();
-
+                    VisitFuncDcl((FuncDcl) child);
+                    EnterScope(child);
+                    break;
                 default:
                     Scopify(child);
                     break;
             }
         }
+    }
+    
+    public void VisitVarDcl(VarDcl node){
+        String varID  = node.Identifier;
+        Types varType = node.Type;
+        currentScope.AddSymbol(new Symbol(varID, varType));
+    }
+
+    public void VisitId(Identifier node){
+        String id = node.ID;
+        if (FindSymbol(id) == null)
+            throw new Error(id + " not declared.");
+    }
+
+    public void VisitFParams(FormalParameters node){
+        ArrayList<AST> params = node.children;
+        for (AST param : params){
+            String paramID  = ((FormalParameter)param).Identifier;
+            Types paramType = ((FormalParameter)param).Type;
+            currentScope.AddSymbol(new Symbol(paramID, paramType));
+        }
+    }
+
+    public void VisitAParams(Arguments node){
+        ArrayList<AST> args = node.children;
+        for (AST arg : args) {
+            String argID = arg.GetValue();
+            if (FindSymbol(argID) == null) {
+                throw new Error(argID + " not declared, but is used as an argument. ");
+            }
+        }
+    }
+
+    public void VisitFuncDcl(FuncDcl node){
+        if (currentScope.Depth != 0){
+            throw new Error(
+                    node.GetValue() + ": functions can only be declared in global scope. ");
+        }
+    }
+
+    public void EnterScope(AST node){
+        OpenScope();
+        Scopify(node);
+        CloseScope();
     }
 }
