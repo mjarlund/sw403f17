@@ -126,11 +126,20 @@ public class ASTFactory
     private void CreateBinaryExpr()
     {
         Expr right = (Expr) astStack.pop();
-        Expr left = (Expr)astStack.pop();
+        Expr left = null;
+        if(astStack.peek() instanceof Expr)
+            left = (Expr)astStack.pop();
         Token op = terminals.pop();
-        BinaryOPExpr binaryOP = new BinaryOPExpr(left,op,right);
-        binaryOP.SetValue("BinaryOPExpr");
-        astStack.push(binaryOP);
+        Expr expr = null;
+        if(left != null) {
+            expr = new BinaryOPExpr(left, op, right);
+            expr.SetValue("BinaryOPExpr");
+        }
+        else {
+            expr  = new UnaryExpr(op, right);
+            expr.SetValue("UnaryOPExpr");
+        }
+        astStack.push(expr);
     }
     private void CreateIfStmt()
     {
