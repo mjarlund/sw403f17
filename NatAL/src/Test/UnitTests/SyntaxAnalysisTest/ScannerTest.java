@@ -79,9 +79,28 @@ public class ScannerTest {
 					{"1", TokenType.INTEGER_LITERAL},
 					{"0", TokenType.INTEGER_LITERAL},
 					{"1000000000000000", TokenType.INTEGER_LITERAL},
+					
+					//Float Literals
+					{"1.0292", TokenType.FLOAT_LITERAL},
+					//{".0292", TokenType.FLOAT_LITERAL},
+					//{"1.", TokenType.FLOAT_LITERAL},
+					//{"9961.9haha292", TokenType.FLOAT_LITERAL},
+					{"9991.12292", TokenType.FLOAT_LITERAL},
 
+					//String Literals
+					{"\"hejmor63\"", TokenType.STRING_LITERAL},
+					{"\"hejmor..,.63\"", TokenType.STRING_LITERAL},
+					{"\"hejm o383r63\"", TokenType.STRING_LITERAL},
+					{"\"hejm \n ???` ?#*^+or63\"", TokenType.STRING_LITERAL},//mangler newline token 
+					{"\"hej#¤&/()=/())=?mor63\"", TokenType.STRING_LITERAL},
+					{"\"hej "+ System.lineSeparator() +"mor63\"", TokenType.STRING_LITERAL},
+					
+					//Char Literals
+					{"'A'",TokenType.CHAR_LITERAL},
+					
 					//Separators
 					{"\n", TokenType.SEPARATOR},
+					
 
 			});
 		}
