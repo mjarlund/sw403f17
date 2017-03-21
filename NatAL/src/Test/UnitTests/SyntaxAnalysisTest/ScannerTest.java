@@ -38,50 +38,50 @@ public class ScannerTest {
 		{
 			return Arrays.asList(new Object[][]{
 					//Operators
-					new Object[]{"or", TokenType.OPERATOR},
-					new Object[]{"and", TokenType.OPERATOR},
-					new Object[]{"equals", TokenType.OPERATOR},
-					new Object[]{"not", TokenType.OPERATOR},
-					new Object[]{"below", TokenType.OPERATOR},
-					new Object[]{"is", TokenType.OPERATOR},
-					new Object[]{"above", TokenType.OPERATOR},
-					new Object[]{"-", TokenType.OPERATOR},
-					new Object[]{"+", TokenType.OPERATOR},
-					new Object[]{"/", TokenType.OPERATOR},
-					new Object[]{"*", TokenType.OPERATOR},
+					{"or", TokenType.OPERATOR},
+					{"and", TokenType.OPERATOR},
+					{"equals", TokenType.OPERATOR},
+					{"not", TokenType.OPERATOR},
+					{"below", TokenType.OPERATOR},
+					{"is", TokenType.OPERATOR},
+					{"above", TokenType.OPERATOR},
+					{"-", TokenType.OPERATOR},
+					{"+", TokenType.OPERATOR},
+					{"/", TokenType.OPERATOR},
+					{"*", TokenType.OPERATOR},
 
 					//Keywords
-					new Object[]{"until", TokenType.KEYWORD},
-					new Object[]{"if", TokenType.KEYWORD},
-					new Object[]{"string", TokenType.KEYWORD},
-					new Object[]{"return", TokenType.KEYWORD},
-					new Object[]{"structure", TokenType.KEYWORD},
-					new Object[]{"number", TokenType.KEYWORD},
-					new Object[]{"character", TokenType.KEYWORD},
-					new Object[]{"end", TokenType.KEYWORD},
-					new Object[]{"else", TokenType.KEYWORD},
-					new Object[]{"boolean", TokenType.KEYWORD},
-					new Object[]{"void", TokenType.KEYWORD},
-					new Object[]{"fraction", TokenType.KEYWORD},
-					new Object[]{"text", TokenType.KEYWORD},
+					{"until", TokenType.KEYWORD},
+					{"if", TokenType.KEYWORD},
+					{"string", TokenType.KEYWORD},
+					{"return", TokenType.KEYWORD},
+					{"structure", TokenType.KEYWORD},
+					{"number", TokenType.KEYWORD},
+					{"character", TokenType.KEYWORD},
+					{"end", TokenType.KEYWORD},
+					{"else", TokenType.KEYWORD},
+					{"boolean", TokenType.KEYWORD},
+					{"void", TokenType.KEYWORD},
+					{"fraction", TokenType.KEYWORD},
+					{"text", TokenType.KEYWORD},
 
 					//Booleans
-					new Object[]{"true", TokenType.BOOLEAN_LITERAL},
-					new Object[]{"false", TokenType.BOOLEAN_LITERAL},
+					{"true", TokenType.BOOLEAN_LITERAL},
+					{"false", TokenType.BOOLEAN_LITERAL},
 
 					//
 
 					//Identifiers
-					new Object[]{"jajajaj", TokenType.IDENTIFIER},
-					new Object[]{"j", TokenType.IDENTIFIER},
+					{"jajajaj", TokenType.IDENTIFIER},
+					{"j", TokenType.IDENTIFIER},
 
 					//Integer Literals
-					new Object[]{"1", TokenType.INTEGER_LITERAL},
-					new Object[]{"0", TokenType.INTEGER_LITERAL},
-					new Object[]{"1000000000000000", TokenType.INTEGER_LITERAL},
+					{"1", TokenType.INTEGER_LITERAL},
+					{"0", TokenType.INTEGER_LITERAL},
+					{"1000000000000000", TokenType.INTEGER_LITERAL},
 
 					//Separators
-					new Object[]{"\n", TokenType.SEPARATOR},
+					{"\n", TokenType.SEPARATOR},
 
 			});
 		}
