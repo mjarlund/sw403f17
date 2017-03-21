@@ -108,8 +108,9 @@ public class ASTFactory
                 if (id.Type.equals(TokenType.IDENTIFIER)){
                     arg = new Argument(new Identifier(id.Value));
                     arg.SetValue(id.Value);
-                } else
+                } else {
                     arg = new Argument(new ValExpr(id));
+                }
 
                 parameters.add(arg);
             }
@@ -171,7 +172,7 @@ public class ASTFactory
         ArrayList<FormalParameter> parameters = new ArrayList<>();
         while (! endPara.Value.equals("("))
         {
-            if (!terminals.peek().Type.SEPARATOR.equals(TokenType.SEPARATOR))
+            if (!terminals.peek().Type.equals(TokenType.SEPARATOR))
             {
                 Token id = terminals.pop();
                 Token type = terminals.pop();
@@ -182,7 +183,9 @@ public class ASTFactory
         FormalParameters astParameters = new FormalParameters();
         for (FormalParameter parameter : parameters)
         {
+            /* TODO: We should only use one of these. */
             astParameters.AdoptChildren(parameter);
+            astParameters.children.add(parameter);
         }
         astParameters.SetValue("FParams");
         astStack.push(astParameters);
