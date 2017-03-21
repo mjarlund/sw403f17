@@ -47,6 +47,7 @@ public class ASTFactory
         SemanticAction.put("BuildActualParams", ASTFactory.this::CreateActualParameters);
         SemanticAction.put("BuildFuncCall", ASTFactory.this::CreateFuncCall);
         SemanticAction.put("BuildReturnStmt", ASTFactory.this::CreateReturnStmt);
+        SemanticAction.put("BuildUnaryExpr", ASTFactory.this::CreateUnaryExpr);
     }
     public void CreateAbstractTree(String action)
     {
@@ -68,6 +69,14 @@ public class ASTFactory
             AST subtree = astStack.pop();
             program.children.add(subtree);
         }
+    }
+    private void CreateUnaryExpr()
+    {
+        Expr val = (Expr)astStack.pop();
+        Token op = terminals.pop();
+        UnaryExpr expr = new UnaryExpr(op,val);
+        expr.SetValue("UnaryExpr");
+        astStack.push(expr);
     }
     private void CreateReturnStmt()
     {
@@ -126,19 +135,10 @@ public class ASTFactory
     private void CreateBinaryExpr()
     {
         Expr right = (Expr) astStack.pop();
-        Expr left = null;
-        if(astStack.peek() instanceof Expr)
-            left = (Expr)astStack.pop();
+        Expr left = (Expr)astStack.pop();
         Token op = terminals.pop();
-        Expr expr = null;
-        if(left != null) {
-            expr = new BinaryOPExpr(left, op, right);
-            expr.SetValue("BinaryOPExpr");
-        }
-        else {
-            expr  = new UnaryExpr(op, right);
-            expr.SetValue("UnaryOPExpr");
-        }
+        Expr expr = new BinaryOPExpr(left, op, right);
+        expr.SetValue("BinaryOPExpr");
         astStack.push(expr);
     }
     private void CreateIfStmt()

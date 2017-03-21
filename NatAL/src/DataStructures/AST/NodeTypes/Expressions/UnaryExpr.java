@@ -1,6 +1,5 @@
 package DataStructures.AST.NodeTypes.Expressions;
 
-import DataStructures.AST.AST;
 import Syntax.Tokens.Token;
 
 /**
@@ -8,7 +7,8 @@ import Syntax.Tokens.Token;
  */
 public class UnaryExpr extends Expr
 {
-    public UnaryExpr(Token op, AST ValExpr)
+    public UnaryExpr(Token op, Expr valExpr)
     {
+        children.add(valExpr);
     }
 }
