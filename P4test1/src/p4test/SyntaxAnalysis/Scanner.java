@@ -15,7 +15,6 @@ public class Scanner
     protected int index = 0;
     protected char currentChar;
     protected int inputLen;
-    private int previousIndex;
 
     public Scanner(String input)
     {
@@ -44,12 +43,13 @@ public class Scanner
 
     public void Advance()
     {
-        previousIndex = index;
-        index++;
+    	index++;
         if(index >= inputLen)
             currentChar = EOF;
         else
+        {
             currentChar = input.charAt(index);
+        }
     }
 
     public Token NextToken()
@@ -62,11 +62,13 @@ public class Scanner
                     Advance();
                     return new Token("\\n", TokenType.SEPARATOR);
                 case '(':case ')':case ',':
+                	Token sp = new Token(Character.toString(currentChar), TokenType.SEPARATOR);
                     Advance();
-                    return new Token(Character.toString(input.charAt(previousIndex)), TokenType.SEPARATOR);
+                    return sp;
                 case '+':case '-':case '/':case '*':
+                	Token op = new Token(Character.toString(currentChar), TokenType.OPERATOR);
                     Advance();
-                    return new Token(Character.toString(input.charAt(previousIndex)), TokenType.OPERATOR);
+                    return op;
                 case '\'':
                     return ScanChar();
                 case '\"':
@@ -127,6 +129,10 @@ public class Scanner
         TokenType type = TokenType.INTEGER_LITERAL;
         do
         {
+        	if(IsLetter())
+        	{
+        		throw new Error(sb.toString() + "is not a valid number");
+        	}
             sb.append(currentChar);
             Advance();
             if(currentChar == '.' && type == TokenType.INTEGER_LITERAL) {
@@ -134,7 +140,7 @@ public class Scanner
                 sb.append(currentChar);
                 Advance();
             }
-        } while(Character.isDigit(currentChar));
+        } while(Character.isDigit(currentChar) || IsLetter() == true);
         return new Token(sb.toString(), type);
     }
 
