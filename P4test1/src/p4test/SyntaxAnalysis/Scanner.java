@@ -129,11 +129,14 @@ public class Scanner
         TokenType type = TokenType.INTEGER_LITERAL;
         do
         {
+
+            sb.append(currentChar);
+            
         	if(IsLetter())
         	{
-        		throw new Error(sb.toString() + "is not a valid number");
+        		throw new Error(sb.toString() + " is not a valid number");
         	}
-            sb.append(currentChar);
+        	
             Advance();
             if(currentChar == '.' && type == TokenType.INTEGER_LITERAL) {
                 type = TokenType.FLOAT_LITERAL;
