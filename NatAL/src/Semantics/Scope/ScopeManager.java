@@ -113,7 +113,7 @@ public class ScopeManager {
             throw new Error(
                     node.GetValue() + ": functions can only be declared in global scope. ");
         }
-        VisitVarDcl((VarDcl) node.children.get(0)); /* So the func id is in global */
+        VisitVarDcl((VarDcl) node.children.get(0)); /* So the id is in global */
     }
 
     public void EnterScope(AST node){
