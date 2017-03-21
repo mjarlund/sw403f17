@@ -134,7 +134,7 @@ public class Scanner
             
         	if(IsLetter())
         	{
-        		throw new Error(sb.toString() + " is not a valid number");
+        		throw new Error(sb.toString() + "... is not a valid number");
         	}
         	
             Advance();

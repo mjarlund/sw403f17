@@ -1,20 +1,24 @@
 package p4test.JUnit.SyntaxAnalysisTest;
-import static org.junit.Assert.assertEquals;
-
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.experimental.runners.Enclosed;
 import org.junit.rules.ExpectedException;
 
+import static org.junit.Assert.*;
+
 import java.util.Arrays;
 import java.util.Collection;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameter;
 import org.junit.runners.Parameterized.Parameters;
+
+import junit.framework.Assert;
+
 import org.junit.runner.RunWith;
 
 import p4test.SyntaxAnalysis.Scanner;
+import p4test.Token;
 import p4test.TokenType;
 
 @RunWith(Enclosed.class)
@@ -78,7 +82,9 @@ public class ScannerTest {
 				new Object[]{"1", TokenType.INTEGER_LITERAL},
 				new Object[]{"0", TokenType.INTEGER_LITERAL},
 				new Object[]{"1000000000000000", TokenType.INTEGER_LITERAL},
-				//new Object[]{"999abn", TokenType.INTEGER_LITERAL},
+
+				//Separators
+				new Object[]{"\n", TokenType.SEPARATOR},
 			
 			});
 		}
@@ -88,6 +94,7 @@ public class ScannerTest {
 		{
 			Scanner testScanner = new Scanner(inputString);
 			assertEquals(expected, testScanner.NextToken().Type);
+			assertEquals(TokenType.EOF, testScanner.NextToken().Type);
 		}
 		
 		
@@ -115,12 +122,33 @@ public class ScannerTest {
         }
         
         @Test
-        public void IntegerThenLettersTest()
+        public void IdentifierDoesNotThrowExceptionTest()
         {
-        	Scanner testScanner = new Scanner("999aabfj");
-        	assertEquals(TokenType.INTEGER_LITERAL, testScanner.NextToken().Type);
-        	assertEquals(TokenType.IDENTIFIER, testScanner.NextToken().Type);        	
-        	assertEquals(TokenType.EOF, testScanner.NextToken().Type);
+        	try
+        	{       		
+        		Scanner testScanner = new Scanner("iaris3383ialak");
+        		while(true)
+        		{
+        			Token currentToken = testScanner.NextToken();
+        			if(currentToken.Type == TokenType.EOF)
+        				break;        				
+        		}
+        	}
+        	catch(Throwable e)
+        	{
+        		fail("ups something went wrong exception was thrown");
+        	}
+        }
+        
+        @Test
+        public void ScannerRecognizesNewLineTest()
+        {
+        	Scanner testScanner = new Scanner("void main" + System.lineSeparator() + "another line");
+        	assertEquals(TokenType.KEYWORD, testScanner.NextToken().Type);
+        	assertEquals(TokenType.IDENTIFIER, testScanner.NextToken().Type);
+        	assertEquals(TokenType.SEPARATOR, testScanner.NextToken().Type);
+        	assertEquals(TokenType.IDENTIFIER, testScanner.NextToken().Type);
+        	assertEquals(TokenType.IDENTIFIER, testScanner.NextToken().Type);
         }
     }	
     
@@ -136,5 +164,24 @@ public class ScannerTest {
         exception.expect(StringIndexOutOfBoundsException.class);
     	Scanner testScanner = new Scanner("");   	
     	}
+    	
+    	
+		@Test
+        public void IntegerThenLettersErrorTest()
+        {
+        	try
+        	{
+            	Scanner testScanner = new Scanner("999aabfj");
+            	while(true)
+            	{
+            		testScanner.NextToken();
+            	}
+        	}
+        	catch(Error e)
+        	{
+        		assertEquals(e.getMessage(), "999a... is not a valid number");
+        	}
+            
+        }
     }
 }
