@@ -1,11 +1,24 @@
 void func1()
    func2()
 end func1
+
 void func2()
     func3(10)
 end func2
+
 void func3(number target)
    func4(target,"dab", true)
 end func3
+
 void func4(number target, text tekst, boolean bool)
+number n is func5()
+func6(n)
 end func4
+
+number func5()
+return 2
+end func5
+
+boolean func6(number n)
+return true
+end func6
