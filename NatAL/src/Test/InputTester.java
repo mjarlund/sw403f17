@@ -8,24 +8,23 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 public class InputTester {
-	
 
-    public static void main(String args[])
-    {
-    	
+
+	public static void main(String args[])
+
+	{
     	String currentFile;
     	Scanner scanner;
-    	
+
     	try {
-    		
-    		File folder = new File(System.getProperty("user.dir") + "/src/TestPrograms/");
+    		File folder = new File(System.getProperty("user.dir") + "/src/Test/TestPrograms/");
     		File[] listOfFiles = folder.listFiles();
 
     		for (File file : listOfFiles) {
     			System.out.println("----------------" + file.getName() + "----------------");
     		    if (file.isFile()) {
     		        currentFile = "";
-    		    	currentFile = readFile(System.getProperty("user.dir") + "/src/TestPrograms/" + file.getName());
+    		    	currentFile = readFile(System.getProperty("user.dir") + "/src/Test/TestPrograms/" + file.getName());
     		    	scanner = new Scanner(currentFile);
     		        try 
     		        {
