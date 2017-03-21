@@ -78,7 +78,13 @@ public class ScopeManager {
                         if (FindSymbol(argID) == null) {
                             throw new Error(argID + " not declared, but is used as an argument. ");
                         }
+                    } break;
+                case "FuncDcl": /* Only in global scope. */
+                    if (currentScope.Depth != 0){
+                        throw new Error(
+                                child.GetValue() + ": functions can only be declared in global scope. ");
                     }
+
                 default:
                     Scopify(child);
                     break;
