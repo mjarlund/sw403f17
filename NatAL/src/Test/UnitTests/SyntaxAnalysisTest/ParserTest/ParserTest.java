@@ -74,4 +74,9 @@ public class ParserTest {
 			assertEquals(null, e);
 		}		
 	}
+	
+	public static class SingleInputParserTest
+	{
+		
+	}
 }
