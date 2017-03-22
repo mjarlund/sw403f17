@@ -28,6 +28,14 @@ public class ParsingTable {
 
         InitProductionRules();
     }
+    public ParsingTable(String path){
+        try {
+            this.Grammar = Grammar.FromFile(path);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        InitProductionRules();
+    }
 
     public boolean IsTerminal(String s) {
         return (Grammar.Terminals.contains(s));
@@ -60,7 +68,7 @@ public class ParsingTable {
         for(Production p : ProductionRules) {
             if(p.Left.equals(nonterminal)) {
                 for(String s : p.Right) {
-                    if(s.equals(terminal)) return Grammar.Productions[i];
+                    if(s.equals(terminal)) return Grammar.Productions[i]; 
                 }
             }
             i++;
