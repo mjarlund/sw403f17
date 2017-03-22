@@ -4,6 +4,7 @@ import Syntax.Grammar.Production;
 import Syntax.Tokens.Token;
 import Syntax.Tokens.TokenType;
 import Syntax.Grammar.Grammar;
+import Utilities.Reporter;
 import Utilities.TypeConverter;
 
 import java.io.IOException;
@@ -26,6 +27,14 @@ public class ParsingTable {
             e.printStackTrace();
         }
 
+        InitProductionRules();
+    }
+    public ParsingTable(String path){
+        try {
+            this.Grammar = Grammar.FromFile(path);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         InitProductionRules();
     }
 
@@ -60,7 +69,7 @@ public class ParsingTable {
         for(Production p : ProductionRules) {
             if(p.Left.equals(nonterminal)) {
                 for(String s : p.Right) {
-                    if(s.equals(terminal)) return Grammar.Productions[i];
+                    if(s.equals(terminal)) return Grammar.Productions[i]; 
                 }
             }
             i++;
@@ -92,9 +101,10 @@ public class ParsingTable {
 
     public static void main(String[] args) throws IOException {
         ParsingTable p = new ParsingTable();
-        System.out.println(p.GetPrediction("DeclarationStatementPrime", "EPSILON"));
+
+        Reporter.Log(p.GetPrediction("DeclarationStatementPrime", "EPSILON").toString());
         //for(Production product : p.ProductionRules) System.out.println(product);
-        System.out.println(p.GetPrediction("Expression", "IntegerLiteral"));
-        System.out.println(p.GetPrediction("Expression", new Token("2", TokenType.INTEGER_LITERAL)));
+        Reporter.Log(p.GetPrediction("Expression", "IntegerLiteral").toString());
+        Reporter.Log(p.GetPrediction("Expression", new Token("2", TokenType.INTEGER_LITERAL)).toString());
     }
 }
