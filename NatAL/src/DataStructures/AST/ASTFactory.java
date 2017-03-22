@@ -7,6 +7,7 @@ import DataStructures.AST.NodeTypes.Types;
 import DataStructures.DefaultHashMap;
 import Syntax.Tokens.Token;
 import Syntax.Tokens.TokenType;
+import Utilities.TypeConverter;
 
 import java.util.ArrayList;
 import java.util.Stack;
@@ -247,7 +248,7 @@ public class ASTFactory
     private void CreateValExprTree()
     {
         Token value = terminals.pop();
-        ValExpr val = new ValExpr(value);
+        ValExpr val = new ValExpr(TypeConverter.TypetoTypes(value),value);
         val.SetValue("ValExpr");
         astStack.push(val);
     }

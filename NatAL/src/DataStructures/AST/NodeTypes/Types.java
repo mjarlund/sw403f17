@@ -5,5 +5,5 @@ package DataStructures.AST.NodeTypes;
  */
 public enum Types
 {
-    VOID, INT, STRING, FLOAT, CHAR
+    VOID, INT, STRING, FLOAT, CHAR, BOOL
 }

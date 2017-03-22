@@ -1,5 +1,6 @@
 package Utilities;
 
+import DataStructures.AST.NodeTypes.Types;
 import Syntax.Tokens.Token;
 
 /**
@@ -28,6 +29,26 @@ public class TypeConverter
             case SEPARATOR:
                 if (token.Value.equals("\\n"))
                     return "EOL";
+            default:
+                return null;
+        }
+    }
+    // Ast types
+    public static Types TypetoTypes(Token token)
+    {
+        switch (token.Type)
+        {
+            case INTEGER_LITERAL:
+                return Types.INT;
+            case BOOLEAN_LITERAL:
+                return Types.BOOL;
+            case FLOAT_LITERAL:
+                return Types.FLOAT;
+            case STRING_LITERAL:
+                return Types.STRING;
+            case KEYWORD:
+                if(token.Value.equals("void"))
+                    return Types.VOID;
             default:
                 return null;
         }

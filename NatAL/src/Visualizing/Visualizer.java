@@ -45,14 +45,16 @@ public class Visualizer extends PApplet {
                             "end if \n"+
                         " return 2 \n"+
                         "end func \n " ;
-
-        sc = new Scanner(code);
+        String code1 = "void func1()\n" +
+                       "number a is 2\n" +
+                        "end func1";
+        sc = new Scanner(code1);
         parser = new Parser(sc);
         AST programTree = parser.ParseProgram();
 
         ScopeManager sm = new ScopeManager();
         sm.OpenScope(); //Global
-        sm.Scopify(programTree);
+        sm.VisitChildren(programTree);
         System.out.println("No variables out of scope!");
         BuildVisualTree(programTree);
     }

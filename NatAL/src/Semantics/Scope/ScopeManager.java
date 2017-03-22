@@ -7,7 +7,11 @@ import DataStructures.AST.NodeTypes.Declarations.FuncDcl;
 import DataStructures.AST.NodeTypes.Declarations.VarDcl;
 import DataStructures.AST.NodeTypes.Expressions.ArgsExpr;
 import DataStructures.AST.NodeTypes.Expressions.IdExpr;
+import DataStructures.AST.NodeTypes.Expressions.UnaryExpr;
+import DataStructures.AST.NodeTypes.Expressions.ValExpr;
+import DataStructures.AST.NodeTypes.Statements.AssignStmt;
 import DataStructures.AST.NodeTypes.Types;
+import Utilities.TypeConverter;
 
 import java.util.ArrayList;
 
@@ -42,51 +46,78 @@ public class ScopeManager {
      * so only need to worry about VarDcls. Called recursively for all
      * nodes, opening and closing scopes every time a code-block or a
      * function declaration is entered or exited, respectively. */
-    public void Scopify(AST root){
-        for (AST child : root.children){
+    public void VisitChildren(AST root){
+        for (AST child : root.children) {
 
             String switchValue;
-            switchValue = (child.GetValue() != null)? child.GetValue() : ((IdExpr)child).ID;
-
-            switch (switchValue){
-                case "VarDcl": /* Add it to this scope (works for FuncDcls too) */
-                    VisitVarDcl((VarDcl) child);
-                    break;
-                case "IdExpr": /* Just check whether or not it's there */
-                    VisitId((IdExpr) child);
-                    break;
-                case "BlockStmt": /* Open a new scope, continue */
-                    EnterScope(child);
-                    break;
-                case "FParamsDcl": /* Used as declarations, add them to that scope */
-                    VisitFParams((FParamsDcl) child);
-                    break;
-                case "ArgsExpr": /* Not much different from IDs */
-                    VisitAParams((ArgsExpr) child);
-                    break;
-                case "FuncDcl": /* Only in global scope. Open scope so its formal parameters
-                                 * are not seen as symbols in the global scope. */
-                    VisitFuncDcl((FuncDcl) child);
-                    EnterScope(child);
-                    break;
-                default:
-                    Scopify(child);
-                    break;
-            }
+            switchValue = (child.GetValue() != null) ? child.GetValue() : ((IdExpr) child).ID;
+            VisitValue(switchValue, child);
         }
     }
-
-    public void VisitVarDcl(VarDcl node){
+    private Object VisitValue(String astName, AST child)
+    {
+        switch (astName){
+            case "VarDcl": /* Add it to this scope (works for FuncDcls too) */
+                return VisitVarDcl((VarDcl) child);
+            case "IdExpr": /* Just check whether or not it's there */
+                return VisitId((IdExpr) child);
+            case "BlockStmt": /* Open a new scope, continue */
+                EnterScope(child);
+                break;
+            case "FParamsDcl": /* Used as declarations, add them to that scope */
+                VisitFParams((FParamsDcl) child);
+                break;
+            case "ArgsExpr": /* Not much different from IDs */
+                VisitAParams((ArgsExpr) child);
+                break;
+            case "FuncDcl": /* Only in global scope. Open scope so its formal parameters
+                                 * are not seen as symbols in the global scope. */
+                VisitFuncDcl((FuncDcl) child);
+                EnterScope(child);
+                break;
+            case "ValExpr":
+                return VisitLiteral((ValExpr) child);
+            case "AssignStmt":
+                VisitAssignment((AssignStmt) child);
+                break;
+            default:
+                VisitChildren(child);
+                break;
+        }
+        return null;
+    }
+    private Object VisitAssignment(AssignStmt stmt)
+    {
+        AST left = stmt.children.get(0);
+        AST right = stmt.children.get(1);
+        Object lType = VisitValue(left.GetValue(),left);
+        Object rType = VisitValue(right.GetValue(),right);
+        if(!lType.equals(rType))
+            throw new Error("incompatible types " + left + " " + right);
+        return null;
+    }
+    private Object VisitUnaryExpr(UnaryExpr expr)
+    {
+        return null;
+    }
+    private Object VisitLiteral(ValExpr lit)
+    {
+        return TypeConverter.TypetoTypes(lit.LiteralValue);
+    }
+    public Object VisitVarDcl(VarDcl node){
         String varID  = node.Identifier;
         Types varType = node.Type;
         currentScope.AddSymbol(new Symbol(varID, varType));
         System.out.println(varID + " added to scope. ");
+        return varType;
     }
 
-    public void VisitId(IdExpr node){
+    public Object VisitId(IdExpr node){
         String id = node.ID;
-        if (FindSymbol(id) == null)
+        Symbol identifier = FindSymbol(id);
+        if (identifier == null)
             throw new Error(id + " not declared.");
+        return identifier.Type;
     }
 
     public void VisitFParams(FParamsDcl node){
@@ -118,7 +149,7 @@ public class ScopeManager {
 
     public void EnterScope(AST node){
         OpenScope();
-        Scopify(node);
+        VisitChildren(node);
         CloseScope();
     }
 }
