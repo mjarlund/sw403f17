@@ -153,7 +153,7 @@ public class Scanner
         do
         {
             sb.append(currentChar);
-            Letter();
+            Advance();
         } while((IsLetter() || Character.isDigit(currentChar)) && !IsWS());
 
         String val = sb.toString();
@@ -162,12 +162,5 @@ public class Scanner
             return new Token(val, type);
 
         return new Token(val, TokenType.IDENTIFIER);
-    }
-    private void Letter()
-    {
-        if(IsLetter() || Character.isDigit(currentChar))
-            Advance();
-        else
-            throw new Error("expecting letter but found: "+currentChar);
     }
 }

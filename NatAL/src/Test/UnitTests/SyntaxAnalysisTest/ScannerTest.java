@@ -74,6 +74,7 @@ public class ScannerTest {
 					//Identifiers
 					{"jajajaj", TokenType.IDENTIFIER},
 					{"j", TokenType.IDENTIFIER},
+					{"z84", TokenType.IDENTIFIER},
 
 					//Integer Literals
 					{"1", TokenType.INTEGER_LITERAL},
@@ -97,6 +98,12 @@ public class ScannerTest {
 					
 					//Char Literals
 					{"'A'",TokenType.CHAR_LITERAL},
+					{"'Z'",TokenType.CHAR_LITERAL},
+					{"'a'",TokenType.CHAR_LITERAL},
+					{"'z'",TokenType.CHAR_LITERAL},
+					{"'w'",TokenType.CHAR_LITERAL},
+					{"'U'",TokenType.CHAR_LITERAL},
+					
 					
 					//Separators
 					{"\n", TokenType.SEPARATOR},
@@ -127,7 +134,18 @@ public class ScannerTest {
 			assertEquals(TokenType.OPERATOR, multipleInputScanner.NextToken().Type);
 			assertEquals(TokenType.INTEGER_LITERAL, multipleInputScanner.NextToken().Type);
 		}
-
+		
+		@Test
+		public void separatorTest()
+		{
+			Scanner scanner = new Scanner("(hello, world)");
+			assertEquals(TokenType.SEPARATOR, scanner.NextToken().Type);
+			assertEquals(TokenType.IDENTIFIER, scanner.NextToken().Type);
+			assertEquals(TokenType.SEPARATOR, scanner.NextToken().Type);
+			assertEquals(TokenType.IDENTIFIER, scanner.NextToken().Type);
+			assertEquals(TokenType.SEPARATOR, scanner.NextToken().Type);
+		}
+		
 		@Test
 		public void EOFTest()
 		{
@@ -154,7 +172,7 @@ public class ScannerTest {
 			{
 				fail("ups something went wrong exception was thrown");
 			}
-		}
+		}		
 
 		@Test
 		public void ScannerRecognizesNewLineTest()
@@ -198,6 +216,22 @@ public class ScannerTest {
 				assertEquals(e.getMessage(), "999a... is not a valid number");
 			}
 
+		}
+		
+		@Test
+		public void NotCorrectIdentifierThowsErrorTest(){
+			try
+			{
+				Scanner testScanner = new Scanner("abc?#(");
+				while(true)
+				{
+					testScanner.NextToken();
+				}
+			}
+			catch(Error e)
+			{
+			assertEquals(e.getMessage(), "invalid char: ?" );
+			}
 		}
 	}
 }
