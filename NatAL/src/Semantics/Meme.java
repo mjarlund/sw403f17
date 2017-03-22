@@ -6,10 +6,6 @@ package Semantics;
 public class Meme {
     // TODO RUN THIS VERY IMPORTANT MAIN
     public static void main(String args[]) {
-        boolean andersIstUndFaglord = false;
-        String name = "Anders Brams";
-        if (name.equals("Anders Brams"))
-            andersIstUndFaglord = true;
-        System.out.println("Is Anders und faglord " + andersIstUndFaglord);
+        System.out.println("Is Anders und faglord " + ("Anders Brams".equals("Anders Brams")));
     }
 }

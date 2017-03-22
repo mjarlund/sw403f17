@@ -141,7 +141,7 @@ public class Scanner
 
             if(IsLetter())
             {
-                throw new Error(sb.toString() + "... is not a valid number");
+                Reporter.Error(sb.toString() + "... is not a valid number");
             }
 
             Advance();

@@ -213,7 +213,7 @@ public class ScannerTest {
 			}
 			catch(Error e)
 			{
-				assertEquals(e.getMessage(), "999a... is not a valid number");
+				assertEquals(e.getMessage(), "ERROR: 999a... is not a valid number");
 			}
 
 		}
