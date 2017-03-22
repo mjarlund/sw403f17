@@ -6,6 +6,7 @@ import Syntax.Scanner.Scanner;
 import Syntax.Tokens.Token;
 import Syntax.Grammar.Production;
 
+import Utilities.Reporter;
 import Utilities.TypeConverter;
 import java.util.Stack;
 
@@ -83,7 +84,7 @@ public class Parser
             if (table.IsEpsilon(value))
                 parseStack.push("EPSILON");
             else
-                throw new Error("No productions available for " + value);
+                Reporter.Error("No productions available for " + value);
         }
         else
         {
@@ -108,11 +109,11 @@ public class Parser
 
         if (val.equals(value))
         {
-            System.out.println("Matched " + value);
+            Reporter.Log("Matched " + value);
             Consume();
         }
         else
-            throw new Error("Got " + value + " expected " + val);
+            Reporter.Error("Got " + value + " expected " + val + ". Line: " + token.LineNumber);
     }
 
     /* Sets current token to the next token found by the scanner */

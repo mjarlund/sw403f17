@@ -2,6 +2,7 @@ package Syntax.Scanner;
 import DataStructures.DefaultHashMap;
 import Syntax.Tokens.Token;
 import Syntax.Tokens.TokenType;
+import Utilities.Reporter;
 
 public class Scanner
 {
@@ -14,12 +15,13 @@ public class Scanner
     protected String input;
     protected int index = 0;
     protected char currentChar;
-    protected int inputLen;
+    protected int inputLength;
+    private int lineNumber;
 
-    public Scanner(String input)
+    public Scanner (String input)
     {
         this.input = input;
-        inputLen = input.length();
+        inputLength = input.length();
         currentChar = input.charAt(index);
 
         // Operators
@@ -41,13 +43,18 @@ public class Scanner
         words.put("false", TokenType.BOOLEAN_LITERAL); words.put("true", TokenType.BOOLEAN_LITERAL);
     }
 
-    public void Advance()
+    public void Advance ()
     {
         index++;
-        if(index >= inputLen)
+        if (index >= inputLength)
+        {
             currentChar = EOF;
+        }
         else
         {
+            if (currentChar == '\n')
+                lineNumber++;
+
             currentChar = input.charAt(index);
         }
     }
@@ -60,14 +67,14 @@ public class Scanner
             {
                 case '\n':
                     Advance();
-                    return new Token("\\n", TokenType.SEPARATOR);
+                    return MakeToken("\\n", TokenType.SEPARATOR);
                 case '(':case ')':case ',':
-                Token sp = new Token(Character.toString(currentChar), TokenType.SEPARATOR);
-                Advance();
+                    Token sp = MakeToken(Character.toString(currentChar), TokenType.SEPARATOR);
+                    Advance();
                 return sp;
                 case '+':case '-':case '/':case '*':
-                Token op = new Token(Character.toString(currentChar), TokenType.OPERATOR);
-                Advance();
+                    Token op = MakeToken(Character.toString(currentChar), TokenType.OPERATOR);
+                    Advance();
                 return op;
                 case '\'':
                     return ScanChar();
@@ -81,10 +88,11 @@ public class Scanner
                     else if(IsWS())
                         Advance();
                     else
-                        throw new Error("invalid char: "+currentChar);
+                        Reporter.Error("Invalid character encountered: " + currentChar + ". Use only the ASCII character set");
             }
         }
-        return new Token("EOF", TokenType.EOF);
+
+        return MakeToken("EOF", TokenType.EOF);
     }
 
     private boolean IsWS()
@@ -108,7 +116,7 @@ public class Scanner
         val+= currentChar;
         Advance();
 
-        return new Token(val, TokenType.CHAR_LITERAL);
+        return MakeToken(val, TokenType.CHAR_LITERAL);
     }
     private Token ScanString()
     {
@@ -120,7 +128,7 @@ public class Scanner
         } while(currentChar != '\"');
         sb.append(currentChar);
         Advance();
-        return new Token(sb.toString(), TokenType.STRING_LITERAL);
+        return MakeToken(sb.toString(), TokenType.STRING_LITERAL);
     }
 
     private Token ScanDigit()
@@ -129,7 +137,6 @@ public class Scanner
         TokenType type = TokenType.INTEGER_LITERAL;
         do
         {
-
             sb.append(currentChar);
 
             if(IsLetter())
@@ -143,8 +150,8 @@ public class Scanner
                 sb.append(currentChar);
                 Advance();
             }
-        } while(Character.isDigit(currentChar) || IsLetter() == true);
-        return new Token(sb.toString(), type);
+        } while(Character.isDigit(currentChar) || IsLetter());
+        return MakeToken(sb.toString(), type);
     }
 
     private Token ScanLetters()
@@ -158,9 +165,15 @@ public class Scanner
 
         String val = sb.toString();
         TokenType type = words.get(val);
-        if(type != TokenType.IDENTIFIER)
-            return new Token(val, type);
 
-        return new Token(val, TokenType.IDENTIFIER);
+        if(type != TokenType.IDENTIFIER)
+            return MakeToken(val, type);
+
+        return MakeToken(val, TokenType.IDENTIFIER);
+    }
+
+    private Token MakeToken (String value, TokenType type)
+    {
+        return new Token(value, type, lineNumber);
     }
 }

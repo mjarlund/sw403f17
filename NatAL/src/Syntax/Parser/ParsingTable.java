@@ -4,6 +4,7 @@ import Syntax.Grammar.Production;
 import Syntax.Tokens.Token;
 import Syntax.Tokens.TokenType;
 import Syntax.Grammar.Grammar;
+import Utilities.Reporter;
 import Utilities.TypeConverter;
 
 import java.io.IOException;
@@ -100,9 +101,10 @@ public class ParsingTable {
 
     public static void main(String[] args) throws IOException {
         ParsingTable p = new ParsingTable();
-        System.out.println(p.GetPrediction("DeclarationStatementPrime", "EPSILON"));
+
+        Reporter.Log(p.GetPrediction("DeclarationStatementPrime", "EPSILON").toString());
         //for(Production product : p.ProductionRules) System.out.println(product);
-        System.out.println(p.GetPrediction("Expression", "IntegerLiteral"));
-        System.out.println(p.GetPrediction("Expression", new Token("2", TokenType.INTEGER_LITERAL)));
+        Reporter.Log(p.GetPrediction("Expression", "IntegerLiteral").toString());
+        Reporter.Log(p.GetPrediction("Expression", new Token("2", TokenType.INTEGER_LITERAL)).toString());
     }
 }

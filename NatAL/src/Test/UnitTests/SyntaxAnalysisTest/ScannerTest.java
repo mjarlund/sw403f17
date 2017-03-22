@@ -93,7 +93,7 @@ public class ScannerTest {
 					{"\"hejmor..,.63\"", TokenType.STRING_LITERAL},
 					{"\"hejm o383r63\"", TokenType.STRING_LITERAL},
 					{"\"hejm \n ???` ?#*^+or63\"", TokenType.STRING_LITERAL},//mangler newline token 
-					{"\"hej#¤&/()=/())=?mor63\"", TokenType.STRING_LITERAL},
+					{"\"hej#ï¿½&/()=/())=?mor63\"", TokenType.STRING_LITERAL},
 					{"\"hej "+ System.lineSeparator() +"mor63\"", TokenType.STRING_LITERAL},
 					
 					//Char Literals
@@ -230,7 +230,7 @@ public class ScannerTest {
 			}
 			catch(Error e)
 			{
-			assertEquals(e.getMessage(), "invalid char: ?" );
+				assertEquals(e.getMessage(), "ERROR: Invalid character encountered: ?. Use only the ASCII character set");
 			}
 		}
 	}
