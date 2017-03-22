@@ -1,11 +1,10 @@
-package Test.UnitTests.Test;
+package Test.UnitTests.SyntaxAnalysisTest.ParserTest;
 
 import static org.junit.Assert.*;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 
 import org.junit.Test;
@@ -16,11 +15,10 @@ import org.junit.runners.Parameterized.Parameters;
 
 import Syntax.Parser.Parser;
 import Syntax.Scanner.Scanner;
-import Syntax.Tokens.TokenType;
 import Test.InputTester;
 
 @RunWith(Enclosed.class)
-public class TableDrivenParserTest {
+public class ParserTest {
 	
 	@RunWith(Parameterized.class)
 	public static class AllParsableFilesTests
