@@ -118,7 +118,6 @@ public class ScopeManager {
         Object lType = VisitValue(left.GetValue(),left);
         Object rType = VisitValue(right.GetValue(),right);
         if(!lType.equals(rType))
-<<<<<<< HEAD
             throw new Error("incompatible types " + left + " " + lType + " " + right + " " + rType);
         if(!IsAssignable(left))
             throw new Error("LHS not assignable " + left);
@@ -130,13 +129,6 @@ public class ScopeManager {
             return true;
         return false;
     }
-=======
-            Reporter.Error(new IncompatibleValueException("Incompatible types " + left + " " + right));
-            //throw new Error("incompatible types " + left + " " + right);
-        return null;
-    }
-
->>>>>>> Parser
     private Object VisitUnaryExpr(UnaryExpr expr)
     {
         Object res = VisitValue(expr.children.get(0).GetValue(),expr.children.get(0));
