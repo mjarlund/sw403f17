@@ -5,13 +5,19 @@ Statement -> DeclarationStatement NewLine
 Statement -> ExpressionStatement NewLine
 Statement -> SelectionStatement NewLine
 Statement -> IterationStatement NewLine
-DeclarationStatement -> Type Identifier BuildVarDCL DeclarationStatementPrime
+DeclarationStatement -> Type Identifier BuildVarDCL DeclarationStatementPrime CombineDown
+DeclarationStatement -> StructDeclarationStatement
 DeclarationStatement -> ListDeclarationStatement
-DeclarationStatementPrime -> FormalParameterList BuildBlock NewLine Block ReturnStatement end Identifier BuildFuncDcl CombineDown
-DeclarationStatementPrime -> is Expression BuildAssign CombineDown
-DeclarationStatementPrime -> EPSILON CombineDown
+DeclarationStatementPrime -> FormalParameterList BuildBlock NewLine Block ReturnStatement end Identifier BuildFuncDcl
+DeclarationStatementPrime -> is Expression BuildAssign
+DeclarationStatementPrime -> EPSILON
 ReturnStatement -> return Expression BuildReturnStmt CombineDown NewLine
 ReturnStatement -> EPSILON
+StructDeclarationStatement -> struct Identifier BuildVarDCL StructDeclarationStatementPrime CombineDown
+StructDeclarationStatementPrime -> BuildBlock NewLine StructDeclarationBlock
+StructDeclarationStatementPrime -> Identifier BuildIdentifier EPSILON
+StructDeclarationBlock -> DeclarationStatement StructDeclaration
+StructDeclarationBlock -> end Identifier
 ListDeclarationStatement -> list of Type Identifier is ParameterList
 FormalParameter -> Type Identifier
 FormalParameterList -> ( FormalParameterListBody ) BuildFormalParams
@@ -55,8 +61,10 @@ PrimaryExpression -> StringLiteral BuildValExpr
 PrimaryExpression -> BooleanLiteral BuildValExpr
 PrimaryExpression -> ( Expression )
 ExpressionStatement -> Identifier BuildIdentifier ExpressionStatementPrime
-ExpressionStatementPrime -> is Expression BuildAssign CombineDown
+ExpressionStatementPrime -> StructExpressionStatement is Expression BuildAssign CombineDown
 ExpressionStatementPrime -> ParameterList BuildFuncCall CombineDown
+StructExpressionStatement -> .Identifier
+StructExpressionStatement -> EPSILON
 Parameter -> Identifier
 Parameter -> IntegerLiteral
 Parameter -> FloatingPointLiteral
@@ -83,11 +91,5 @@ Type -> fraction
 Type -> character
 Type -> boolean
 Type -> void
-Type -> StructSpecifier
-StructSpecifier -> struct Identifier StructSpecifierPrime
-StructSpecifierPrime -> StructDeclaration end Identifier
-StructSpecifierPrime -> EPSILON
-StructDeclaration -> DeclarationStatement StructDeclaration
-StructDeclaration -> EPSILON
 NewLine -> EOL NewLine
 NewLine -> EPSILON
