@@ -9,6 +9,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.junit.Test;
+import org.junit.experimental.runners.Enclosed;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
@@ -16,6 +17,7 @@ import org.junit.runners.Parameterized.Parameters;
 import Syntax.Grammar.Grammar;
 import Syntax.Grammar.Production;
 
+@RunWith(Enclosed.class)
 public class GrammarTest {
 	
 	@RunWith(Parameterized.class)
