@@ -1,5 +1,8 @@
 package Semantics.Scope;
 
+import Exceptions.*;
+import Utilities.Reporter;
+
 import java.util.ArrayList;
 
 /**
@@ -21,7 +24,8 @@ public class Scope {
     public void AddSymbol(Symbol entry) throws Error{
         for (Symbol n : symbols){
             if (n.Name.equals(entry.Name)){
-                throw new Error("Name already defined in this scope");
+                Reporter.Error(new DuplicatedSymbolException("Name already defined in current scope"));
+                //throw new Error("Name already defined in this scope");
             }
         }
         symbols.add(entry);
@@ -31,7 +35,7 @@ public class Scope {
      * order to find the symbol. */
     public Symbol FindSymbol(String identifier){
         Symbol toReturn = null;
-        System.out.println("Searching for: " + identifier);
+        Reporter.Log("Searching for: " + identifier);
         for (Symbol s : symbols){
             System.out.println(s.Name + " ? " + identifier);
             if (s.Name.equals(identifier)){

@@ -11,15 +11,10 @@ public final class Reporter
         System.out.println("LOG: " + message);
     }
 
-    public static void Error (String message)
-    {
-        throw new Error("ERROR: " + message);
-    }
-
     // Throws a specific exception
-    public static void Error (Exception exception) throws Exception
+    public static void Error (Error error)
     {
-        throw exception;
+        throw error;
     }
 
     public static void Warning (String message)

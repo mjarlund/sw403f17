@@ -3,9 +3,9 @@ package Exceptions;
 /**
  * Created by Mathias on 22-03-2017.
  */
-public class UnexpectedTokenException extends Error
+public class UndeclaredSymbolException extends Error
 {
-    public UnexpectedTokenException (String message)
+    public UndeclaredSymbolException(String message)
     {
         super(message);
     }

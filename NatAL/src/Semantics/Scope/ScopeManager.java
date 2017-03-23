@@ -8,7 +8,9 @@ import DataStructures.AST.NodeTypes.Declarations.VarDcl;
 import DataStructures.AST.NodeTypes.Expressions.*;
 import DataStructures.AST.NodeTypes.Statements.AssignStmt;
 import DataStructures.AST.NodeTypes.Types;
+import Utilities.Reporter;
 import Utilities.TypeConverter;
+import Exceptions.*;
 
 import java.util.ArrayList;
 
@@ -116,6 +118,7 @@ public class ScopeManager {
         Object lType = VisitValue(left.GetValue(),left);
         Object rType = VisitValue(right.GetValue(),right);
         if(!lType.equals(rType))
+<<<<<<< HEAD
             throw new Error("incompatible types " + left + " " + lType + " " + right + " " + rType);
         if(!IsAssignable(left))
             throw new Error("LHS not assignable " + left);
@@ -127,6 +130,13 @@ public class ScopeManager {
             return true;
         return false;
     }
+=======
+            Reporter.Error(new IncompatibleValueException("Incompatible types " + left + " " + right));
+            //throw new Error("incompatible types " + left + " " + right);
+        return null;
+    }
+
+>>>>>>> Parser
     private Object VisitUnaryExpr(UnaryExpr expr)
     {
         Object res = VisitValue(expr.children.get(0).GetValue(),expr.children.get(0));
@@ -140,7 +150,8 @@ public class ScopeManager {
         String varID  = node.Identifier;
         Types varType = node.Type;
         currentScope.AddSymbol(new Symbol(varID, varType));
-        System.out.println(varID + " added to scope. ");
+        Reporter.Log(varID + " added to scope.");
+
         return varType;
     }
 
@@ -148,7 +159,8 @@ public class ScopeManager {
         String id = node.ID;
         Symbol identifier = FindSymbol(id);
         if (identifier == null)
-            throw new Error(id + " not declared.");
+            Reporter.Error(new UndeclaredSymbolException(id + " not declared."));
+            //throw new Error(id + " not declared.");
         return identifier.Type;
     }
 
@@ -166,15 +178,16 @@ public class ScopeManager {
         for (AST arg : args) {
             String argID = arg.GetValue();
             if (FindSymbol(argID) == null) {
-                throw new Error(argID + " not declared, but is used as an argument. ");
+                Reporter.Error(new UndeclaredSymbolException(argID + " not declared, but is used as an argument."));
+                //throw new Error(argID + " not declared, but is used as an argument. ");
             }
         }
     }
 
     public void VisitFuncDcl(FuncDcl node){
         if (currentScope.Depth > 0){
-            throw new Error(
-                    node.GetValue() + ": functions can only be declared in global scope. ");
+            Reporter.Error(new InvalidScopeException(node.GetValue() + ": Functions can only be declared in global scope."));
+            //throw new Error(node.GetValue() + ": functions can only be declared in global scope. ");
         }
         VisitVarDcl((VarDcl) node.children.get(0)); /* So the id is in global */
     }
