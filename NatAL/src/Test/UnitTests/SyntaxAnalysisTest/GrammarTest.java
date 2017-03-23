@@ -9,6 +9,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.junit.Test;
+import org.junit.experimental.runners.Enclosed;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
@@ -16,16 +17,17 @@ import org.junit.runners.Parameterized.Parameters;
 import Syntax.Grammar.Grammar;
 import Syntax.Grammar.Production;
 
+@RunWith(Enclosed.class)
 public class GrammarTest {
 	
 	@RunWith(Parameterized.class)
-	public static class LL1Tjek{
+	public static class LL1Check{
 		
 		private boolean expected;
 		private String path;
 		private boolean result;
 		
-		public LL1Tjek(String input, boolean expectedBool)
+		public LL1Check(String input, boolean expectedBool)
 		{
 			this.path = input;
 			this.expected = expectedBool;

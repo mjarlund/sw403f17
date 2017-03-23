@@ -4,6 +4,8 @@ import Exceptions.*;
 import Syntax.Tokens.Token;
 import org.junit.Rule;
 import org.junit.Test;
+
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;
 
@@ -13,8 +15,10 @@ import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 import org.junit.runner.RunWith;
 
+import Syntax.Parser.Parser;
 import Syntax.Scanner.Scanner;
 import Syntax.Tokens.TokenType;
+import Test.InputTester;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
@@ -199,7 +203,23 @@ public class ScannerTest {
 			exception.expect(StringIndexOutOfBoundsException.class);
 			Scanner testScanner = new Scanner("");
 		}
-
+		
+		
+		@Test
+		public void EmptyDocumentThrownsErrorTest() throws IOException
+		{
+			boolean thrown = false;		
+				
+			try 
+			{
+				Scanner testScanner = new Scanner(InputTester.readFile("src/Test/TestPrograms/TestFail"));
+			} 
+			catch (StringIndexOutOfBoundsException e){
+				thrown = true;
+			}
+			assertEquals(true, thrown);	
+		}
+		
 
 		@Test
 		public void IntegerThenLettersErrorTest()
