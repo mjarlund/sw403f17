@@ -217,7 +217,6 @@ public class ScannerTest {
 				// Der er sikkert en smartere måde at gøre dette på, men det virker - Math
 				assertEquals(true, true);
 			}
-
 		}
 		
 		@Test
@@ -230,7 +229,7 @@ public class ScannerTest {
 					testScanner.NextToken();
 				}
 			}
-			catch(InvalidASCIICharacterException e)
+			catch(InvalidCharacterSequenceException e)
 			{
 				// Der er sikkert en smartere måde at gøre dette på, men det virker - Mathias
 				assertEquals(true, true);

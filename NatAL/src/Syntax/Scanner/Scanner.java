@@ -89,7 +89,7 @@ public class Scanner
                     else if(IsWS())
                         Advance();
                     else
-                        Reporter.Error(new InvalidASCIICharacterException("Invalid character encountered: " + currentChar + ". Use only the ASCII character set"));
+                        Reporter.Error(new InvalidCharacterSequenceException("Invalid character encountered: " + currentChar));
             }
         }
 
