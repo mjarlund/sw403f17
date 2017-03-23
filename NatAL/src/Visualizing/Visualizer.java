@@ -47,9 +47,9 @@ public class Visualizer extends PApplet {
                         "end func \n " ;
         String code1 = "void func1()\n" +
                        "number a is 2\n" +
-                        "boolean b is true and true\n" +
+                        "boolean b is true and false\n" +
                         "end func1";
-        sc = new Scanner(code);
+        sc = new Scanner(code1);
         parser = new Parser(sc);
         AST programTree = parser.ParseProgram();
 
