@@ -60,14 +60,15 @@ public class ASTFactory
     /* Combines the top of the tree stack with the one below it */
     private void CombineDown()
     {
+        AST subtree = astStack.pop();
         if (astStack.size() > 1)
         {
-            AST subtree = astStack.pop();
+            subtree.SetParent(astStack.peek());
             astStack.peek().children.add(subtree);
         }
         else
         {
-            AST subtree = astStack.pop();
+            subtree.SetParent(program);
             program.children.add(subtree);
         }
     }

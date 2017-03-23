@@ -24,6 +24,8 @@ public class TypeConverter
                 return "FloatingPointLiteral";
             case STRING_LITERAL:
                 return "StringLiteral";
+            case CHAR_LITERAL:
+                return "CharacterLiteral";
             case EOF:
                 return "$";
             case SEPARATOR:

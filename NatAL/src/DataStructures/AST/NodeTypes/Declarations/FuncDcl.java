@@ -8,6 +8,9 @@ import DataStructures.AST.NodeTypes.Statements.BlockStmt;
 public class FuncDcl extends Dcl {
     public FuncDcl(VarDcl dcl, FParamsDcl parameters, BlockStmt block)
     {
+        block.SetParent(this);
+        parameters.SetParent(this);
+        dcl.SetParent(this);
         children.add(dcl);
         children.add(parameters);
         children.add(block);

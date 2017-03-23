@@ -7,10 +7,13 @@ import DataStructures.AST.NodeTypes.Declarations.FuncDcl;
 import DataStructures.AST.NodeTypes.Declarations.VarDcl;
 import DataStructures.AST.NodeTypes.Expressions.*;
 import DataStructures.AST.NodeTypes.Statements.AssignStmt;
+import DataStructures.AST.NodeTypes.Statements.ReturnStmt;
 import DataStructures.AST.NodeTypes.Types;
+import Exceptions.IncompatibleValueException;
+import Exceptions.InvalidScopeException;
+import Exceptions.UndeclaredSymbolException;
 import Utilities.Reporter;
 import Utilities.TypeConverter;
-import Exceptions.*;
 
 import java.util.ArrayList;
 
@@ -72,7 +75,6 @@ public class ScopeManager {
             case "FuncDcl": /* Only in global scope. Open scope so its formal parameters
                                  * are not seen as symbols in the global scope. */
                 VisitFuncDcl((FuncDcl) child);
-                EnterScope(child);
                 break;
             case "ValExpr":
                 return VisitLiteral((ValExpr) child);
@@ -85,11 +87,35 @@ public class ScopeManager {
                 return VisitUnaryExpr((UnaryExpr)child);
             case "BoolExpr":
                 return VisitBoolExpr((BoolExpr)child);
+            case "FuncCallExpr":
+                return VisitFuncCall((FuncCallExpr)child);
+            case "ReturnStmt":
+                VisitReturnStmt((ReturnStmt)child);
+                break;
             default:
                 VisitChildren(child);
                 break;
         }
         return null;
+    }
+    private Object VisitReturnStmt(ReturnStmt stmt)
+    {
+        Expr returnValue = (Expr) stmt.children.get(0);
+        Object returnedType = VisitValue(returnValue.GetValue(), returnValue);
+        FuncDcl func = (FuncDcl) stmt.GetParent().GetParent();
+        Types returnType = ((VarDcl)func.children.get(0)).Type;
+        if(!returnedType.equals(returnType))
+            Reporter.Error(new IncompatibleValueException(returnedType,returnType));
+        return null;
+    }
+    private Object VisitFuncCall(FuncCallExpr expr)
+    {
+        IdExpr funcId = (IdExpr) expr.children.get(0);
+        Symbol identifier = FindSymbol(funcId.ID);
+        if(identifier==null)
+            Reporter.Error(new UndeclaredSymbolException(funcId.ID+ " not declared."));
+        VisitValue(expr.children.get(1).GetValue(),expr.children.get(1));
+        return VisitId(funcId);
     }
     private Object VisitBinaryExpr(BinaryOPExpr expr)
     {
@@ -138,6 +164,7 @@ public class ScopeManager {
     {
         return TypeConverter.TypetoTypes(lit.LiteralValue);
     }
+
     public Object VisitVarDcl(VarDcl node){
         String varID  = node.Identifier;
         Types varType = node.Type;
@@ -181,7 +208,8 @@ public class ScopeManager {
             Reporter.Error(new InvalidScopeException(node.GetValue() + ": Functions can only be declared in global scope."));
             //throw new Error(node.GetValue() + ": functions can only be declared in global scope. ");
         }
-        VisitVarDcl((VarDcl) node.children.get(0)); /* So the id is in global */
+        VisitVarDcl((VarDcl) node.children.get(0));
+        EnterScope(node);
     }
 
     public void EnterScope(AST node){

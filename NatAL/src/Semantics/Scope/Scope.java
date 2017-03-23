@@ -24,7 +24,7 @@ public class Scope {
     public void AddSymbol(Symbol entry) throws Error{
         for (Symbol n : symbols){
             if (n.Name.equals(entry.Name)){
-                Reporter.Error(new DuplicatedSymbolException("Name already defined in current scope"));
+                Reporter.Error(new DuplicatedSymbolException("Name already defined in current scope " + entry.Name));
                 //throw new Error("Name already defined in this scope");
             }
         }
