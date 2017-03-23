@@ -1,5 +1,6 @@
 package Test.UnitTests.SyntaxAnalysisTest;
 
+import Exceptions.*;
 import Syntax.Tokens.Token;
 import org.junit.Rule;
 import org.junit.Test;
@@ -113,7 +114,7 @@ public class ScannerTest {
 		}
 
 		@Test
-		public void SingleOutputTest()
+		public void SingleOutputTest() throws Exception
 		{
 			Scanner testScanner = new Scanner(inputString);
 			assertEquals(expected, testScanner.NextToken().Type);
@@ -211,9 +212,10 @@ public class ScannerTest {
 					testScanner.NextToken();
 				}
 			}
-			catch(Error e)
+			catch(InvalidIdentifierException e)
 			{
-				assertEquals(e.getMessage(), "ERROR: 999a... is not a valid number");
+				// Der er sikkert en smartere måde at gøre dette på, men det virker - Math
+				assertEquals(true, true);
 			}
 
 		}
@@ -228,9 +230,10 @@ public class ScannerTest {
 					testScanner.NextToken();
 				}
 			}
-			catch(Error e)
+			catch(InvalidASCIICharacterException e)
 			{
-				assertEquals(e.getMessage(), "ERROR: Invalid character encountered: ?. Use only the ASCII character set");
+				// Der er sikkert en smartere måde at gøre dette på, men det virker - Mathias
+				assertEquals(true, true);
 			}
 		}
 	}

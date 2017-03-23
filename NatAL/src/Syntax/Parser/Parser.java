@@ -2,6 +2,8 @@ package Syntax.Parser;
 
 import DataStructures.AST.AST;
 import DataStructures.AST.ASTFactory;
+import Exceptions.MissingProductionsException;
+import Exceptions.UnexpectedTokenException;
 import Syntax.Scanner.Scanner;
 import Syntax.Tokens.Token;
 import Syntax.Grammar.Production;
@@ -84,7 +86,7 @@ public class Parser
             if (table.IsEpsilon(value))
                 parseStack.push("EPSILON");
             else
-                Reporter.Error("No productions available for " + value);
+                Reporter.Error(new MissingProductionsException("No productions available for " + value));
         }
         else
         {
@@ -113,7 +115,7 @@ public class Parser
             Consume();
         }
         else
-            Reporter.Error("Got " + value + " expected " + val + ". Line: " + token.LineNumber);
+            Reporter.Error(new UnexpectedTokenException("Got " + value + " expected " + val + ". Line: " + token.LineNumber));
     }
 
     /* Sets current token to the next token found by the scanner */

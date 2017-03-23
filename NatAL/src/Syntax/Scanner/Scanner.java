@@ -1,5 +1,6 @@
 package Syntax.Scanner;
 import DataStructures.DefaultHashMap;
+import Exceptions.*;
 import Syntax.Tokens.Token;
 import Syntax.Tokens.TokenType;
 import Utilities.Reporter;
@@ -88,7 +89,7 @@ public class Scanner
                     else if(IsWS())
                         Advance();
                     else
-                        Reporter.Error("Invalid character encountered: " + currentChar + ". Use only the ASCII character set");
+                        Reporter.Error(new InvalidASCIICharacterException("Invalid character encountered: " + currentChar + ". Use only the ASCII character set"));
             }
         }
 
@@ -140,9 +141,7 @@ public class Scanner
             sb.append(currentChar);
 
             if(IsLetter())
-            {
-                Reporter.Error(sb.toString() + "... is not a valid number");
-            }
+                Reporter.Error(new InvalidIdentifierException(sb + " is not a valid number"));
 
             Advance();
             if(currentChar == '.' && type == TokenType.INTEGER_LITERAL) {
