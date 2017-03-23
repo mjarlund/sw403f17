@@ -24,7 +24,7 @@ public class Scanner
         this.input = input;
         inputLength = input.length();
         currentChar = input.charAt(index);
-
+        this.lineNumber = 1;
         // Operators
         words.put("or", TokenType.OPERATOR); words.put("and", TokenType.OPERATOR);
         words.put("equals", TokenType.OPERATOR); words.put("is", TokenType.OPERATOR);

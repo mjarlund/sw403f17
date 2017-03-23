@@ -29,7 +29,7 @@ public class InputTester {
 
     		for (File file : listOfFiles) {
     			System.out.println("----------------" + file.getName() + "----------------");
-    		    if (file.isFile()) {
+    		    if (file.isFile() && !file.getName().contains("fail")) {
     		        currentFile = "";
     		    	currentFile = readFile(System.getProperty("user.dir") + "/src/Test/TestPrograms/" + file.getName());
     		    	scanner = new Scanner(currentFile);

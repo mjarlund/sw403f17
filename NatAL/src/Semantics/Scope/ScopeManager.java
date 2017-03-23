@@ -98,7 +98,7 @@ public class ScopeManager {
         Object lType = VisitValue(left.GetValue(),left);
         Object rType = VisitValue(right.GetValue(),right);
         if(!lType.equals(rType))
-            throw new Error("incompatible types " + left + " " + lType + " " + right + " " + rType);
+            Reporter.Error(new IncompatibleValueException(lType,rType,expr.Operation.LineNumber));
         return lType;
     }
     private Object VisitBoolExpr(BoolExpr expr)
@@ -108,7 +108,7 @@ public class ScopeManager {
         Object lType = VisitValue(left.GetValue(),left);
         Object rType = VisitValue(right.GetValue(),right);
         if(!lType.equals(rType))
-            throw new Error("incompatible types " + left + " " + lType + " " + right + " " + rType);
+            Reporter.Error(new IncompatibleValueException(lType,rType,expr.Operator.LineNumber));
         return lType;
     }
     private Object VisitAssignment(AssignStmt stmt)
@@ -118,7 +118,7 @@ public class ScopeManager {
         Object lType = VisitValue(left.GetValue(),left);
         Object rType = VisitValue(right.GetValue(),right);
         if(!lType.equals(rType))
-            throw new Error("incompatible types " + left + " " + lType + " " + right + " " + rType);
+            Reporter.Error(new IncompatibleValueException(lType,rType));
         if(!IsAssignable(left))
             throw new Error("LHS not assignable " + left);
         return null;
