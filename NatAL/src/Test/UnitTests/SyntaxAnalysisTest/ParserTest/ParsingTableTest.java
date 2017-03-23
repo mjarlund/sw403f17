@@ -129,10 +129,12 @@ public class ParsingTableTest {
 		{
 			return Arrays.asList(new Object[][]{
 					
-					{"Statement", new Token("EPSILON",TokenType.OPERATOR),"Statement -> EPSILON"},
+					{"Statement", new Token("1",TokenType.KEYWORD),"Statement -> 1"},
+					{"Statement", new Token("+",TokenType.OPERATOR),"Statement -> + Statement"},
+					{"Statement", new Token("IntegerLiteral",TokenType.INTEGER_LITERAL),"Statement -> IntegerLiteral"},
+
 			});
 		}
-
 		@Test
 		public void testGetPredictionStringToken() {
 			ParsingTable p = new ParsingTable("src/Test/GrammaTestFile");

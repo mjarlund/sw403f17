@@ -2,4 +2,6 @@ Program -> Statement Statements $
 Statements -> Statement Statements
 Statements -> EPSILON
 Statement -> 1
+Statement -> + Statement
+Statement -> IntegerLiteral
 Statement -> EPSILON
