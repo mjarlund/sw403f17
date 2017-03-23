@@ -37,7 +37,7 @@ public class Visualizer extends PApplet {
                       "void func2(number a, number b)\n"+
                         "a is a + b\n"+
                         "end func2\n "+
-                      "number func(character x, character y)\n"+
+                      "number func(number x, number y)\n"+
                         /*"func1()\n"+*/
                         "func2(x,y)\n"+
                         "if (x above x)\n"+

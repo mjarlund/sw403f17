@@ -35,7 +35,6 @@ public class Scope {
      * order to find the symbol. */
     public Symbol FindSymbol(String identifier){
         Symbol toReturn = null;
-        Reporter.Log("Searching for: " + identifier);
         for (Symbol s : symbols){
             System.out.println(s.Name + " ? " + identifier);
             if (s.Name.equals(identifier)){

@@ -9,6 +9,7 @@ import DataStructures.AST.NodeTypes.Expressions.*;
 import DataStructures.AST.NodeTypes.Statements.AssignStmt;
 import DataStructures.AST.NodeTypes.Statements.ReturnStmt;
 import DataStructures.AST.NodeTypes.Types;
+import Exceptions.ArgumentsException;
 import Exceptions.IncompatibleValueException;
 import Exceptions.InvalidScopeException;
 import Exceptions.UndeclaredSymbolException;
@@ -115,6 +116,26 @@ public class ScopeManager {
         if(identifier==null)
             Reporter.Error(new UndeclaredSymbolException(funcId.ID+ " not declared."));
         VisitValue(expr.GetFuncArgs().GetValue(),expr.GetFuncArgs());
+        ArrayList<ArgExpr> args = expr.GetFuncArgs().GetArgs();
+        if(identifier.TypeSignature.size()>0)
+        {
+            int iterations = identifier.TypeSignature.size();
+            if(iterations < args.size())
+                Reporter.Error(new ArgumentsException("Too few Arguments in " + identifier.Name));
+            else if(iterations > args.size())
+                Reporter.Error(new ArgumentsException("Too many Arguments in " + identifier.Name));
+            for (int i = 0; i<iterations;i++)
+            {
+                ArgExpr argument = args.get(i);
+
+                Types argType = argument.GetArg() instanceof ValExpr ?
+                        ((ValExpr)argument.GetArg()).Type :
+                        (Types)VisitId((IdExpr) argument.GetArg());
+
+                if(!argType.equals(identifier.TypeSignature.get(i)))
+                    Reporter.Error(new IncompatibleValueException("Incompatible argument types in " + identifier.Name));
+            }
+        }
         return VisitId(funcId);
     }
     private Object VisitBinaryExpr(BinaryOPExpr expr)
@@ -193,8 +214,8 @@ public class ScopeManager {
     }
 
     public void VisitAParams(ArgsExpr node){
-        ArrayList<AST> args = node.children;
-        for (AST arg : args) {
+        ArrayList<ArgExpr> args = node.GetArgs();
+        for (ArgExpr arg : args) {
             String argID = arg.GetValue();
             if (FindSymbol(argID) == null) {
                 Reporter.Error(new UndeclaredSymbolException(argID + " not declared, but is used as an argument."));
@@ -210,6 +231,14 @@ public class ScopeManager {
         }
         VisitVarDcl(node.GetVarDcl());
         EnterScope(node);
+        ArrayList<FParamDcl> parameters = node.GetFormalParamsDcl().GetFParams();
+        ArrayList<Types> typeSignature = new ArrayList<>();
+        for(FParamDcl param : parameters)
+        {
+            typeSignature.add(param.Type);
+        }
+        Symbol funcDcl = FindSymbol(node.GetVarDcl().Identifier);
+        funcDcl.SetTypeSignature(typeSignature);
     }
 
     public void EnterScope(AST node){
