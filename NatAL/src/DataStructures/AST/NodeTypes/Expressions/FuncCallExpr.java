@@ -10,4 +10,12 @@ public class FuncCallExpr extends Expr
         children.add(funcIdentifier);
         children.add(args);
     }
+    public IdExpr GetFuncId()
+    {
+        return (IdExpr) children.get(0);
+    }
+    public ArgsExpr GetFuncArgs()
+    {
+        return (ArgsExpr) children.get(1);
+    }
 }

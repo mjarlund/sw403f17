@@ -1,5 +1,6 @@
 package DataStructures.AST.NodeTypes.Statements;
 
+import DataStructures.AST.AST;
 import DataStructures.AST.NodeTypes.Declarations.VarDcl;
 import DataStructures.AST.NodeTypes.Expressions.Expr;
 
@@ -17,5 +18,13 @@ public class AssignStmt extends Stmt
     {
         children.add(identifier);
         children.add(expr);
+    }
+    public AST GetLeft()
+    {
+        return children.get(0);
+    }
+    public AST GetRight()
+    {
+        return children.get(1);
     }
 }

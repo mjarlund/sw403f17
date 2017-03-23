@@ -100,27 +100,27 @@ public class ScopeManager {
     }
     private Object VisitReturnStmt(ReturnStmt stmt)
     {
-        Expr returnValue = (Expr) stmt.children.get(0);
+        Expr returnValue = stmt.GetReturnExpr();
         Object returnedType = VisitValue(returnValue.GetValue(), returnValue);
         FuncDcl func = (FuncDcl) stmt.GetParent().GetParent();
-        Types returnType = ((VarDcl)func.children.get(0)).Type;
+        Types returnType = func.GetVarDcl().Type;
         if(!returnedType.equals(returnType))
             Reporter.Error(new IncompatibleValueException(returnedType,returnType));
         return null;
     }
     private Object VisitFuncCall(FuncCallExpr expr)
     {
-        IdExpr funcId = (IdExpr) expr.children.get(0);
+        IdExpr funcId = expr.GetFuncId();
         Symbol identifier = FindSymbol(funcId.ID);
         if(identifier==null)
             Reporter.Error(new UndeclaredSymbolException(funcId.ID+ " not declared."));
-        VisitValue(expr.children.get(1).GetValue(),expr.children.get(1));
+        VisitValue(expr.GetFuncArgs().GetValue(),expr.GetFuncArgs());
         return VisitId(funcId);
     }
     private Object VisitBinaryExpr(BinaryOPExpr expr)
     {
-        AST left = expr.children.get(0);
-        AST right = expr.children.get(1);
+        AST left = expr.GetLeftExpr();
+        AST right = expr.GetRightExpr();
         Object lType = VisitValue(left.GetValue(),left);
         Object rType = VisitValue(right.GetValue(),right);
         if(!lType.equals(rType))
@@ -129,8 +129,8 @@ public class ScopeManager {
     }
     private Object VisitBoolExpr(BoolExpr expr)
     {
-        AST left = expr.children.get(0);
-        AST right = expr.children.get(1);
+        AST left = expr.GetLeftExpr();
+        AST right = expr.GetRightExpr();
         Object lType = VisitValue(left.GetValue(),left);
         Object rType = VisitValue(right.GetValue(),right);
         if(!lType.equals(rType))
@@ -139,8 +139,8 @@ public class ScopeManager {
     }
     private Object VisitAssignment(AssignStmt stmt)
     {
-        AST left = stmt.children.get(0);
-        AST right = stmt.children.get(1);
+        AST left = stmt.GetLeft();
+        AST right = stmt.GetRight();
         Object lType = VisitValue(left.GetValue(),left);
         Object rType = VisitValue(right.GetValue(),right);
         if(!lType.equals(rType))
@@ -157,7 +157,7 @@ public class ScopeManager {
     }
     private Object VisitUnaryExpr(UnaryExpr expr)
     {
-        Object res = VisitValue(expr.children.get(0).GetValue(),expr.children.get(0));
+        Object res = VisitValue(expr.GetValExpr().GetValue(),expr.GetValExpr());
         return res;
     }
     private Object VisitLiteral(ValExpr lit)
@@ -208,7 +208,7 @@ public class ScopeManager {
             Reporter.Error(new InvalidScopeException(node.GetValue() + ": Functions can only be declared in global scope."));
             //throw new Error(node.GetValue() + ": functions can only be declared in global scope. ");
         }
-        VisitVarDcl((VarDcl) node.children.get(0));
+        VisitVarDcl(node.GetVarDcl());
         EnterScope(node);
     }
 

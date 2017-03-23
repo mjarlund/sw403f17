@@ -11,4 +11,8 @@ public class UnaryExpr extends Expr
     {
         children.add(valExpr);
     }
+    public Expr GetValExpr()
+    {
+        return (Expr) children.get(0);
+    }
 }

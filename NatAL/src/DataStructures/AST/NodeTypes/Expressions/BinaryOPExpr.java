@@ -14,4 +14,12 @@ public class BinaryOPExpr extends Expr
         children.add(expr2);
     }
     public final Token Operation;
+    public Expr GetLeftExpr()
+    {
+        return (Expr) children.get(0);
+    }
+    public Expr GetRightExpr()
+    {
+        return (Expr) children.get(1);
+    }
 }

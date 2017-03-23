@@ -11,4 +11,8 @@ public class ReturnStmt extends Stmt
     {
         children.add(returnVal);
     }
+    public Expr GetReturnExpr()
+    {
+        return (Expr) children.get(0);
+    }
 }

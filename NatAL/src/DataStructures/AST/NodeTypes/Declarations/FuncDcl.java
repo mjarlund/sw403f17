@@ -15,4 +15,16 @@ public class FuncDcl extends Dcl {
         children.add(parameters);
         children.add(block);
     }
+    public VarDcl GetVarDcl()
+    {
+        return (VarDcl) children.get(0);
+    }
+    public FParamsDcl GetFormalParamsDcl()
+    {
+        return (FParamsDcl) children.get(1);
+    }
+    public BlockStmt GetFuncBlockStmt()
+    {
+        return (BlockStmt) children.get(2);
+    }
 }
