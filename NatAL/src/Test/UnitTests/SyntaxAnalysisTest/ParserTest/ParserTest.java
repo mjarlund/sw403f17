@@ -13,12 +13,15 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
+import Exceptions.MissingProductionsException;
 import Syntax.Parser.Parser;
 import Syntax.Scanner.Scanner;
+import Syntax.Tokens.TokenType;
 import Test.InputTester;
 
 @RunWith(Enclosed.class)
 public class ParserTest {
+	
 	
 	@RunWith(Parameterized.class)
 	public static class AllParsableFilesTests
@@ -74,10 +77,26 @@ public class ParserTest {
 			assertEquals(null, e);
 		}		
 	}
-	/*
-	public static class SingleInputParserTest
+	
+	
+	
+	public static class multipleInputParserTest
 	{
-		
+		@Test
+		public void voidMainTest()
+		{	
+			try{
+			Scanner multipleInputScanner = new Scanner("void main()" + System.lineSeparator() + "Interger a is 4"
+					+ "hej mor etc" );
+			Parser parser = new Parser(multipleInputScanner);
+			parser.ParseProgram();
+			}
+			catch (MissingProductionsException ex)
+			{					
+				assertEquals(true, true);
+			}			
+		}	
 	}
-	*/
+	
+	
 }

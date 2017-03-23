@@ -243,35 +243,6 @@ public class Grammar {
         return s;
     }
 
-    /**
-     * Check if grammar is LL(1)
-     */
-    public Boolean IsLL1() {
-        String left = Productions[0].Left;
-        Set<String> symbols = new HashSet<>();
-        Set<String> tmpSet = new HashSet<>();
-
-        for(Production p : Productions) {
-            if(left.equals(p.Left)) {
-                if(p.Right[0].equals("EPSILON")) tmpSet.addAll(Follow(p.Left));
-                else tmpSet.addAll(First(p.Right[0], true));
-
-                for(String s : tmpSet) {
-                    if(symbols.contains(s)) return false;
-                    symbols.add(s);
-                }
-
-            } else {
-                symbols.clear();
-                if(p.Right[0].equals("EPSILON")) symbols.addAll(Follow(p.Left));
-                else symbols.addAll(First(p.Right[0], true));
-            }
-            tmpSet.clear();
-            left = p.Left;
-        }
-
-        return true;
-    }
 
     /**
      * Get all terminals and non-terminals in the grammar
@@ -321,10 +292,5 @@ public class Grammar {
         followMap = new HashMap<>();
         for(String s : Symbols) Epsilon.put(s, false);
         InitEpsilon();
-    }
-
-    public static void main(String[] args) throws IOException {
-        Grammar cfg = new ParsingTable().Grammar;
-        System.out.println(cfg.IsLL1());
     }
 }

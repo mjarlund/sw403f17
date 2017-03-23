@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import org.junit.Rule;
 import org.junit.Test;
+import org.junit.experimental.runners.Enclosed;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -16,6 +17,7 @@ import Syntax.Scanner.Scanner;
 import Syntax.Tokens.Token;
 import Syntax.Tokens.TokenType;
 
+@RunWith(Enclosed.class)
 public class ParsingTableTest {
 
 		@RunWith(Parameterized.class)
@@ -129,10 +131,12 @@ public class ParsingTableTest {
 		{
 			return Arrays.asList(new Object[][]{
 					
-					{"Statement", new Token("EPSILON",TokenType.OPERATOR),"Statement -> EPSILON"},
+					{"Statement", new Token("1",TokenType.KEYWORD),"Statement -> 1"},
+					{"Statement", new Token("+",TokenType.OPERATOR),"Statement -> + Statement"},
+					{"Statement", new Token("IntegerLiteral",TokenType.INTEGER_LITERAL),"Statement -> IntegerLiteral"},
+
 			});
 		}
-
 		@Test
 		public void testGetPredictionStringToken() {
 			ParsingTable p = new ParsingTable("src/Test/GrammaTestFile");
