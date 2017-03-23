@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import org.junit.Rule;
 import org.junit.Test;
+import org.junit.experimental.runners.Enclosed;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -16,6 +17,7 @@ import Syntax.Scanner.Scanner;
 import Syntax.Tokens.Token;
 import Syntax.Tokens.TokenType;
 
+@RunWith(Enclosed.class)
 public class ParsingTableTest {
 
 		@RunWith(Parameterized.class)
