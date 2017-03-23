@@ -5,10 +5,7 @@ import DataStructures.AST.NodeTypes.Declarations.FParamDcl;
 import DataStructures.AST.NodeTypes.Declarations.FParamsDcl;
 import DataStructures.AST.NodeTypes.Declarations.FuncDcl;
 import DataStructures.AST.NodeTypes.Declarations.VarDcl;
-import DataStructures.AST.NodeTypes.Expressions.ArgsExpr;
-import DataStructures.AST.NodeTypes.Expressions.IdExpr;
-import DataStructures.AST.NodeTypes.Expressions.UnaryExpr;
-import DataStructures.AST.NodeTypes.Expressions.ValExpr;
+import DataStructures.AST.NodeTypes.Expressions.*;
 import DataStructures.AST.NodeTypes.Statements.AssignStmt;
 import DataStructures.AST.NodeTypes.Types;
 import Utilities.TypeConverter;
@@ -80,11 +77,37 @@ public class ScopeManager {
             case "AssignStmt":
                 VisitAssignment((AssignStmt) child);
                 break;
+            case "BinaryOPExpr":
+                return VisitBinaryExpr((BinaryOPExpr)child);
+            case "UnaryExpr":
+                return VisitUnaryExpr((UnaryExpr)child);
+            case "BoolExpr":
+                return VisitBoolExpr((BoolExpr)child);
             default:
                 VisitChildren(child);
                 break;
         }
         return null;
+    }
+    private Object VisitBinaryExpr(BinaryOPExpr expr)
+    {
+        AST left = expr.children.get(0);
+        AST right = expr.children.get(1);
+        Object lType = VisitValue(left.GetValue(),left);
+        Object rType = VisitValue(right.GetValue(),right);
+        if(!lType.equals(rType))
+            throw new Error("incompatible types " + left + " " + lType + " " + right + " " + rType);
+        return lType;
+    }
+    private Object VisitBoolExpr(BoolExpr expr)
+    {
+        AST left = expr.children.get(0);
+        AST right = expr.children.get(1);
+        Object lType = VisitValue(left.GetValue(),left);
+        Object rType = VisitValue(right.GetValue(),right);
+        if(!lType.equals(rType))
+            throw new Error("incompatible types " + left + " " + lType + " " + right + " " + rType);
+        return lType;
     }
     private Object VisitAssignment(AssignStmt stmt)
     {
@@ -93,12 +116,21 @@ public class ScopeManager {
         Object lType = VisitValue(left.GetValue(),left);
         Object rType = VisitValue(right.GetValue(),right);
         if(!lType.equals(rType))
-            throw new Error("incompatible types " + left + " " + right);
+            throw new Error("incompatible types " + left + " " + lType + " " + right + " " + rType);
+        if(!IsAssignable(left))
+            throw new Error("LHS not assignable " + left);
         return null;
+    }
+    private boolean IsAssignable(AST lhs)
+    {
+        if(lhs.GetValue().equals("IdExpr") || lhs.GetValue().equals("VarDcl"))
+            return true;
+        return false;
     }
     private Object VisitUnaryExpr(UnaryExpr expr)
     {
-        return null;
+        Object res = VisitValue(expr.children.get(0).GetValue(),expr.children.get(0));
+        return res;
     }
     private Object VisitLiteral(ValExpr lit)
     {

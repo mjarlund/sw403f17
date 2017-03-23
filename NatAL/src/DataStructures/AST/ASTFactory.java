@@ -267,6 +267,8 @@ public class ASTFactory
         {
             case "number":
                 return Types.INT;
+            case "boolean":
+                return Types.BOOL;
             case "fraction":
                 return Types.FLOAT;
             case "void":

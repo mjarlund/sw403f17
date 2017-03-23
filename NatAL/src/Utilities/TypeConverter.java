@@ -21,7 +21,7 @@ public class TypeConverter
             case BOOLEAN_LITERAL:
                 return "BooleanLiteral";
             case FLOAT_LITERAL:
-                return "FloatingLiteral";
+                return "FloatingPointLiteral";
             case STRING_LITERAL:
                 return "StringLiteral";
             case EOF:
