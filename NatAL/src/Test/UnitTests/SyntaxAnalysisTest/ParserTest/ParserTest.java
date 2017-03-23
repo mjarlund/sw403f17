@@ -13,6 +13,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
+import Exceptions.InvalidIdentifierException;
 import Exceptions.MissingProductionsException;
 import Exceptions.UnexpectedTokenException;
 import Syntax.Parser.Parser;
@@ -136,9 +137,10 @@ public class ParserTest {
 		public void ExceptionssuccessfullyThrownTest() throws IOException {
 			
 			boolean thrown = false;		
-			Scanner testScanner = new Scanner(InputTester.readFile(testPath));
 			try 
 			{
+				Scanner testScanner = new Scanner(InputTester.readFile(testPath));
+				System.out.println(testPath);
 				Parser parser = new Parser(testScanner);
 				parser.ParseProgram();
 			} 
@@ -147,6 +149,13 @@ public class ParserTest {
 				thrown = true;
 			}			
 			catch (MissingProductionsException ex)
+			{
+				thrown = true;
+			}
+			catch (StringIndexOutOfBoundsException e){
+				thrown = true;
+			}
+			catch (InvalidIdentifierException e)
 			{
 				thrown = true;
 			}
