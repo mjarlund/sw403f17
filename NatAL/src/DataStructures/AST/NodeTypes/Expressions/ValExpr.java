@@ -13,11 +13,12 @@ public class ValExpr extends Expr
     {
         LiteralValue = literalValue;
         Type = type;
+        SetValue("ValExpr");
     }
     public ValExpr(Token literalValue)
-
     {
         LiteralValue = literalValue;
+        SetValue("ValExpr");
     }
     public final Token LiteralValue;
     public Types Type;

@@ -9,6 +9,10 @@ import java.util.ArrayList;
  */
 public class FParamsDcl extends AST
 {
+    public FParamsDcl()
+    {
+        SetValue("FParamsDcl");
+    }
     public ArrayList<FParamDcl> GetFParams()
     {
         ArrayList<FParamDcl> params = new ArrayList<>();

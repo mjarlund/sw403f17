@@ -11,6 +11,7 @@ public class VarDcl extends Dcl
     {
         Type = type;
         Identifier = identifier;
+        SetValue("VarDcl");
     }
 
     public final Types Type;

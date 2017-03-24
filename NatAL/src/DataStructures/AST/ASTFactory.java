@@ -20,6 +20,7 @@ public class ASTFactory
     public DefaultHashMap<String, Runnable> SemanticAction = new DefaultHashMap<String, Runnable>(null);
     private Stack<AST> astStack;
     private Stack<Token> terminals;
+    private int currentLineNumber;
 
     public AST program;
 
@@ -50,10 +51,14 @@ public class ASTFactory
         SemanticAction.put("BuildReturnStmt", ASTFactory.this::CreateReturnStmt);
         SemanticAction.put("BuildUnaryExpr", ASTFactory.this::CreateUnaryExpr);
     }
-    public void CreateAbstractTree(String action)
+    public void CreateAbstractTree(String action, int lineNumber)
     {
         Runnable method = SemanticAction.get(action);
-        if (method!=null)method.run();
+        if (method!=null)
+        {
+            method.run();
+            currentLineNumber = lineNumber;
+        }
         else
             throw new Error("Semantic action not found please come again (indian accent)");
     }
@@ -77,14 +82,12 @@ public class ASTFactory
         Expr val = (Expr)astStack.pop();
         Token op = terminals.pop();
         UnaryExpr expr = new UnaryExpr(op,val);
-        expr.SetValue("UnaryExpr");
         astStack.push(expr);
     }
     private void CreateReturnStmt()
     {
         Expr returnval = (Expr)astStack.pop();
         ReturnStmt stmt = new ReturnStmt(returnval);
-        stmt.SetValue("ReturnStmt");
         astStack.push(stmt);
     }
     private void CreateUntilStmtTree()
@@ -94,7 +97,6 @@ public class ASTFactory
         // remove 'until' terminal
         terminals.pop();
         UntilStmt untilStmt = new UntilStmt(condition,block);
-        untilStmt.SetValue("UntilStmt");
         astStack.push(untilStmt);
     }
     private void CreateFuncCall()
@@ -102,7 +104,7 @@ public class ASTFactory
         ArgsExpr args = (ArgsExpr) astStack.pop();
         IdExpr id = (IdExpr) astStack.pop();
         FuncCallExpr funcCall = new FuncCallExpr(id,args);
-        funcCall.SetValue("FuncCallExpr");
+        funcCall.SetLineNumber(currentLineNumber);
         astStack.push(funcCall);
     }
     private void CreateActualParameters()
@@ -119,7 +121,7 @@ public class ASTFactory
                     arg = new ArgExpr(new IdExpr(id.Value));
                     arg.SetValue(id.Value);
                 } else {
-                    arg = new ArgExpr(new ValExpr(id));
+                    arg = new ArgExpr(new ValExpr(TypeConverter.TypetoTypes(id),id));
                 }
 
                 parameters.add(arg);
@@ -131,7 +133,6 @@ public class ASTFactory
         {
             astParameters.children.add(parameter);
         }
-        astParameters.SetValue("ArgsExpr");
         astStack.push(astParameters);
     }
     private void CreateBinaryExpr()
@@ -140,7 +141,6 @@ public class ASTFactory
         Expr left = (Expr)astStack.pop();
         Token op = terminals.pop();
         Expr expr = new BinaryOPExpr(left, op, right);
-        expr.SetValue("BinaryOPExpr");
         astStack.push(expr);
     }
     private void CreateIfStmt()
@@ -150,14 +150,12 @@ public class ASTFactory
         // remove 'if' terminal
         //terminals.pop();
         IfStmt ifstmt = new IfStmt(condition,block);
-        ifstmt.SetValue("IfStmt");
         astStack.push(ifstmt);
     }
     private void CreateElse()
     {
         BlockStmt elseBlock = (BlockStmt) astStack.pop();
         ElseStmt elseStmt = new ElseStmt(elseBlock);
-        elseStmt.SetValue("ElseStmt");
         astStack.push(elseStmt);
     }
     private void CreateBoolExpr()
@@ -171,7 +169,6 @@ public class ASTFactory
         if(terminals.peek().equals(")")) // remove '('
             terminals.pop();
         BoolExpr expr = new BoolExpr(left, op, right);
-        expr.SetValue("BoolExpr");
         astStack.push(expr);
     }
     // expect terminalStack to start with ')' and end with '(' in between are the parameters
@@ -196,7 +193,6 @@ public class ASTFactory
             astParameters.AdoptChildren(parameter);
             astParameters.children.add(parameter);
         }
-        astParameters.SetValue("FParamsDcl");
         astStack.push(astParameters);
     }
     private void CreateBlockTree()
@@ -216,7 +212,6 @@ public class ASTFactory
         terminals.pop();
 
         FuncDcl function = new FuncDcl(dcl,parameters,block);
-        function.SetValue("FuncDcl");
         astStack.push(function);
     }
     // Expecting an expr and identifier or dcl on astStack and an is terminal on terminal stack
@@ -231,10 +226,8 @@ public class ASTFactory
 
         if (astStack.peek() instanceof Dcl){
             assign = new AssignStmt((VarDcl) astStack.pop(), right);
-            assign.SetValue("AssignStmt");
         } else {
             assign = new AssignStmt((Expr) astStack.pop(), right);
-            assign.SetValue("AssignStmt");
         }
 
         astStack.push(assign);
@@ -243,14 +236,12 @@ public class ASTFactory
     {
         Token id = terminals.pop();
         IdExpr identifier = new IdExpr(id.Value);
-        identifier.SetValue("IdExpr");
         astStack.push(identifier);
     }
     private void CreateValExprTree()
     {
         Token value = terminals.pop();
         ValExpr val = new ValExpr(TypeConverter.TypetoTypes(value),value);
-        val.SetValue("ValExpr");
         astStack.push(val);
     }
     private void CreateDclTree()
@@ -258,7 +249,6 @@ public class ASTFactory
         String id = terminals.pop().Value;
         Types type = GetType(terminals.pop());
         VarDcl dcl = new VarDcl(type, id);
-        dcl.SetValue("VarDcl");
         astStack.push(dcl);
     }
 

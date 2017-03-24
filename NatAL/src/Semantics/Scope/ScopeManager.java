@@ -164,7 +164,7 @@ public class ScopeManager {
                         (Types)VisitId((IdExpr) argument.GetArg());
 
                 if(!argType.equals(identifier.TypeSignature.get(i)))
-                    Reporter.Error(new IncompatibleValueException("Incompatible argument types in " + identifier.Name));
+                    Reporter.Error(new IncompatibleValueException("Incompatible argument types in " + identifier.Name + " on line " + expr.GetLineNumber()));
             }
         }
         // returns function return type
@@ -253,11 +253,12 @@ public class ScopeManager {
     public void VisitAParams(ArgsExpr node){
         ArrayList<ArgExpr> args = node.GetArgs();
         for (ArgExpr arg : args) {
-            String argID = arg.GetValue();
-            if (FindSymbol(argID) == null) {
+            String argID = arg.GetArg().GetValue();
+            /*if (FindSymbol(argID) == null) {
                 Reporter.Error(new UndeclaredSymbolException(argID + " not declared, but is used as an argument."));
                 //throw new Error(argID + " not declared, but is used as an argument. ");
-            }
+            }*/
+            VisitValue(argID,arg.GetArg());
         }
     }
 

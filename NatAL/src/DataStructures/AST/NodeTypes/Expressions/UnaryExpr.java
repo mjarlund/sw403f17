@@ -10,6 +10,7 @@ public class UnaryExpr extends Expr
     public UnaryExpr(Token op, Expr valExpr)
     {
         children.add(valExpr);
+        SetValue("UnaryExpr");
     }
     public Expr GetValExpr()
     {

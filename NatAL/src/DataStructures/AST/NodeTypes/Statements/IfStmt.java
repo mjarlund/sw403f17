@@ -11,6 +11,7 @@ public class IfStmt extends Stmt
     {
         children.add(expr);
         children.add(statements);
+        SetValue("IfStmt");
     }
     public Expr GetCondition()
     {

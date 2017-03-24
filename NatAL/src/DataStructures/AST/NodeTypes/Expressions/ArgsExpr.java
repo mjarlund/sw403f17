@@ -11,6 +11,7 @@ public class ArgsExpr extends Expr
 {
     public ArgsExpr()
     {
+        SetValue("ArgsExpr");
     }
     public ArrayList<ArgExpr> GetArgs()
     {

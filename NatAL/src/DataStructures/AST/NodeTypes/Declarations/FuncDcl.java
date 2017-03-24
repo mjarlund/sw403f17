@@ -14,6 +14,7 @@ public class FuncDcl extends Dcl {
         children.add(dcl);
         children.add(parameters);
         children.add(block);
+        SetValue("FuncDcl");
     }
     public VarDcl GetVarDcl()
     {

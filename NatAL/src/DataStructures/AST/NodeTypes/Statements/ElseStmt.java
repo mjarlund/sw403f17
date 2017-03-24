@@ -8,5 +8,6 @@ public class ElseStmt extends Stmt
     public ElseStmt(BlockStmt block)
     {
         children.add(block);
+        SetValue("ElseStmt");
     }
 }

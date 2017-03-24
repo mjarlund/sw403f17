@@ -12,6 +12,7 @@ public class BinaryOPExpr extends Expr
         Operation = operation;
         children.add(expr1);
         children.add(expr2);
+        SetValue("BinaryOPExpr");
     }
     public final Token Operation;
     public Expr GetLeftExpr()

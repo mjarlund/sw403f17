@@ -18,6 +18,10 @@ public class Scanner
     protected char currentChar;
     protected int inputLength;
     private int lineNumber;
+    public int GetLineNumber()
+    {
+        return lineNumber;
+    }
 
     public Scanner (String input)
     {

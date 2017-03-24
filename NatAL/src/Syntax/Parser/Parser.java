@@ -57,7 +57,7 @@ public class Parser
                 // Terminal might be a semantic actions
                 else if (ASTFactory.SemanticAction.get(parseTop) != null)
                 {
-                    ASTFactory.CreateAbstractTree(parseTop);
+                    ASTFactory.CreateAbstractTree(parseTop, scanner.GetLineNumber()-1);
                 }
                 else
                 {

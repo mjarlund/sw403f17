@@ -12,6 +12,7 @@ public class FParamDcl extends AST
     {
         Type = type;
         Identifier = identifier;
+        SetValue("FParamDcl");
     }
 
     public final Types Type;
