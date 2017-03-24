@@ -110,6 +110,7 @@ public class ScopeManager {
     private void VisitIfStmt(IfStmt stmt)
     {
         Expr condition = stmt.GetCondition();
+        // if condition check must result in a bool expression
         if(!(condition instanceof BoolExpr))
             Reporter.Error(new IncompatibleValueException("Expected boolean expression in " + stmt));
         VisitChildren(stmt);
@@ -117,27 +118,32 @@ public class ScopeManager {
     private void VisitUntilStmt(UntilStmt stmt)
     {
         Expr condition = stmt.GetCondition();
+        // until condition check must result in a bool expression
         if(!(condition instanceof BoolExpr))
             Reporter.Error(new IncompatibleValueException("Expected boolean expression in " + stmt));
         VisitChildren(stmt);
     }
-    private Object VisitReturnStmt(ReturnStmt stmt)
+    private void VisitReturnStmt(ReturnStmt stmt)
     {
         Expr returnValue = stmt.GetReturnExpr();
+        // Get the value after the return stmt
         Object returnedType = VisitValue(returnValue.GetValue(), returnValue);
         FuncDcl func = (FuncDcl) stmt.GetParent().GetParent();
+        // Get function return type
         Types returnType = func.GetVarDcl().Type;
+        // The type returned by the return stmt must match the function return type
         if(!returnedType.equals(returnType))
             Reporter.Error(new IncompatibleValueException(returnedType,returnType));
-        return null;
     }
+    /* Checks symbol table for function identifier and checks correct usage of arguments */
     private Object VisitFuncCall(FuncCallExpr expr)
     {
         IdExpr funcId = expr.GetFuncId();
         Symbol identifier = FindSymbol(funcId.ID);
+        // Check if function is declared before usage
         if(identifier==null)
             Reporter.Error(new UndeclaredSymbolException(funcId.ID+ " not declared."));
-
+        // Checks that args are used declared before usage
         VisitValue(expr.GetFuncArgs().GetValue(),expr.GetFuncArgs());
         ArrayList<ArgExpr> args = expr.GetFuncArgs().GetArgs();
 
@@ -148,6 +154,7 @@ public class ScopeManager {
                 Reporter.Error(new ArgumentsException("Too few Arguments in " + identifier.Name));
             else if(iterations < args.size())
                 Reporter.Error(new ArgumentsException("Too many Arguments in " + identifier.Name));
+            // Checks that every argument type fits the function type signature
             for (int i = 0; i<iterations;i++)
             {
                 ArgExpr argument = args.get(i);
@@ -169,6 +176,7 @@ public class ScopeManager {
         AST right = expr.GetRightExpr();
         Object lType = VisitValue(left.GetValue(),left);
         Object rType = VisitValue(right.GetValue(),right);
+        // checks that the left hand side is the same as the right hand side
         if(!lType.equals(rType))
             Reporter.Error(new IncompatibleValueException(lType,rType,expr.Operation.LineNumber));
         return lType;
@@ -179,6 +187,7 @@ public class ScopeManager {
         AST right = expr.GetRightExpr();
         Object lType = VisitValue(left.GetValue(),left);
         Object rType = VisitValue(right.GetValue(),right);
+        // checks that the left hand side type is the same as the right hand side type
         if(!lType.equals(rType))
             Reporter.Error(new IncompatibleValueException(lType,rType,expr.Operator.LineNumber));
         return lType;
@@ -189,15 +198,18 @@ public class ScopeManager {
         AST right = stmt.GetRight();
         Object lType = VisitValue(left.GetValue(),left);
         Object rType = VisitValue(right.GetValue(),right);
+        // left hand side is the same type as the right hand side type
         if(!lType.equals(rType))
             Reporter.Error(new IncompatibleValueException(lType,rType));
+        // left value must be assignable i.e. a variable
         if(!IsAssignable(left))
             throw new Error("LHS not assignable " + left);
         return null;
     }
     private boolean IsAssignable(AST lhs)
     {
-        if(lhs.GetValue().equals("IdExpr") || lhs.GetValue().equals("VarDcl"))
+        // left hand side must be a variable
+        if(lhs instanceof IdExpr || lhs instanceof VarDcl)
             return true;
         return false;
     }
