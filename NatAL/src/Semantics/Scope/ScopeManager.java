@@ -7,7 +7,9 @@ import DataStructures.AST.NodeTypes.Declarations.FuncDcl;
 import DataStructures.AST.NodeTypes.Declarations.VarDcl;
 import DataStructures.AST.NodeTypes.Expressions.*;
 import DataStructures.AST.NodeTypes.Statements.AssignStmt;
+import DataStructures.AST.NodeTypes.Statements.IfStmt;
 import DataStructures.AST.NodeTypes.Statements.ReturnStmt;
+import DataStructures.AST.NodeTypes.Statements.UntilStmt;
 import DataStructures.AST.NodeTypes.Types;
 import Exceptions.ArgumentsException;
 import Exceptions.IncompatibleValueException;
@@ -93,11 +95,25 @@ public class ScopeManager {
             case "ReturnStmt":
                 VisitReturnStmt((ReturnStmt)child);
                 break;
+            case "IfStmt":
+                VisitIfStmt((IfStmt)child);
+                break;
+            case "UntilStmt":
+                VisitUntilStmt((UntilStmt)child);
+                break;
             default:
                 VisitChildren(child);
                 break;
         }
         return null;
+    }
+    private void VisitIfStmt(IfStmt stmt)
+    {
+        VisitChildren(stmt);
+    }
+    private void VisitUntilStmt(UntilStmt stmt)
+    {
+        VisitChildren(stmt);
     }
     private Object VisitReturnStmt(ReturnStmt stmt)
     {
@@ -115,14 +131,16 @@ public class ScopeManager {
         Symbol identifier = FindSymbol(funcId.ID);
         if(identifier==null)
             Reporter.Error(new UndeclaredSymbolException(funcId.ID+ " not declared."));
+
         VisitValue(expr.GetFuncArgs().GetValue(),expr.GetFuncArgs());
         ArrayList<ArgExpr> args = expr.GetFuncArgs().GetArgs();
+
         if(identifier.TypeSignature.size()>0)
         {
             int iterations = identifier.TypeSignature.size();
-            if(iterations < args.size())
+            if(iterations > args.size())
                 Reporter.Error(new ArgumentsException("Too few Arguments in " + identifier.Name));
-            else if(iterations > args.size())
+            else if(iterations < args.size())
                 Reporter.Error(new ArgumentsException("Too many Arguments in " + identifier.Name));
             for (int i = 0; i<iterations;i++)
             {
@@ -136,6 +154,7 @@ public class ScopeManager {
                     Reporter.Error(new IncompatibleValueException("Incompatible argument types in " + identifier.Name));
             }
         }
+        // returns function return type
         return VisitId(funcId);
     }
     private Object VisitBinaryExpr(BinaryOPExpr expr)
@@ -230,7 +249,8 @@ public class ScopeManager {
             //throw new Error(node.GetValue() + ": functions can only be declared in global scope. ");
         }
         VisitVarDcl(node.GetVarDcl());
-        EnterScope(node);
+
+        // setup function type signature, must be before scope else no recursion
         ArrayList<FParamDcl> parameters = node.GetFormalParamsDcl().GetFParams();
         ArrayList<Types> typeSignature = new ArrayList<>();
         for(FParamDcl param : parameters)
@@ -239,6 +259,9 @@ public class ScopeManager {
         }
         Symbol funcDcl = FindSymbol(node.GetVarDcl().Identifier);
         funcDcl.SetTypeSignature(typeSignature);
+
+        // Enter scope and visit func declaration children
+        EnterScope(node);
     }
 
     public void EnterScope(AST node){
