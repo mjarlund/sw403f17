@@ -141,7 +141,7 @@ public class ScopeManager {
         VisitValue(expr.GetFuncArgs().GetValue(),expr.GetFuncArgs());
         ArrayList<ArgExpr> args = expr.GetFuncArgs().GetArgs();
 
-        if(identifier.TypeSignature.size()>0)
+        if(identifier.TypeSignature.size()>0 || args.size()>0)
         {
             int iterations = identifier.TypeSignature.size();
             if(iterations > args.size())
