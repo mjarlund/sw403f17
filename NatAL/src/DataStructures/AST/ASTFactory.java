@@ -222,11 +222,12 @@ public class ASTFactory
         parameters.SetLineNumber(currentLineNumber);
         VarDcl dcl = (VarDcl) astStack.pop();
         dcl.SetLineNumber(currentLineNumber);
-        // remove 'end' 'id' from terminal stack
-        terminals.pop();
-        terminals.pop();
 
         FuncDcl function = new FuncDcl(dcl,parameters,block);
+        String endId = terminals.pop().Value;
+        // remove end keyword
+        terminals.pop();
+        function.SetEndIdentifier(endId);
         astStack.push(function);
     }
     // Expecting an expr and identifier or dcl on astStack and an is terminal on terminal stack

@@ -16,6 +16,11 @@ public class FuncDcl extends Dcl {
         children.add(block);
         SetValue("FuncDcl");
     }
+    private String endIdentifier;
+    public void SetEndIdentifier(String endId)
+    {
+        endIdentifier = endId;
+    }
     public VarDcl GetVarDcl()
     {
         return (VarDcl) children.get(0);
