@@ -15,8 +15,8 @@ ReturnStatement -> return Expression BuildReturnStmt CombineDown NewLine
 ReturnStatement -> EPSILON
 StructDeclarationStatement -> struct Identifier BuildVarDCL StructDeclarationStatementPrime CombineDown
 StructDeclarationStatementPrime -> BuildBlock NewLine StructDeclarationBlock
-StructDeclarationStatementPrime -> Identifier BuildIdentifier EPSILON
-StructDeclarationBlock -> DeclarationStatement StructDeclaration
+StructDeclarationStatementPrime -> Identifier BuildIdentifier
+StructDeclarationBlock -> DeclarationStatement StructDeclarationBlock
 StructDeclarationBlock -> end Identifier
 ListDeclarationStatement -> list of Type Identifier is ParameterList
 FormalParameter -> Type Identifier
