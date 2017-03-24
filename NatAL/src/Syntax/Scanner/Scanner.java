@@ -42,7 +42,7 @@ public class Scanner
         words.put("return", TokenType.KEYWORD); words.put("void", TokenType.KEYWORD);
         words.put("structure", TokenType.KEYWORD); words.put("fraction", TokenType.KEYWORD);
         words.put("number", TokenType.KEYWORD);  words.put("text", TokenType.KEYWORD);
-        words.put("character", TokenType.KEYWORD);
+        words.put("character", TokenType.KEYWORD); words.put("list", TokenType.KEYWORD);
 
         // Other
         words.put("false", TokenType.BOOLEAN_LITERAL); words.put("true", TokenType.BOOLEAN_LITERAL);
