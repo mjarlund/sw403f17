@@ -206,18 +206,18 @@ public class ScannerTest {
 		
 		
 		@Test
-		public void EmptyDocumentThrownsErrorTest() throws IOException
+		public void EmptyDocumentThrowsErrorTest() throws IOException
 		{
-			boolean thrown = false;		
+			boolean thrown = false;
 				
 			try 
 			{
-				Scanner testScanner = new Scanner(InputTester.readFile("src/Test/TestPrograms/TestFail"));
+				Scanner testScanner = new Scanner(InputTester.readFile("src/Test/TestPrograms/Testfail"));
 			} 
 			catch (StringIndexOutOfBoundsException e){
 				thrown = true;
 			}
-			assertEquals(true, thrown);	
+			assertEquals(true, thrown);
 		}
 		
 
