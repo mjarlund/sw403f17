@@ -9,4 +9,8 @@ public class UndeclaredSymbolException extends Error
     {
         super(message);
     }
+    public UndeclaredSymbolException(String message, int linenumber)
+    {
+        super(message + " on line " + linenumber);
+    }
 }
