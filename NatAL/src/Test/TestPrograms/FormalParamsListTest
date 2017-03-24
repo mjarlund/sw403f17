@@ -1,0 +1,5 @@
+number func(number x, number y, number z)
+number ans is 0
+ans is x*y*z
+return ans
+end func
