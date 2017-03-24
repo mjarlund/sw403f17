@@ -12,6 +12,7 @@ public class BoolExpr extends Expr
         Operator = operator;
         children.add(expr1);
         children.add(expr2);
+        SetValue("BoolExpr");
     }
     public final Token Operator;
     public Expr GetLeftExpr()

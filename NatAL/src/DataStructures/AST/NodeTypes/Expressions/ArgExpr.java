@@ -9,6 +9,7 @@ public class ArgExpr extends Expr
 {
     public ArgExpr(ValExpr value)
     {
+        SetValue("ArgExpr");
         children.add(value);
     }
     public ArgExpr(IdExpr id)

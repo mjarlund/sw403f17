@@ -9,6 +9,7 @@ public class FuncCallExpr extends Expr
     {
         children.add(funcIdentifier);
         children.add(args);
+        SetValue("FuncCallExpr");
     }
     public IdExpr GetFuncId()
     {

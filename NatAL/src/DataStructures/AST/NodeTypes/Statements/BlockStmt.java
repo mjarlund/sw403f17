@@ -13,6 +13,7 @@ public class BlockStmt extends Stmt
         {
             children.add(stmt);
         }
+        SetValue("BlockStmt");
     }
     public BlockStmt(){}
 }

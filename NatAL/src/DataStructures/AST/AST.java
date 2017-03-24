@@ -15,6 +15,16 @@ public class AST
         value = val;
     }
 
+    private int lineNumber;
+    public void SetLineNumber(int lineNumber)
+    {
+        this.lineNumber = lineNumber;
+    }
+    public int GetLineNumber()
+    {
+        return lineNumber;
+    }
+
     private AST nextRightSibling;
     public AST GetNextRightSibling(){
         return nextRightSibling;
