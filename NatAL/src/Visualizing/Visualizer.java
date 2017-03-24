@@ -30,9 +30,9 @@ public class Visualizer extends PApplet {
         String code = "void func1()\n" +
                         "number a is -2\n" +
                         "number b is a\n" +
-                        "if (a equals b)\n " +
+                        "until (a above b)\n " +
                             "b is a+1\n" +
-                            "end if\n"+
+                            "end until\n"+
                         "end func1 \n " +
                       "void func2(number a, number b)\n"+
                         "a is a + b\n"+

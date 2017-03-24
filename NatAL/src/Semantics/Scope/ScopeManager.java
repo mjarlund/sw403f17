@@ -109,10 +109,16 @@ public class ScopeManager {
     }
     private void VisitIfStmt(IfStmt stmt)
     {
+        Expr condition = stmt.GetCondition();
+        if(!(condition instanceof BoolExpr))
+            Reporter.Error(new IncompatibleValueException("Expected boolean expression in " + stmt));
         VisitChildren(stmt);
     }
     private void VisitUntilStmt(UntilStmt stmt)
     {
+        Expr condition = stmt.GetCondition();
+        if(!(condition instanceof BoolExpr))
+            Reporter.Error(new IncompatibleValueException("Expected boolean expression in " + stmt));
         VisitChildren(stmt);
     }
     private Object VisitReturnStmt(ReturnStmt stmt)

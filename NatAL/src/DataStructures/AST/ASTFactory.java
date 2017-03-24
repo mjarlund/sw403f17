@@ -90,7 +90,7 @@ public class ASTFactory
     private void CreateUntilStmtTree()
     {
         BlockStmt block = (BlockStmt) astStack.pop();
-        BoolExpr condition = (BoolExpr) astStack.pop();
+        Expr condition = (Expr) astStack.pop();
         // remove 'until' terminal
         terminals.pop();
         UntilStmt untilStmt = new UntilStmt(condition,block);
@@ -146,7 +146,7 @@ public class ASTFactory
     private void CreateIfStmt()
     {
         BlockStmt block = (BlockStmt) astStack.pop();
-        BoolExpr condition = (BoolExpr) astStack.pop();
+        Expr condition = (Expr) astStack.pop();
         // remove 'if' terminal
         //terminals.pop();
         IfStmt ifstmt = new IfStmt(condition,block);
