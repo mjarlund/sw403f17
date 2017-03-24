@@ -11,10 +11,7 @@ import DataStructures.AST.NodeTypes.Statements.IfStmt;
 import DataStructures.AST.NodeTypes.Statements.ReturnStmt;
 import DataStructures.AST.NodeTypes.Statements.UntilStmt;
 import DataStructures.AST.NodeTypes.Types;
-import Exceptions.ArgumentsException;
-import Exceptions.IncompatibleValueException;
-import Exceptions.InvalidScopeException;
-import Exceptions.UndeclaredSymbolException;
+import Exceptions.*;
 import Utilities.Reporter;
 import Utilities.TypeConverter;
 
@@ -281,6 +278,8 @@ public class ScopeManager {
 
         // Enter scope and visit func declaration children
         EnterScope(node);
+        if(!node.GetVarDcl().Identifier.equals(node.GetEndIdentifier()))
+            Reporter.Error(new InvalidIdentifierException("Invalid end Identifier in line " + node.GetLineNumber()));
     }
 
     public void EnterScope(AST node){

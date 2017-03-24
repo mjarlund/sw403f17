@@ -224,6 +224,7 @@ public class ASTFactory
         dcl.SetLineNumber(currentLineNumber);
 
         FuncDcl function = new FuncDcl(dcl,parameters,block);
+        function.SetLineNumber(currentLineNumber);
         String endId = terminals.pop().Value;
         // remove end keyword
         terminals.pop();
