@@ -11,10 +11,7 @@ import DataStructures.AST.NodeTypes.Statements.IfStmt;
 import DataStructures.AST.NodeTypes.Statements.ReturnStmt;
 import DataStructures.AST.NodeTypes.Statements.UntilStmt;
 import DataStructures.AST.NodeTypes.Types;
-import Exceptions.ArgumentsException;
-import Exceptions.IncompatibleValueException;
-import Exceptions.InvalidScopeException;
-import Exceptions.UndeclaredSymbolException;
+import Exceptions.*;
 import Utilities.Reporter;
 import Utilities.TypeConverter;
 
@@ -112,7 +109,7 @@ public class ScopeManager {
         Expr condition = stmt.GetCondition();
         // if condition check must result in a bool expression
         if(!(condition instanceof BoolExpr))
-            Reporter.Error(new IncompatibleValueException("Expected boolean expression in " + stmt));
+            Reporter.Error(new IncompatibleValueException("Expected boolean expression in " + stmt + " on line " + stmt.GetLineNumber()));
         VisitChildren(stmt);
     }
     private void VisitUntilStmt(UntilStmt stmt)
@@ -120,7 +117,7 @@ public class ScopeManager {
         Expr condition = stmt.GetCondition();
         // until condition check must result in a bool expression
         if(!(condition instanceof BoolExpr))
-            Reporter.Error(new IncompatibleValueException("Expected boolean expression in " + stmt));
+            Reporter.Error(new IncompatibleValueException("Expected boolean expression in " + stmt + " on line " + stmt.GetLineNumber()));
         VisitChildren(stmt);
     }
     private void VisitReturnStmt(ReturnStmt stmt)
@@ -142,7 +139,7 @@ public class ScopeManager {
         Symbol identifier = FindSymbol(funcId.ID);
         // Check if function is declared before usage
         if(identifier==null)
-            Reporter.Error(new UndeclaredSymbolException(funcId.ID+ " not declared."));
+            Reporter.Error(new UndeclaredSymbolException(funcId.ID+ " not declared.", expr.GetLineNumber()));
         // Checks that args are used declared before usage
         VisitValue(expr.GetFuncArgs().GetValue(),expr.GetFuncArgs());
         ArrayList<ArgExpr> args = expr.GetFuncArgs().GetArgs();
@@ -178,7 +175,7 @@ public class ScopeManager {
         Object rType = VisitValue(right.GetValue(),right);
         // checks that the left hand side is the same as the right hand side
         if(!lType.equals(rType))
-            Reporter.Error(new IncompatibleValueException(lType,rType,expr.Operation.LineNumber));
+            Reporter.Error(new IncompatibleValueException(lType,rType,expr.GetLineNumber()));
         return lType;
     }
     private Object VisitBoolExpr(BoolExpr expr)
@@ -189,7 +186,7 @@ public class ScopeManager {
         Object rType = VisitValue(right.GetValue(),right);
         // checks that the left hand side type is the same as the right hand side type
         if(!lType.equals(rType))
-            Reporter.Error(new IncompatibleValueException(lType,rType,expr.Operator.LineNumber));
+            Reporter.Error(new IncompatibleValueException(lType,rType,expr.GetLineNumber()));
         return lType;
     }
     private Object VisitAssignment(AssignStmt stmt)
@@ -200,7 +197,7 @@ public class ScopeManager {
         Object rType = VisitValue(right.GetValue(),right);
         // left hand side is the same type as the right hand side type
         if(!lType.equals(rType))
-            Reporter.Error(new IncompatibleValueException(lType,rType));
+            Reporter.Error(new IncompatibleValueException(lType,rType,stmt.GetLineNumber()));
         // left value must be assignable i.e. a variable
         if(!IsAssignable(left))
             throw new Error("LHS not assignable " + left);
@@ -236,7 +233,7 @@ public class ScopeManager {
         String id = node.ID;
         Symbol identifier = FindSymbol(id);
         if (identifier == null)
-            Reporter.Error(new UndeclaredSymbolException(id + " not declared."));
+            Reporter.Error(new UndeclaredSymbolException(id + " not declared.", node.GetLineNumber()));
             //throw new Error(id + " not declared.");
         return identifier.Type;
     }
@@ -281,6 +278,8 @@ public class ScopeManager {
 
         // Enter scope and visit func declaration children
         EnterScope(node);
+        if(!node.GetVarDcl().Identifier.equals(node.GetEndIdentifier()))
+            Reporter.Error(new InvalidIdentifierException("Invalid end Identifier in line " + node.GetLineNumber()));
     }
 
     public void EnterScope(AST node){

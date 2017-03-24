@@ -82,12 +82,14 @@ public class ASTFactory
         Expr val = (Expr)astStack.pop();
         Token op = terminals.pop();
         UnaryExpr expr = new UnaryExpr(op,val);
+        expr.SetLineNumber(currentLineNumber);
         astStack.push(expr);
     }
     private void CreateReturnStmt()
     {
         Expr returnval = (Expr)astStack.pop();
         ReturnStmt stmt = new ReturnStmt(returnval);
+        stmt.SetLineNumber(currentLineNumber);
         astStack.push(stmt);
     }
     private void CreateUntilStmtTree()
@@ -97,6 +99,7 @@ public class ASTFactory
         // remove 'until' terminal
         terminals.pop();
         UntilStmt untilStmt = new UntilStmt(condition,block);
+        untilStmt.SetLineNumber(currentLineNumber);
         astStack.push(untilStmt);
     }
     private void CreateFuncCall()
@@ -118,10 +121,14 @@ public class ASTFactory
                 Token id = terminals.pop();
                 ArgExpr arg;
                 if (id.Type.equals(TokenType.IDENTIFIER)){
-                    arg = new ArgExpr(new IdExpr(id.Value));
+                    IdExpr expr = new IdExpr(id.Value);
+                    expr.SetLineNumber(currentLineNumber);
+                    arg = new ArgExpr(expr);
                     arg.SetValue(id.Value);
                 } else {
-                    arg = new ArgExpr(new ValExpr(TypeConverter.TypetoTypes(id),id));
+                    ValExpr expr = new ValExpr(TypeConverter.TypetoTypes(id),id);
+                    expr.SetLineNumber(currentLineNumber);
+                    arg = new ArgExpr(expr);
                 }
 
                 parameters.add(arg);
@@ -141,21 +148,25 @@ public class ASTFactory
         Expr left = (Expr)astStack.pop();
         Token op = terminals.pop();
         Expr expr = new BinaryOPExpr(left, op, right);
+        expr.SetLineNumber(currentLineNumber);
         astStack.push(expr);
     }
     private void CreateIfStmt()
     {
         BlockStmt block = (BlockStmt) astStack.pop();
         Expr condition = (Expr) astStack.pop();
+        condition.SetLineNumber(currentLineNumber);
         // remove 'if' terminal
         //terminals.pop();
         IfStmt ifstmt = new IfStmt(condition,block);
+        ifstmt.SetLineNumber(currentLineNumber);
         astStack.push(ifstmt);
     }
     private void CreateElse()
     {
         BlockStmt elseBlock = (BlockStmt) astStack.pop();
         ElseStmt elseStmt = new ElseStmt(elseBlock);
+        elseStmt.SetLineNumber(currentLineNumber);
         astStack.push(elseStmt);
     }
     private void CreateBoolExpr()
@@ -169,6 +180,7 @@ public class ASTFactory
         if(terminals.peek().equals(")")) // remove '('
             terminals.pop();
         BoolExpr expr = new BoolExpr(left, op, right);
+        expr.SetLineNumber(currentLineNumber);
         astStack.push(expr);
     }
     // expect terminalStack to start with ')' and end with '(' in between are the parameters
@@ -182,7 +194,9 @@ public class ASTFactory
             {
                 Token id = terminals.pop();
                 Token type = terminals.pop();
-                parameters.add(new FParamDcl(GetType(type), id.Value));
+                FParamDcl paramDcl = new FParamDcl(GetType(type), id.Value);
+                paramDcl.SetLineNumber(currentLineNumber);
+                parameters.add(paramDcl);
             }
             endPara = terminals.pop();
         }
@@ -205,13 +219,16 @@ public class ASTFactory
     {
         BlockStmt block = (BlockStmt) astStack.pop();
         FParamsDcl parameters = (FParamsDcl) astStack.pop();
+        parameters.SetLineNumber(currentLineNumber);
         VarDcl dcl = (VarDcl) astStack.pop();
-
-        // remove 'end' 'id' from terminal stack
-        terminals.pop();
-        terminals.pop();
+        dcl.SetLineNumber(currentLineNumber);
 
         FuncDcl function = new FuncDcl(dcl,parameters,block);
+        function.SetLineNumber(currentLineNumber);
+        String endId = terminals.pop().Value;
+        // remove end keyword
+        terminals.pop();
+        function.SetEndIdentifier(endId);
         astStack.push(function);
     }
     // Expecting an expr and identifier or dcl on astStack and an is terminal on terminal stack
@@ -229,19 +246,21 @@ public class ASTFactory
         } else {
             assign = new AssignStmt((Expr) astStack.pop(), right);
         }
-
+        assign.SetLineNumber(currentLineNumber);
         astStack.push(assign);
     }
     private void CreateIdentifierTree()
     {
         Token id = terminals.pop();
         IdExpr identifier = new IdExpr(id.Value);
+        identifier.SetLineNumber(currentLineNumber);
         astStack.push(identifier);
     }
     private void CreateValExprTree()
     {
         Token value = terminals.pop();
         ValExpr val = new ValExpr(TypeConverter.TypetoTypes(value),value);
+        val.SetLineNumber(currentLineNumber);
         astStack.push(val);
     }
     private void CreateDclTree()
@@ -249,6 +268,7 @@ public class ASTFactory
         String id = terminals.pop().Value;
         Types type = GetType(terminals.pop());
         VarDcl dcl = new VarDcl(type, id);
+        dcl.SetLineNumber(currentLineNumber);
         astStack.push(dcl);
     }
 

@@ -29,7 +29,7 @@ public class Visualizer extends PApplet {
         /* Scanner and parser */
         String code = "void func1()\n" +
                         "number a is -2\n" +
-                        "number b is a\n" +
+                        "number b is 2\n" +
                         "until (a above b)\n " +
                             "b is a+1\n" +
                             "end until\n"+
@@ -45,13 +45,13 @@ public class Visualizer extends PApplet {
                             "end if \n"+
                         " return 2 \n"+
                         "end func \n " ;
-        String code1 = "number func1()\n" +
+        String code1 = "text func1()\n" +
                        "number a is 2\n" +
                         "boolean b is true and false\n" +
-                        "return 2\n" +
+                        "return \"a\"\n" +
                         "end func1\n" +
                         "void func2()\n" +
-                         "number b is func1()\n end func2\n";
+                         "text b is func1()\n end func2\n";
         sc = new Scanner(code);
         parser = new Parser(sc);
         AST programTree = parser.ParseProgram();
