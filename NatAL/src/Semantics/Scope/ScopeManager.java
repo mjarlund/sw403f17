@@ -51,9 +51,13 @@ public class ScopeManager {
     public void VisitChildren(AST root){
         for (AST child : root.children) {
 
-            String switchValue;
-            switchValue = (child.GetValue() != null) ? child.GetValue() : ((IdExpr) child).ID;
-            VisitValue(switchValue, child);
+            try {
+                String switchValue;
+                switchValue = (child.GetValue() != null) ? child.GetValue() : ((IdExpr) child).ID;
+                VisitValue(switchValue, child);
+            } catch (ClassCastException e){
+                System.out.println(e.getCause().toString());
+            }
         }
     }
     private Object VisitValue(String astName, AST child)

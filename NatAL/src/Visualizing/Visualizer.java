@@ -30,6 +30,7 @@ public class Visualizer extends PApplet {
         String code = "void func1()\n" +
                         "number a is -2\n" +
                         "number b is 2\n" +
+                        "list of number alist is (2, 3)\n" +
                         "until (a above b)\n " +
                             "b is a+1\n" +
                             "end until\n"+
@@ -74,7 +75,7 @@ public class Visualizer extends PApplet {
     /* Builds the visual tree from an AST */
     public void BuildVisualTree(AST tree){
         visTree = new VisualNode(tree, new PVector(900, 50)); //Root in the top-middle of the screen
-        visTree.defaultXOffset = 450;
+        visTree.defaultXOffset = 600;
         ArrayList<VisualNode> visTreeList = new ArrayList<VisualNode>();
         visTree.AssignPositionsToChildren(visTreeList);
     }
