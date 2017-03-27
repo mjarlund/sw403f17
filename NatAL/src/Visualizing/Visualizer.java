@@ -1,7 +1,7 @@
 package Visualizing;
 
 import DataStructures.AST.AST;
-import Semantics.Scope.ScopeManager;
+import Semantics.Scope.SemanticAnalyzer;
 import Syntax.Scanner.Scanner;
 import Syntax.Parser.Parser;
 import processing.core.PApplet;
@@ -57,7 +57,7 @@ public class Visualizer extends PApplet {
         parser = new Parser(sc);
         AST programTree = parser.ParseProgram();
 
-        ScopeManager sm = new ScopeManager();
+        SemanticAnalyzer sm = new SemanticAnalyzer();
         sm.OpenScope(); //Global
         sm.VisitChildren(programTree);
         System.out.println("No variables out of scope!");

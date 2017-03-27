@@ -30,7 +30,7 @@ public class Scope {
         }
         symbols.add(entry);
     }
-
+    // [Post optimization] Use hashlist instead of list for improved performance
     /* Recursively traverses the tree in reverse in
      * order to find the symbol. */
     public Symbol FindSymbol(String identifier){
