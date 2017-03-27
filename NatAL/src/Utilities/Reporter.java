@@ -19,6 +19,6 @@ public final class Reporter
 
     public static void Warning (String message)
     {
-        System.out.println("WARNING: " + "");
+        System.out.println("WARNING: " + message);
     }
 }
