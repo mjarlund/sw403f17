@@ -50,6 +50,7 @@ public class ASTFactory
         SemanticAction.put("BuildFuncCall", ASTFactory.this::CreateFuncCall);
         SemanticAction.put("BuildReturnStmt", ASTFactory.this::CreateReturnStmt);
         SemanticAction.put("BuildUnaryExpr", ASTFactory.this::CreateUnaryExpr);
+        SemanticAction.put("BuildListDeclaration", ASTFactory.this::CreateListDcl);
     }
     public void CreateAbstractTree(String action, int lineNumber)
     {
@@ -270,6 +271,23 @@ public class ASTFactory
         VarDcl dcl = new VarDcl(type, id);
         dcl.SetLineNumber(currentLineNumber);
         astStack.push(dcl);
+    }
+
+    private void CreateListDcl(){
+        AST listContents;
+        ListDcl listDcl;
+
+        /* BuildActualParameters put the contents on the astStack */
+        listContents = astStack.pop();
+
+        terminals.pop(); /* is */
+
+        /* BuildVarDcl put the declaration on the astStack */
+        AST dcl = astStack.pop();
+        listDcl = new ListDcl((VarDcl) dcl, (ArgsExpr) listContents);
+        listDcl.SetValue("ListDcl");
+
+        astStack.push(listDcl);
     }
 
     private Types GetType(Token token)
