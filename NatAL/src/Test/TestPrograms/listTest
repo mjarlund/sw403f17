@@ -1,0 +1,6 @@
+void main()
+list of number testlist is (1, 2, 3, 4, 5)
+testlist[2] is 5
+testlist[1] is testlist[3]
+testlist.add(6)
+end main
