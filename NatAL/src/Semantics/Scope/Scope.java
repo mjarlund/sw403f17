@@ -11,7 +11,7 @@ import java.util.ArrayList;
  */
 public class Scope {
 
-    public int Depth;
+    public int Depth = 0;
     private ArrayList<Symbol> symbols;
     public Scope Parent;
 

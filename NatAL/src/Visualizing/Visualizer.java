@@ -58,7 +58,6 @@ public class Visualizer extends PApplet {
         AST programTree = parser.ParseProgram();
 
         SemanticAnalyzer sm = new SemanticAnalyzer();
-        sm.OpenScope(); //Global
         sm.VisitChildren(programTree);
         System.out.println("No variables out of scope!");
         BuildVisualTree(programTree);

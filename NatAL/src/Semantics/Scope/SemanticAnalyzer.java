@@ -263,7 +263,7 @@ public class SemanticAnalyzer {
 
     public void VisitFuncDcl(FuncDcl node){
         if (currentScope.Depth > 0){
-            Reporter.Error(new InvalidScopeException(node.GetValue() + ": Functions can only be declared in global scope."));
+            Reporter.Error(new InvalidScopeException(node.GetVarDcl().Identifier + ": Functions can only be declared in global scope."));
             //throw new Error(node.GetValue() + ": functions can only be declared in global scope. ");
         }
         VisitVarDcl(node.GetVarDcl());
