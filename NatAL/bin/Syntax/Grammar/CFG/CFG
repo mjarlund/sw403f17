@@ -8,7 +8,7 @@ Statement -> IterationStatement NewLine
 DeclarationStatement -> Type Identifier BuildVarDCL DeclarationStatementPrime CombineDown
 DeclarationStatement -> StructDeclarationStatement
 DeclarationStatement -> ListDeclarationStatement
-DeclarationStatementPrime -> FormalParameterList BuildBlock NewLine Statements ReturnStatement end Identifier BuildFuncDcl
+DeclarationStatementPrime -> FormalParameterList BuildBlock NewLine Block ReturnStatement end Identifier BuildFuncDcl
 DeclarationStatementPrime -> is Expression BuildAssign
 DeclarationStatementPrime -> EPSILON
 ReturnStatement -> return Expression BuildReturnStmt CombineDown NewLine
@@ -78,12 +78,13 @@ ParameterListBody -> Parameter ParameterListBodyPrime
 ParameterListBody -> EPSILON
 ParameterListBodyPrime -> , ParameterListBody
 ParameterListBodyPrime -> EPSILON
-SelectionStatement -> if Condition BuildBlock NewLine Statements BuildIfStmt SelectionStatementPrime CombineDown
-SelectionStatementPrime -> else BuildBlock NewLine Statements BuildElseStmt CombineDown end else if
+SelectionStatement -> if Condition BuildBlock NewLine Block BuildIfStmt SelectionStatementPrime CombineDown
+SelectionStatementPrime -> else BuildBlock NewLine Block BuildElseStmt CombineDown end else if
 SelectionStatementPrime -> end if
-IterationStatement -> until Condition BuildBlock NewLine Statements BuildUntilStmt end until CombineDown
-IterationStatement -> foreach ( FormalParameter in Parameter ) BuildBlock NewLine Statements end foreach
+IterationStatement -> until Condition BuildBlock NewLine Block BuildUntilStmt end until CombineDown
+IterationStatement -> foreach ( FormalParameter in Parameter ) BuildBlock NewLine Block end foreach
 Condition -> ( Expression )
+Block -> Statements
 Type -> text
 Type -> number
 Type -> fraction
