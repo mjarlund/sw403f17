@@ -13,10 +13,8 @@ DeclarationStatementPrime -> is Expression BuildAssign
 DeclarationStatementPrime -> EPSILON
 ReturnStatement -> return Expression BuildReturnStmt CombineDown NewLine
 ReturnStatement -> EPSILON
-StructDeclarationStatement -> struct Identifier BuildVarDCL StructDeclarationStatementPrime CombineDown
-StructDeclarationStatementPrime -> BuildBlock NewLine StructDeclarationBlock
-StructDeclarationStatementPrime -> Identifier BuildIdentifier
-StructDeclarationBlock -> DeclarationStatement StructDeclarationBlock
+StructDeclarationStatement -> structure Identifier BuildVarDCL NewLine BuildBlock StructDeclarationBlock BuildStructDeclaration CombineDown
+StructDeclarationBlock -> DeclarationStatement NewLine StructDeclarationBlock
 StructDeclarationBlock -> end Identifier
 ListDeclarationStatement -> list of Type Identifier BuildVarDCL is ParameterList BuildListDeclaration CombineDown
 FormalParameter -> Type Identifier

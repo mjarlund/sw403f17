@@ -1,10 +1,7 @@
 package Semantics.Scope;
 
 import DataStructures.AST.AST;
-import DataStructures.AST.NodeTypes.Declarations.FParamDcl;
-import DataStructures.AST.NodeTypes.Declarations.FParamsDcl;
-import DataStructures.AST.NodeTypes.Declarations.FuncDcl;
-import DataStructures.AST.NodeTypes.Declarations.VarDcl;
+import DataStructures.AST.NodeTypes.Declarations.*;
 import DataStructures.AST.NodeTypes.Expressions.*;
 import DataStructures.AST.NodeTypes.Statements.AssignStmt;
 import DataStructures.AST.NodeTypes.Statements.IfStmt;
@@ -99,6 +96,9 @@ public class SemanticAnalyzer {
                 break;
             case "UntilStmt":
                 VisitUntilStmt((UntilStmt)child);
+                break;
+            case "StructDcl":
+                VisitStructDcl((StructDcl) child);
                 break;
             default:
                 VisitChildren(child);
@@ -282,6 +282,15 @@ public class SemanticAnalyzer {
         EnterScope(node);
         if(!node.GetVarDcl().Identifier.equals(node.GetEndIdentifier()))
             Reporter.Error(new InvalidIdentifierException("Invalid end Identifier in line " + node.GetLineNumber()));
+    }
+
+    public void VisitStructDcl(StructDcl node){
+        if (currentScope.Depth > 0){
+            Reporter.Error(new InvalidScopeException(
+                    node.GetVarDcl().Identifier + ": Structs can only be declared in global scope."));
+        }
+        VisitVarDcl(node.GetVarDcl());
+        EnterScope(node);
     }
 
     public void EnterScope(AST node){

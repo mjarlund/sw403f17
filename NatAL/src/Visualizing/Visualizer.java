@@ -27,7 +27,8 @@ public class Visualizer extends PApplet {
         textSize(12);
 
         /* Scanner and parser */
-        String code = "void func1()\n" +
+        String code =
+                      "void func1()\n" +
                         "number a is -2\n" +
                         "number b is 2\n" +
                         "list of number alist is (2, 3)\n" +
@@ -39,13 +40,16 @@ public class Visualizer extends PApplet {
                         "a is a + b\n"+
                         "end func2\n "+
                       "number func(number x, number y)\n"+
-                        /*"func1()\n"+*/
                         "func2(x,y)\n"+
                         "if (x above x)\n"+
                             "func2(2,x)\n"+
                             "end if \n"+
                         " return 2 \n"+
-                        "end func \n " ;
+                        "end func \n " +
+                      "structure struct \n" +
+                           " number a\n" +
+                           " number b \n" +
+                           " end struct\n" ;
         String code1 = "text func1()\n" +
                        "number a is 2\n" +
                         "boolean b is true and false\n" +
