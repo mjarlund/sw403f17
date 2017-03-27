@@ -18,7 +18,7 @@ StructDeclarationStatementPrime -> BuildBlock NewLine StructDeclarationBlock
 StructDeclarationStatementPrime -> Identifier BuildIdentifier
 StructDeclarationBlock -> DeclarationStatement StructDeclarationBlock
 StructDeclarationBlock -> end Identifier
-ListDeclarationStatement -> list of Type Identifier is ParameterList
+ListDeclarationStatement -> list of Type Identifier BuildVarDCL is ParameterList BuildListDeclaration CombineDown
 FormalParameter -> Type Identifier
 FormalParameterList -> ( FormalParameterListBody ) BuildFormalParams
 FormalParameterListBody -> FormalParameter FormalParameterListBodyPrime
