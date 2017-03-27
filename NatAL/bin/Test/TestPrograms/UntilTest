@@ -8,5 +8,7 @@ void func1()
     end until
     until(target above 10)
         target is target + 1
+        until(target above 10)
+        end until
     end until
 end func1
