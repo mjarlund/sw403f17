@@ -1,15 +1,23 @@
 Program -> Statement Statements $
 Statements -> Statement Statements
 Statements -> EPSILON
-Statement -> DeclarationStatement
-Statement -> ExpressionStatement
-Statement -> SelectionStatement
-Statement -> IterationStatement
-DeclarationStatement -> Type Identifier BuildVarDCL DeclarationStatementPrime
+Statement -> DeclarationStatement NewLine
+Statement -> ExpressionStatement NewLine
+Statement -> SelectionStatement NewLine
+Statement -> IterationStatement NewLine
+DeclarationStatement -> Type Identifier BuildVarDCL DeclarationStatementPrime CombineDown
+DeclarationStatement -> StructDeclarationStatement
 DeclarationStatement -> ListDeclarationStatement
-DeclarationStatementPrime -> FormalParameterList BuildBlock Block end Identifier BuildFuncDcl CombineDown
-DeclarationStatementPrime -> is Expression BuildAssign CombineDown
+DeclarationStatementPrime -> FormalParameterList BuildBlock NewLine Statements ReturnStatement end Identifier BuildFuncDcl
+DeclarationStatementPrime -> is Expression BuildAssign
 DeclarationStatementPrime -> EPSILON
+ReturnStatement -> return Expression BuildReturnStmt CombineDown NewLine
+ReturnStatement -> EPSILON
+StructDeclarationStatement -> struct Identifier BuildVarDCL StructDeclarationStatementPrime CombineDown
+StructDeclarationStatementPrime -> BuildBlock NewLine StructDeclarationBlock
+StructDeclarationStatementPrime -> Identifier BuildIdentifier
+StructDeclarationBlock -> DeclarationStatement StructDeclarationBlock
+StructDeclarationBlock -> end Identifier
 ListDeclarationStatement -> list of Type Identifier is ParameterList
 FormalParameter -> Type Identifier
 FormalParameterList -> ( FormalParameterListBody ) BuildFormalParams
@@ -40,10 +48,12 @@ RelationalExpressionPrime -> AdditiveExpressionPrime AdditiveExpression
 AdditiveExpression -> + AdditiveExpressionPrime BuildBinaryExpr AdditiveExpression
 AdditiveExpression -> - AdditiveExpressionPrime BuildBinaryExpr AdditiveExpression
 AdditiveExpression -> EPSILON
-AdditiveExpressionPrime -> PrimaryExpression MultiplicativeExpression
+AdditiveExpressionPrime -> UnaryExpression MultiplicativeExpression
 MultiplicativeExpression -> * PrimaryExpression BuildBinaryExpr MultiplicativeExpression
 MultiplicativeExpression -> / PrimaryExpression BuildBinaryExpr MultiplicativeExpression
 MultiplicativeExpression -> EPSILON
+UnaryExpression -> - PrimaryExpression BuildUnaryExpr
+UnaryExpression -> PrimaryExpression
 PrimaryExpression -> Identifier BuildIdentifier IdentifierAppendantOptional
 PrimaryExpression -> IntegerLiteral BuildValExpr
 PrimaryExpression -> FloatingPointLiteral BuildValExpr
@@ -51,10 +61,10 @@ PrimaryExpression -> StringLiteral BuildValExpr
 PrimaryExpression -> BooleanLiteral BuildValExpr
 PrimaryExpression -> ( Expression )
 ExpressionStatement -> Identifier BuildIdentifier ExpressionStatementPrime
-ExpressionStatementPrime -> ExpressionStatementPrimePrime is Expression BuildAssign CombineDown
+ExpressionStatementPrime -> is Expression BuildAssign CombineDown
 ExpressionStatementPrime -> ParameterList BuildFuncCall CombineDown
-ExpressionStatementPrimePrime -> .Identifier
-ExpressionStatementPrimePrime -> EPSILON
+StructExpressionStatement -> .Identifier
+StructExpressionStatement -> EPSILON
 Parameter -> Identifier
 Parameter -> IntegerLiteral
 Parameter -> FloatingPointLiteral
@@ -68,22 +78,17 @@ ParameterListBody -> Parameter ParameterListBodyPrime
 ParameterListBody -> EPSILON
 ParameterListBodyPrime -> , ParameterListBody
 ParameterListBodyPrime -> EPSILON
-SelectionStatement -> if Condition BuildBlock Block BuildIfStmt SelectionStatementPrime CombineDown
-SelectionStatementPrime -> else BuildBlock Block BuildElseStmt CombineDown end else if
+SelectionStatement -> if Condition BuildBlock NewLine Statements BuildIfStmt SelectionStatementPrime CombineDown
+SelectionStatementPrime -> else BuildBlock NewLine Statements BuildElseStmt CombineDown end else if
 SelectionStatementPrime -> end if
-IterationStatement -> until Condition BuildBlock Block BuildUntilStmt end until CombineDown
-IterationStatement -> foreach ( FormalParameter in Parameter ) BuildBlock Block end foreach
+IterationStatement -> until Condition BuildBlock NewLine Statements BuildUntilStmt end until CombineDown
+IterationStatement -> foreach ( FormalParameter in Parameter ) BuildBlock NewLine Statements end foreach
 Condition -> ( Expression )
-Block -> Statements
 Type -> text
 Type -> number
 Type -> fraction
 Type -> character
 Type -> boolean
 Type -> void
-Type -> StructSpecifier
-StructSpecifier -> struct Identifier StructSpecifierPrime
-StructSpecifierPrime -> StructDeclaration end Identifier
-StructSpecifierPrime -> EPSILON
-StructDeclaration -> DeclarationStatement StructDeclaration
-StructDeclaration -> EPSILON
+NewLine -> EOL NewLine
+NewLine -> EPSILON

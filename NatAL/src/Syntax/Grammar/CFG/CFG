@@ -61,7 +61,7 @@ PrimaryExpression -> ( Expression )
 ExpressionStatement -> Identifier BuildIdentifier ExpressionStatementPrime
 ExpressionStatementPrime -> is Expression BuildAssign CombineDown
 ExpressionStatementPrime -> ParameterList BuildFuncCall CombineDown
-StructExpressionStatement -> .Identifier
+StructExpressionStatement -> . Identifier
 StructExpressionStatement -> EPSILON
 Parameter -> Identifier
 Parameter -> IntegerLiteral

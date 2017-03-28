@@ -152,6 +152,16 @@ public class ScannerTest {
 		}
 		
 		@Test
+		public void AccessorTest()
+		{
+			Scanner scanner = new Scanner("Accessor.Test");
+			assertEquals(TokenType.IDENTIFIER, scanner.NextToken().Type);
+			assertEquals(TokenType.ACCESSOR, scanner.NextToken().Type);
+			assertEquals(TokenType.IDENTIFIER, scanner.NextToken().Type);
+		}
+
+		
+		@Test
 		public void EOFTest()
 		{
 			Scanner multipleInputScanner = new Scanner("main void");
