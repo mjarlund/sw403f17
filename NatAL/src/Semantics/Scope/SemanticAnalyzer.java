@@ -43,7 +43,7 @@ public class SemanticAnalyzer {
      * so only need to worry about VarDcls. Called recursively for all
      * nodes, opening and closing scopes every time a code-block or a
      * function declaration is entered or exited, respectively. */
-    public void VisitChildren(AST root){
+    public void AnalyzeSemantics(AST root){
         for (AST child : root.children) {
 
             try {
@@ -101,7 +101,7 @@ public class SemanticAnalyzer {
                 VisitStructDcl((StructDcl) child);
                 break;
             default:
-                VisitChildren(child);
+                AnalyzeSemantics(child);
                 break;
         }
         return null;
@@ -112,7 +112,7 @@ public class SemanticAnalyzer {
         // if condition check must result in a bool expression
         if(!(condition instanceof BoolExpr))
             Reporter.Error(new IncompatibleValueException("Expected boolean expression in " + stmt + " on line " + stmt.GetLineNumber()));
-        VisitChildren(stmt);
+        AnalyzeSemantics(stmt);
     }
     private void VisitUntilStmt(UntilStmt stmt)
     {
@@ -120,7 +120,7 @@ public class SemanticAnalyzer {
         // until condition check must result in a bool expression
         if(!(condition instanceof BoolExpr))
             Reporter.Error(new IncompatibleValueException("Expected boolean expression in " + stmt + " on line " + stmt.GetLineNumber()));
-        VisitChildren(stmt);
+        AnalyzeSemantics(stmt);
     }
     private void VisitReturnStmt(ReturnStmt stmt)
     {
@@ -295,7 +295,7 @@ public class SemanticAnalyzer {
 
     public void EnterScope(AST node){
         OpenScope();
-        VisitChildren(node);
+        AnalyzeSemantics(node);
         CloseScope();
     }
 }

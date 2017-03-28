@@ -1,0 +1,8 @@
+number scope1()
+number a is 1
+number b is 2
+until (a above b)
+number c is 1
+a is a + c
+end until
+end scope1

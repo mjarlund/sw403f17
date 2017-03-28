@@ -1,0 +1,4 @@
+void test()
+number a is 5
+text a is "hej mor"
+end test

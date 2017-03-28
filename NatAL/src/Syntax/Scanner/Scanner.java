@@ -86,6 +86,10 @@ public class Scanner
                     return ScanChar();
                 case '\"':
                     return ScanString();
+                case '.' :case '[':case ']':
+                	Token ac = MakeToken(Character.toString(currentChar), TokenType.ACCESSOR);
+                	Advance();
+                	return ac;
                 default:
                     if(IsLetter())
                         return ScanLetters();

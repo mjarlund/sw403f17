@@ -31,7 +31,6 @@ public class Visualizer extends PApplet {
                       "void func1()\n" +
                         "number a is -2\n" +
                         "number b is 2\n" +
-                        "list of number alist is (2, 3)\n" +
                         "until (a above b)\n " +
                             "b is a+1\n" +
                             "end until\n"+
@@ -39,13 +38,6 @@ public class Visualizer extends PApplet {
                       "void func2(number a, number b)\n"+
                         "a is a + b\n"+
                         "end func2\n "+
-                      "number func(number x, number y)\n"+
-                        "func2(x,y)\n"+
-                        "if (x above x)\n"+
-                            "func2(2,x)\n"+
-                            "end if \n"+
-                        " return 2 \n"+
-                        "end func \n " +
                       "structure struct \n" +
                            " number a\n" +
                            " number b \n" +
@@ -62,7 +54,7 @@ public class Visualizer extends PApplet {
         AST programTree = parser.ParseProgram();
 
         SemanticAnalyzer sm = new SemanticAnalyzer();
-        sm.VisitChildren(programTree);
+        sm.AnalyzeSemantics(programTree);
         System.out.println("No variables out of scope!");
         BuildVisualTree(programTree);
     }
