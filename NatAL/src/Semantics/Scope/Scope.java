@@ -36,7 +36,6 @@ public class Scope {
     public Symbol FindSymbol(String identifier){
         Symbol toReturn = null;
         for (Symbol s : symbols){
-            System.out.println(s.Name + " ? " + identifier);
             if (s.Name.equals(identifier)){
                 toReturn = s;
                 break;
