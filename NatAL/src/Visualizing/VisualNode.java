@@ -14,6 +14,7 @@ public class VisualNode extends PApplet {
     PVector pos;
     PVector textPos;
     ArrayList<VisualNode> children;
+    int drawColor = 200;
     int bubbleWidth = 0;
     int defaultXOffset = 85;
     int defaultYOffset = 50;
@@ -75,7 +76,7 @@ public class VisualNode extends PApplet {
             ProcessingInstance.ellipse(pos.x, pos.y, bubbleWidth, 30);
             ProcessingInstance.fill(0); //Black draw color (for the text)
             ProcessingInstance.text(base.GetValue(), textPos.x, textPos.y);
-            ProcessingInstance.fill(200); //White draw color (for everything else)
+            ProcessingInstance.fill(200, drawColor, 100); //White draw color (for everything else)
         }
 
         for (VisualNode n : children){
