@@ -1,10 +1,7 @@
 package Semantics.Scope;
 
 import DataStructures.AST.AST;
-import DataStructures.AST.NodeTypes.Declarations.FParamDcl;
-import DataStructures.AST.NodeTypes.Declarations.FParamsDcl;
-import DataStructures.AST.NodeTypes.Declarations.FuncDcl;
-import DataStructures.AST.NodeTypes.Declarations.VarDcl;
+import DataStructures.AST.NodeTypes.Declarations.*;
 import DataStructures.AST.NodeTypes.Expressions.*;
 import DataStructures.AST.NodeTypes.Statements.AssignStmt;
 import DataStructures.AST.NodeTypes.Statements.IfStmt;
@@ -20,26 +17,24 @@ import java.util.ArrayList;
 /**
  * Created by Anders Brams on 3/21/2017.
  */
-public class ScopeManager {
+public class SemanticAnalyzer {
 
-    Scope currentScope;
+    Scope currentScope = new Scope();
 
     public Symbol FindSymbol(String identifier){
         return currentScope.FindSymbol(identifier);
     }
 
+    // Made changes on 27/03
     /* Creates a new scope as a child of the current */
     public void OpenScope(){
-        if (currentScope == null){ //Create a new global scope
-            currentScope = new Scope();
-        } else { //Global scope already exists, continue
-            Scope newScope = new Scope();
-            currentScope.AddChildScope(newScope);
-            currentScope = newScope;
-        }
+        Scope newScope = new Scope();
+        currentScope.AddChildScope(newScope);
+        currentScope = newScope;
     }
 
-    /* memes */
+    /* Overrides the current scope with that of its parent,
+     * effectively closing the current scope */
     public void CloseScope(){
         currentScope = currentScope.Parent;
     }
@@ -101,6 +96,9 @@ public class ScopeManager {
                 break;
             case "UntilStmt":
                 VisitUntilStmt((UntilStmt)child);
+                break;
+            case "StructDcl":
+                VisitStructDcl((StructDcl) child);
                 break;
             default:
                 VisitChildren(child);
@@ -228,7 +226,7 @@ public class ScopeManager {
         String varID  = node.Identifier;
         Types varType = node.Type;
         currentScope.AddSymbol(new Symbol(varID, varType));
-        Reporter.Log(varID + " added to scope.");
+        Reporter.Log(varID + " added to scope at depth = " + currentScope.Depth);
 
         return varType;
     }
@@ -265,7 +263,7 @@ public class ScopeManager {
 
     public void VisitFuncDcl(FuncDcl node){
         if (currentScope.Depth > 0){
-            Reporter.Error(new InvalidScopeException(node.GetValue() + ": Functions can only be declared in global scope."));
+            Reporter.Error(new InvalidScopeException(node.GetVarDcl().Identifier + ": Functions can only be declared in global scope."));
             //throw new Error(node.GetValue() + ": functions can only be declared in global scope. ");
         }
         VisitVarDcl(node.GetVarDcl());
@@ -284,6 +282,15 @@ public class ScopeManager {
         EnterScope(node);
         if(!node.GetVarDcl().Identifier.equals(node.GetEndIdentifier()))
             Reporter.Error(new InvalidIdentifierException("Invalid end Identifier in line " + node.GetLineNumber()));
+    }
+
+    public void VisitStructDcl(StructDcl node){
+        if (currentScope.Depth > 0){
+            Reporter.Error(new InvalidScopeException(
+                    node.GetVarDcl().Identifier + ": Structs can only be declared in global scope."));
+        }
+        VisitVarDcl(node.GetVarDcl());
+        EnterScope(node);
     }
 
     public void EnterScope(AST node){

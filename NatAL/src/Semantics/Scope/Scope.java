@@ -11,7 +11,7 @@ import java.util.ArrayList;
  */
 public class Scope {
 
-    public int Depth;
+    public int Depth = 0;
     private ArrayList<Symbol> symbols;
     public Scope Parent;
 
@@ -30,7 +30,7 @@ public class Scope {
         }
         symbols.add(entry);
     }
-
+    // [Post optimization] Use hashlist instead of list for improved performance
     /* Recursively traverses the tree in reverse in
      * order to find the symbol. */
     public Symbol FindSymbol(String identifier){

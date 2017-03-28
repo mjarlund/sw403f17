@@ -8,6 +8,7 @@ import DataStructures.DefaultHashMap;
 import Syntax.Tokens.Token;
 import Syntax.Tokens.TokenType;
 import Utilities.TypeConverter;
+import jdk.nashorn.internal.ir.Block;
 
 import java.util.ArrayList;
 import java.util.Stack;
@@ -51,6 +52,7 @@ public class ASTFactory
         SemanticAction.put("BuildReturnStmt", ASTFactory.this::CreateReturnStmt);
         SemanticAction.put("BuildUnaryExpr", ASTFactory.this::CreateUnaryExpr);
         SemanticAction.put("BuildListDeclaration", ASTFactory.this::CreateListDcl);
+        SemanticAction.put("BuildStructDeclaration", ASTFactory.this::CreateStructDcl);
     }
     public void CreateAbstractTree(String action, int lineNumber)
     {
@@ -288,6 +290,16 @@ public class ASTFactory
         listDcl.SetValue("ListDcl");
 
         astStack.push(listDcl);
+    }
+
+    private void CreateStructDcl(){
+        /* astStack contains: VarDcl and BlockStmt */
+        BlockStmt block = (BlockStmt) astStack.pop();
+        VarDcl dcl = (VarDcl) astStack.pop();
+
+        StructDcl struct = new StructDcl(dcl, block);
+        struct.SetValue("StructDcl");
+        astStack.push(struct);
     }
 
     private Types GetType(Token token)
