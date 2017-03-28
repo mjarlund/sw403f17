@@ -52,7 +52,7 @@ MultiplicativeExpression -> / PrimaryExpression BuildBinaryExpr MultiplicativeEx
 MultiplicativeExpression -> EPSILON
 UnaryExpression -> - PrimaryExpression BuildUnaryExpr
 UnaryExpression -> PrimaryExpression
-PrimaryExpression -> Identifier BuildIdentifier IdentifierAppendantOptional
+PrimaryExpression -> Identifier BuildIdentifier IdentifierAppendantOptional ProcedureCall
 PrimaryExpression -> IntegerLiteral BuildValExpr
 PrimaryExpression -> FloatingPointLiteral BuildValExpr
 PrimaryExpression -> StringLiteral BuildValExpr
@@ -61,12 +61,13 @@ PrimaryExpression -> ( Expression )
 ExpressionStatement -> Identifier IdentifierAppendantOptional BuildIdentifier ExpressionStatementPrime
 ExpressionStatementPrime -> is Expression BuildAssign CombineDown
 ExpressionStatementPrime -> ParameterList BuildFuncCall CombineDown
+ProcedureCall -> ParameterList BuildFuncCall
+ProcedureCall -> EPSILON
 Parameter -> Identifier
 Parameter -> IntegerLiteral
 Parameter -> FloatingPointLiteral
 Parameter -> StringLiteral
 Parameter -> BooleanLiteral
-IdentifierAppendantOptional -> ParameterList BuildFuncCall
 IdentifierAppendantOptional -> . Identifier
 IdentifierAppendantOptional -> [ IntegerLiteral ]
 IdentifierAppendantOptional -> EPSILON
