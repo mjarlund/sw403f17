@@ -11,7 +11,7 @@ public class Symbol {
     public String Name;
     public Types Type;
     public ArrayList<Types> TypeSignature;
-    public DclType dclType;
+    public DclType dclType = DclType.Variable;
 
     public Symbol(String name, Types type){
         Name = name;
