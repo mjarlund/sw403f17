@@ -152,7 +152,7 @@ public class ScannerTest {
 		}
 		
 		@Test
-		public void AccessorTest()
+		public void StructAccessorTest()
 		{
 			Scanner scanner = new Scanner("Accessor.Test");
 			assertEquals(TokenType.IDENTIFIER, scanner.NextToken().Type);
@@ -160,6 +160,17 @@ public class ScannerTest {
 			assertEquals(TokenType.IDENTIFIER, scanner.NextToken().Type);
 		}
 
+		@Test
+		public void ListAccessorTest()
+		{
+			Scanner scanner = new Scanner("Accessor[2] is 5");
+			assertEquals(TokenType.IDENTIFIER, scanner.NextToken().Type);
+			assertEquals(TokenType.ACCESSOR, scanner.NextToken().Type);
+			assertEquals(TokenType.INTEGER_LITERAL, scanner.NextToken().Type);
+			assertEquals(TokenType.ACCESSOR, scanner.NextToken().Type);
+			assertEquals(TokenType.OPERATOR , scanner.NextToken().Type);
+			assertEquals(TokenType.INTEGER_LITERAL, scanner.NextToken().Type);
+		}
 		
 		@Test
 		public void EOFTest()
