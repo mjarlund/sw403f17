@@ -47,7 +47,7 @@ public class ScopeTest {
 			Collection<Object[]> data = new ArrayList<Object[]>();
 			
 			try{
-				File folder = new File("src/Test/TestPrograms/Semantics/");
+				File folder = new File("src/Test/TestPrograms/semantics/");
 				File[] listOfFiles = folder.listFiles();
     		
     			for (File file : listOfFiles) {
@@ -109,7 +109,7 @@ public class ScopeTest {
 			Collection<Object[]> data = new ArrayList<Object[]>();
 			
 			try{
-				File folder = new File("src/Test/TestPrograms/Semantics/");
+				File folder = new File("src/Test/TestPrograms/semantics/");
 				File[] listOfFiles = folder.listFiles();
     		
     			for (File file : listOfFiles) {
