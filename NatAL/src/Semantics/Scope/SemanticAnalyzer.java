@@ -167,7 +167,7 @@ public class SemanticAnalyzer {
             }
         }
         // returns function return type
-        return VisitId(funcId);
+        return identifier.Type;
     }
     private Object VisitBinaryExpr(BinaryOPExpr expr)
     {
@@ -242,6 +242,8 @@ public class SemanticAnalyzer {
         Symbol identifier = FindSymbol(id);
         if (identifier == null)
             Reporter.Error(new UndeclaredSymbolException(id + " not declared.", node.GetLineNumber()));
+        if(identifier.dclType.equals(DclType.Function))
+            Reporter.Error(new InvalidIdentifierException("Not a variable " + identifier.Name));
         return identifier.Type;
     }
 
