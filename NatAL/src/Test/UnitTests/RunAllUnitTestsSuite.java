@@ -6,12 +6,12 @@ import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
 import Test.UnitTests.SyntaxAnalysisTest.GrammarTest.GrammarTest;
-import Test.UnitTests.SyntaxAnalysisTest.GrammarTest.LLOneTest;
+import Test.UnitTests.SyntaxAnalysisTest.GrammarTest.LLTest;
 import Test.UnitTests.SyntaxAnalysisTest.ScannerTest;
 import Test.UnitTests.SyntaxAnalysisTest.ParserTest.ParserTest;
 
 @RunWith(Suite.class)
-@SuiteClasses({ParserTest.class, ScannerTest.class, ParsingTableTest.class, GrammarTest.class, LLOneTest.class})
+@SuiteClasses({ParserTest.class, ScannerTest.class, ParsingTableTest.class, GrammarTest.class, LLTest.class})
 public class RunAllUnitTestsSuite {
 
 }

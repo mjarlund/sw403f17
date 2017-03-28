@@ -132,7 +132,7 @@ public class Grammar {
      * @param inclEpsilon
      * @return
      */
-    public Set First(String v, Boolean inclEpsilon) {
+    public Set<String> First(String v, Boolean inclEpsilon) {
         // Retrieve memoized value, if it exists.
         if(firstMap.get(v) != null) return firstMap.get(v);
 
