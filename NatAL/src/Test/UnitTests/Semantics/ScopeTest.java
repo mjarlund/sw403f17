@@ -13,9 +13,13 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
+import DataStructures.AST.AST;
+import Exceptions.DuplicatedSymbolException;
 import Exceptions.InvalidIdentifierException;
 import Exceptions.MissingProductionsException;
+import Exceptions.UndeclaredSymbolException;
 import Exceptions.UnexpectedTokenException;
+import Semantics.Scope.SemanticAnalyzer;
 import Syntax.Parser.Parser;
 import Syntax.Scanner.Scanner;
 import Test.InputTester;
@@ -43,7 +47,7 @@ public class ScopeTest {
 			Collection<Object[]> data = new ArrayList<Object[]>();
 			
 			try{
-				File folder = new File("src/Test/TestPrograms/");
+				File folder = new File("src/Test/TestPrograms/Semantics/");
 				File[] listOfFiles = folder.listFiles();
     		
     			for (File file : listOfFiles) {
@@ -64,11 +68,13 @@ public class ScopeTest {
 		public void NoExceptionsThrownTest() throws IOException {
 			
 			Throwable e = null;		
-			Scanner testScanner = new Scanner(InputTester.readFile(testPath));
 			try 
 			{
+				Scanner testScanner = new Scanner(InputTester.readFile(testPath));
 				Parser parser = new Parser(testScanner);
-				parser.ParseProgram();
+				AST programTree = parser.ParseProgram();
+			    SemanticAnalyzer sm = new SemanticAnalyzer();
+			    sm.AnalyzeSemantics(programTree);
 			} 
 			catch (Throwable ex)
 			{					
@@ -103,7 +109,7 @@ public class ScopeTest {
 			Collection<Object[]> data = new ArrayList<Object[]>();
 			
 			try{
-				File folder = new File("src/Test/TestPrograms/");
+				File folder = new File("src/Test/TestPrograms/Semantics/");
 				File[] listOfFiles = folder.listFiles();
     		
     			for (File file : listOfFiles) {
@@ -129,20 +135,15 @@ public class ScopeTest {
 				Scanner testScanner = new Scanner(InputTester.readFile(testPath));
 				System.out.println(testPath);
 				Parser parser = new Parser(testScanner);
-				parser.ParseProgram();
+				AST programTree = parser.ParseProgram();
+			    SemanticAnalyzer sm = new SemanticAnalyzer();
+			    sm.AnalyzeSemantics(programTree);
 			} 
-			catch (UnexpectedTokenException ex)
+			catch (UndeclaredSymbolException ex)
 			{					
 				thrown = true;
 			}			
-			catch (MissingProductionsException ex)
-			{
-				thrown = true;
-			}
-			catch (StringIndexOutOfBoundsException e){
-				thrown = true;
-			}
-			catch (InvalidIdentifierException e)
+			catch (DuplicatedSymbolException ex)
 			{
 				thrown = true;
 			}
