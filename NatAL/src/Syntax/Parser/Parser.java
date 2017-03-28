@@ -111,7 +111,7 @@ public class Parser
 
         if (val.equals(value))
         {
-            Reporter.Log("Matched " + value);
+            //Reporter.Log("Matched " + value);
             Consume();
         }
         else
