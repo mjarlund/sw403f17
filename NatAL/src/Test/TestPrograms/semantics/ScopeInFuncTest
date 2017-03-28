@@ -6,7 +6,7 @@ return c
 end scope1
 
 boolean scope2()
-number is scope1()
+number d is scope1()
 boolean john is false
 if (d above 15)
 john is true

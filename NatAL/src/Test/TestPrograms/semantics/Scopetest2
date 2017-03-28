@@ -1,0 +1,9 @@
+text func1()
+number a is 2
+boolean b is true
+return "a"
+end func1
+
+void func2()
+text b is func1()
+end func2
