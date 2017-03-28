@@ -66,6 +66,7 @@ Parameter -> IntegerLiteral
 Parameter -> FloatingPointLiteral
 Parameter -> StringLiteral
 Parameter -> BooleanLiteral
+IdentifierAppendantOptional -> ParameterList BuildFuncCall
 IdentifierAppendantOptional -> . Identifier
 IdentifierAppendantOptional -> [ IntegerLiteral ]
 IdentifierAppendantOptional -> EPSILON

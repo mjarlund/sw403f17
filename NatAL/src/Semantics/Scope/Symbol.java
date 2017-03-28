@@ -11,6 +11,7 @@ public class Symbol {
     public String Name;
     public Types Type;
     public ArrayList<Types> TypeSignature;
+    public DclType dclType;
 
     public Symbol(String name, Types type){
         Name = name;
@@ -25,5 +26,9 @@ public class Symbol {
     public void SetTypeSignature(ArrayList<Types> typeSignature)
     {
         TypeSignature = typeSignature;
+    }
+    public void SetDclType(DclType type)
+    {
+        dclType = type;
     }
 }

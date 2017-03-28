@@ -141,10 +141,11 @@ public class SemanticAnalyzer {
         // Check if function is declared before usage
         if(identifier==null)
             Reporter.Error(new UndeclaredSymbolException(funcId.ID+ " not declared.", expr.GetLineNumber()));
+        if(!identifier.dclType.equals( DclType.Function))
+            Reporter.Error(new InvalidIdentifierException("Not used as a function call"));
         // Checks that args are used declared before usage
         VisitValue(expr.GetFuncArgs().GetValue(),expr.GetFuncArgs());
         ArrayList<ArgExpr> args = expr.GetFuncArgs().GetArgs();
-
         if(identifier.TypeSignature.size()>0 || args.size()>0)
         {
             int iterations = identifier.TypeSignature.size();
@@ -227,7 +228,9 @@ public class SemanticAnalyzer {
         }
         String varID  = node.Identifier;
         Types varType = node.Type;
-        currentScope.AddSymbol(new Symbol(varID, varType));
+        Symbol var = new Symbol(varID,varType);
+        var.SetDclType(DclType.Variable);
+        currentScope.AddSymbol(var);
         Reporter.Log(varID + " added to scope at depth = " + currentScope.Depth);
         visitedVarDcls.add(node);
 
@@ -239,7 +242,6 @@ public class SemanticAnalyzer {
         Symbol identifier = FindSymbol(id);
         if (identifier == null)
             Reporter.Error(new UndeclaredSymbolException(id + " not declared.", node.GetLineNumber()));
-            //throw new Error(id + " not declared.");
         return identifier.Type;
     }
 
@@ -281,6 +283,7 @@ public class SemanticAnalyzer {
         }
         Symbol funcDcl = FindSymbol(node.GetVarDcl().Identifier);
         funcDcl.SetTypeSignature(typeSignature);
+        funcDcl.SetDclType(DclType.Function);
 
         // Enter scope and visit func declaration children
         EnterScope(node);
