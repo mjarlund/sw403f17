@@ -40,7 +40,6 @@ public class GrammarTest {
 				Terminals.add("1");
 				Terminals.add("$");
 				Terminals.add("+");
-				Terminals.add("IntegerLiteral");
 			assertEquals(Terminals,g.Terminals);
 		}
 		@Test
@@ -61,7 +60,6 @@ public class GrammarTest {
 				Symbols.add("1");
 				Symbols.add("$");
 				Symbols.add("+");
-				Symbols.add("IntegerLiteral");
 			assertEquals(Symbols,g.Symbols);
 		}
 		@Test
@@ -69,7 +67,6 @@ public class GrammarTest {
 				Set<String> set = new HashSet<>();
 				set.add("1");
 				set.add("+");
-				set.add("IntegerLiteral");
 				assertEquals(set,g.First("Statement", false));
 		}
 		@Test
@@ -77,7 +74,6 @@ public class GrammarTest {
 				Set<String> set = new HashSet<>();
 				set.add("1");
 				set.add("+");
-				set.add("IntegerLiteral");
 				set.add("$");
 				assertEquals(set,g.Follow("Statement"));
 		}

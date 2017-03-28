@@ -33,7 +33,7 @@ public class LLTest {
 		public static Collection<Object[]> generateData()
 		{
 			return Arrays.asList(new Object[][]{
-				//{"src/Test/GrammaTestFile", true},
+				{"src/Test/GrammaTestFile", true},
 				{"src/Syntax/Grammar/CFG/CFG", true},
 			});
 		}

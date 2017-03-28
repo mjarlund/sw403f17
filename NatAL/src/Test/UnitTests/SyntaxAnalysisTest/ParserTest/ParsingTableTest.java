@@ -67,7 +67,7 @@ public class ParsingTableTest {
 		{
 			return Arrays.asList(new Object[][]{
 					//Operators
-					{"Statement", true},
+					{"Statement", false},
 					{"Statements", true},
 					{"1", false},
 					{"EPSILON", true},
@@ -99,7 +99,7 @@ public class ParsingTableTest {
 		{
 			return Arrays.asList(new Object[][]{
 					//Operators
-					{"Statement", "EPSILON","Statement -> EPSILON"},
+					{"Statements", "EPSILON","Statements -> EPSILON"},
 					{"Statement", "1","Statement -> 1"},
 					{"Statements","1", "Statements -> Statement Statements"},
 			});
@@ -133,7 +133,6 @@ public class ParsingTableTest {
 					
 					{"Statement", new Token("1",TokenType.KEYWORD),"Statement -> 1"},
 					{"Statement", new Token("+",TokenType.OPERATOR),"Statement -> + Statement"},
-					{"Statement", new Token("IntegerLiteral",TokenType.INTEGER_LITERAL),"Statement -> IntegerLiteral"},
 
 			});
 		}
@@ -150,7 +149,7 @@ public class ParsingTableTest {
 		public void GetPredictionErrorTest()
 		{
 				ParsingTable testParsingTable = new ParsingTable("src/Test/GrammaTestFile");		
-				assertEquals(testParsingTable.GetPrediction("Statements", "2"), null);
+				assertEquals(testParsingTable.GetPrediction("Statements", "3"), null);
 		}
 	}
 }
