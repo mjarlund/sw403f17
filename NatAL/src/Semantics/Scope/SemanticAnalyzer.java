@@ -20,7 +20,7 @@ import java.util.ArrayList;
 public class SemanticAnalyzer {
 
     Scope currentScope = new Scope();
-
+    ArrayList<AST> visitedVarDcls = new ArrayList<>();
     public Symbol FindSymbol(String identifier){
         return currentScope.FindSymbol(identifier);
     }
@@ -45,7 +45,6 @@ public class SemanticAnalyzer {
      * function declaration is entered or exited, respectively. */
     public void AnalyzeSemantics(AST root){
         for (AST child : root.children) {
-
             try {
                 String switchValue;
                 switchValue = (child.GetValue() != null) ? child.GetValue() : ((IdExpr) child).ID;
@@ -223,10 +222,14 @@ public class SemanticAnalyzer {
     }
 
     public Object VisitVarDcl(VarDcl node){
+        for (AST visited : visitedVarDcls){
+            if (visited == node) return null;
+        }
         String varID  = node.Identifier;
         Types varType = node.Type;
         currentScope.AddSymbol(new Symbol(varID, varType));
         Reporter.Log(varID + " added to scope at depth = " + currentScope.Depth);
+        visitedVarDcls.add(node);
 
         return varType;
     }
@@ -246,6 +249,7 @@ public class SemanticAnalyzer {
             String paramID  = ((FParamDcl)param).Identifier;
             Types paramType = ((FParamDcl)param).Type;
             currentScope.AddSymbol(new Symbol(paramID, paramType));
+            Reporter.Log(paramID + " added to scope at depth = " + currentScope.Depth);
         }
     }
 
