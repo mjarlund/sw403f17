@@ -226,7 +226,7 @@ public class SemanticAnalyzer {
         String varID  = node.Identifier;
         Types varType = node.Type;
         currentScope.AddSymbol(new Symbol(varID, varType));
-        Reporter.Log(varID + " added to scope.");
+        Reporter.Log(varID + " added to scope at depth = " + currentScope.Depth);
 
         return varType;
     }
