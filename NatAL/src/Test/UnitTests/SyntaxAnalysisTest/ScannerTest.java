@@ -110,9 +110,9 @@ public class ScannerTest {
 					{"'U'",TokenType.CHAR_LITERAL},
 					
 					
-					//Separators
+					/*//Separators
 					{"\n", TokenType.SEPARATOR},
-					
+					*/
 
 			});
 		}

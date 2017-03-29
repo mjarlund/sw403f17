@@ -49,6 +49,11 @@ public class Scanner
 
         // Other
         words.put("false", TokenType.BOOLEAN_LITERAL); words.put("true", TokenType.BOOLEAN_LITERAL);
+        
+        while (IsWS() || currentChar == '\n')
+    	{
+    		Advance();
+    	}
     }
 
     public void Advance ()
@@ -68,7 +73,7 @@ public class Scanner
     }
 
     public Token NextToken()
-    {
+    {	
         while(currentChar != EOF)
         {
             switch (currentChar)
