@@ -22,6 +22,7 @@ public class Scanner
     {
         return lineNumber;
     }
+    public static void SetLineNumber(int increaseBy) {lineNumber+=increaseBy;}
 
     public Scanner (String input)
     {
@@ -60,9 +61,6 @@ public class Scanner
         }
         else
         {
-            if (currentChar == '\n')
-                lineNumber++;
-
             currentChar = input.charAt(index);
         }
     }
