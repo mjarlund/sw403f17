@@ -86,7 +86,10 @@ public class Parser
             if (table.IsEpsilon(value))
                 parseStack.push("EPSILON");
             else
-                Reporter.Error(new MissingProductionsException("No productions available for " + value));
+            {
+                Reporter.Error(new MissingProductionsException(value, currentToken));
+            }
+
         }
         else
         {
@@ -115,7 +118,7 @@ public class Parser
             Consume();
         }
         else
-            Reporter.Error(new UnexpectedTokenException("Got " + value + " expected " + val + ". Line: " + token.LineNumber));
+            throw new UnexpectedTokenException(token, val);
     }
 
     /* Sets current token to the next token found by the scanner */

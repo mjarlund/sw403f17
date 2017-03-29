@@ -1,6 +1,9 @@
 package DataStructures.AST;
 
+import Utilities.Reporter;
+
 import java.util.ArrayList;
+import java.util.Scanner;
 
 /**
  * Created by Anders Brams on 3/21/2017.
@@ -18,7 +21,9 @@ public class AST
     private int lineNumber;
     public void SetLineNumber(int lineNumber)
     {
+
         this.lineNumber = lineNumber;
+        Reporter.Log("SET THROUGH AST: " + lineNumber + " Type: " + GetValue());
     }
     public int GetLineNumber()
     {
@@ -58,6 +63,12 @@ public class AST
     }
     public void SetParent(AST par){
         parent = par;
+    }
+
+    public AST()
+    {
+        int t = Syntax.Scanner.Scanner.GetLineNumber()-1;
+        Reporter.Log("SET THROUGH STATIC: " + t);
     }
 
     public AST MakeSiblings(AST newSib) {
