@@ -57,6 +57,7 @@ PrimaryExpression -> IntegerLiteral BuildValExpr
 PrimaryExpression -> FloatingPointLiteral BuildValExpr
 PrimaryExpression -> StringLiteral BuildValExpr
 PrimaryExpression -> BooleanLiteral BuildValExpr
+PrimaryExpression -> CharacterLiteral BuildValExpr
 PrimaryExpression -> ( Expression )
 ExpressionStatement -> Identifier IdentifierAppendantOptional BuildIdentifier ExpressionStatementPrime
 ExpressionStatementPrime -> is Expression BuildAssign CombineDown

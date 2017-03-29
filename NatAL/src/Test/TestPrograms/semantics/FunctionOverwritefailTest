@@ -1,4 +1,4 @@
 character prog()
 character b is 'B'
 return b
-end prog()
+end prog
