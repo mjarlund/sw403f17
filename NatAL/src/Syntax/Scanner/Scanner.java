@@ -44,8 +44,8 @@ public class Scanner
         words.put("number", TokenType.KEYWORD);  words.put("text", TokenType.KEYWORD);
         words.put("character", TokenType.KEYWORD); words.put("list", TokenType.KEYWORD);
         words.put("of", TokenType.KEYWORD); words.put("digital", TokenType.KEYWORD);
-        words.put("analog", TokenType.KEYWORD);
-        words.put("high", TokenType.KEYWORD); words.put("low", TokenType.KEYWORD);
+        /*words.put("analog", TokenType.KEYWORD);
+        words.put("high", TokenType.KEYWORD); words.put("low", TokenType.KEYWORD);*/
 
         // Other
         words.put("false", TokenType.BOOLEAN_LITERAL); words.put("true", TokenType.BOOLEAN_LITERAL);

@@ -60,7 +60,7 @@ public class LLTest {
                     productions.remove(0);
 
 
-                    if (g.Epsilon.get(left)) tmpSet.addAll(g.Follow(left));
+                    if (g.Epsilon.get(left).equals(true)) tmpSet.addAll(g.Follow(left));
                     for (String firstVal : g.First(right, false)) {
                         if (tmpSet.contains(firstVal)) {
                             tmpResult = false;
