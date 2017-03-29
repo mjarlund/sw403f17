@@ -22,7 +22,7 @@ public class Scanner
     {
         return lineNumber;
     }
-    public static void SetLineNumber(int increaseBy) {lineNumber+=increaseBy;}
+    public static void IncreaseLineNumber(int increaseBy) {lineNumber+=increaseBy;}
 
     public Scanner (String input)
     {
@@ -53,6 +53,8 @@ public class Scanner
         
         while (IsWS() || currentChar == '\n')
     	{
+    	    if(currentChar == '\n')
+    	        IncreaseLineNumber(1);
     		Advance();
     	}
     }
@@ -110,7 +112,7 @@ public class Scanner
         return MakeToken("EOF", TokenType.EOF);
     }
 
-    private boolean IsWS()
+    public boolean IsWS()
     {
         return (currentChar == ' ' || currentChar == '\t' || currentChar == '\r');
     }

@@ -116,7 +116,7 @@ public class Parser
         {
             //Reporter.Log("Matched " + value);
             if(value.equals("EOL"))
-                scanner.SetLineNumber(1);
+                scanner.IncreaseLineNumber(1);
             Consume();
         }
         else
