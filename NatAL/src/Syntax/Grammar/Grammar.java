@@ -3,6 +3,7 @@ package Syntax.Grammar;
 import Syntax.Parser.ParsingTable;
 import java.io.File;
 import java.io.IOException;
+import java.io.SyncFailedException;
 import java.nio.file.Files;
 import java.util.*;
 
@@ -221,7 +222,7 @@ public class Grammar {
      * @param v
      * @return
      */
-    public Set Follow(String v) {
+    public Set<String> Follow(String v) {
         // Retrieve memoized value, if it exists.
         if(followMap.get(v) != null) return followMap.get(v);
 
@@ -292,5 +293,16 @@ public class Grammar {
         followMap = new HashMap<>();
         for(String s : Symbols) Epsilon.put(s, false);
         InitEpsilon();
+    }
+    public static void main(String args[])
+    {
+        try {
+            Grammar g = Grammar.FromFile("src/Syntax/Grammar/CFG/CFG");
+            for(String val : g.Follow("NewLine"))
+                System.out.println(val);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
