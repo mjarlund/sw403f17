@@ -15,6 +15,7 @@ import org.junit.runners.Parameterized.Parameters;
 
 import DataStructures.AST.AST;
 import Exceptions.DuplicatedSymbolException;
+import Exceptions.IncompatibleValueException;
 import Exceptions.InvalidIdentifierException;
 import Exceptions.MissingProductionsException;
 import Exceptions.UndeclaredSymbolException;
@@ -144,6 +145,10 @@ public class ScopeTest {
 				thrown = true;
 			}			
 			catch (DuplicatedSymbolException ex)
+			{
+				thrown = true;
+			}
+			catch (IncompatibleValueException ex)
 			{
 				thrown = true;
 			}
