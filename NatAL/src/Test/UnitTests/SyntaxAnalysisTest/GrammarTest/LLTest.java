@@ -35,6 +35,7 @@ public class LLTest {
 			return Arrays.asList(new Object[][]{
 				{"src/Test/GrammaTestFile", true},
 				{"src/Syntax/Grammar/CFG/CFG", true},
+				{"src/Test/GrammarTestFile2", true},
 			});
 		}
 
