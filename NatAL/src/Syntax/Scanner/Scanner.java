@@ -17,8 +17,8 @@ public class Scanner
     protected int index = 0;
     protected char currentChar;
     protected int inputLength;
-    private int lineNumber;
-    public int GetLineNumber()
+    private static int lineNumber;
+    public static int GetLineNumber()
     {
         return lineNumber;
     }
