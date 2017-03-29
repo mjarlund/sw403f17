@@ -1,0 +1,8 @@
+character prog()
+character b is 'B'
+return b
+end prog()
+
+character testprog()
+prog is 'A'
+end testprog
