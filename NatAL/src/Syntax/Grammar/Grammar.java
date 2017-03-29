@@ -1,9 +1,7 @@
 package Syntax.Grammar;
 
-import Syntax.Parser.ParsingTable;
 import java.io.File;
 import java.io.IOException;
-import java.io.SyncFailedException;
 import java.nio.file.Files;
 import java.util.*;
 
@@ -166,32 +164,29 @@ public class Grammar {
     private Set Sibling(String v) {
         Set s = new HashSet();
 
-        // Check for each production
-        for(Production p : Productions) {
-            String[] r = p.Right;
+        for(int i = 0; i < Productions.length; i++) {
+            Production p = Productions[i];
             String l = p.Left;
-            String e;
-            for(int i = 0; i < r.length; i++) {
-
-                // If symbol is present in the production (but not the last element) do
-                if(r[i].equals(v)) {
-
-                    if(i < r.length - 1) {
-                        e = r[i + 1];
-
-                        // Add the first set for the following symbol
+            String[] r = p.Right;
+            int n = r.length;
+            for(int j = 0; j < n-1; j++) {
+                if(r[j].equals(v)) {
+                    String e;
+                    int k = 1;
+                    do{
+                        e = r[j + k];
                         s.addAll(First(e, false));
-
-                        if(Epsilon.get(e).equals(true)) s.add(l);
-                    }
-                    else {
-                        s.add(l);
-                    }
+                        k++;
+                    } while(Epsilon.get(e) && j+k < r.length);
                 }
-
+                int c = n;
+                do {
+                    if(c > 0 && r[c-1].equals(v))
+                        s.add(l);
+                    c--;
+                } while(c > 0 && Epsilon.get(r[c]));
             }
         }
-
         return s;
     }
 
@@ -273,6 +268,7 @@ public class Grammar {
      * set the non-terminal in the left of the production equal to epsilon.
      */
     public void InitEpsilon() {
+
         for(Production p : Productions) {
             String l = p.Left;
 
@@ -298,9 +294,14 @@ public class Grammar {
     {
         try {
             Grammar g = Grammar.FromFile("src/Syntax/Grammar/CFG/CFG");
-            for(String val : g.Follow("NewLine"))
-                System.out.println(val);
-
+            for(String var : g.Follow("DeclarationStatement"))
+                System.out.println(var);
+            /*for(String nonTerminal : g.NonTerminals) {
+                System.out.print(nonTerminal + " -> ");
+                System.out.print(g.Follow(nonTerminal).size());
+                System.out.println();
+                System.out.println();
+            }*/
         } catch (IOException e) {
             e.printStackTrace();
         }
