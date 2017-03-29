@@ -48,6 +48,8 @@ public class TypeConverter
                 return Types.FLOAT;
             case STRING_LITERAL:
                 return Types.STRING;
+            case CHAR_LITERAL:
+            	return Types.CHAR;
             case KEYWORD:
                 if(token.Value.equals("void"))
                     return Types.VOID;
