@@ -49,7 +49,7 @@ public class Visualizer extends PApplet {
                         "end func1\n" +
                         "void func2()\n" +
                          "text b is func1()\n end func2\n";
-        sc = new Scanner(code);
+        sc = new Scanner(code1);
         parser = new Parser(sc);
         AST programTree = parser.ParseProgram();
 

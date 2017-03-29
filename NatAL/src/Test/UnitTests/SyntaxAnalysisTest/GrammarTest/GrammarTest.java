@@ -27,7 +27,7 @@ public class GrammarTest {
 		public void setUp() throws Exception {
 			
 			try{
-			g = Grammar.FromFile("src/Test/GrammaTestFile");
+			g = Grammar.FromFile("src/Test/GrammarTestFile");
 	        
 			} catch(IOException e){
 				fail("Error: " + e);

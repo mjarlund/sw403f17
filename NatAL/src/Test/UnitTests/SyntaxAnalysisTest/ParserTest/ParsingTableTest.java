@@ -46,7 +46,7 @@ public class ParsingTableTest {
 		
 		@Test	
 		public void IsTerminal() {
-			ParsingTable p = new ParsingTable("src/Test/GrammaTestFile");
+			ParsingTable p = new ParsingTable("src/Test/GrammarTestFile");
 			assertEquals(expected, p.IsTerminal(inputString));
 		} 
 	}
@@ -75,7 +75,7 @@ public class ParsingTableTest {
 		}
 		@Test
 		public void IsEpsilon() {
-			ParsingTable p = new ParsingTable("src/Test/GrammaTestFile");
+			ParsingTable p = new ParsingTable("src/Test/GrammarTestFile");
 			assertEquals(expected, p.IsEpsilon(inputString));
 		}
 	}
@@ -107,7 +107,7 @@ public class ParsingTableTest {
 
 		@Test
 		public void testGetPredictionStringToken() {
-			ParsingTable p = new ParsingTable("src/Test/GrammaTestFile");
+			ParsingTable p = new ParsingTable("src/Test/GrammarTestFile");
 			assertEquals(expected, p.GetPrediction(nonterminal, token).toString());
 		}
 	}
@@ -138,7 +138,7 @@ public class ParsingTableTest {
 		}
 		@Test
 		public void testGetPredictionStringToken() {
-			ParsingTable p = new ParsingTable("src/Test/GrammaTestFile");
+			ParsingTable p = new ParsingTable("src/Test/GrammarTestFile");
 			assertEquals(expected, p.GetPrediction(nonterminal, token).toString());
 		}
 	}
@@ -148,7 +148,7 @@ public class ParsingTableTest {
 		@Test
 		public void GetPredictionErrorTest()
 		{
-				ParsingTable testParsingTable = new ParsingTable("src/Test/GrammaTestFile");		
+				ParsingTable testParsingTable = new ParsingTable("src/Test/GrammarTestFile");
 				assertEquals(testParsingTable.GetPrediction("Statements", "3"), null);
 		}
 	}
