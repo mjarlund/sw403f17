@@ -34,7 +34,8 @@ public class Scanner
         words.put("or", TokenType.OPERATOR); words.put("and", TokenType.OPERATOR);
         words.put("equals", TokenType.OPERATOR); words.put("is", TokenType.OPERATOR);
         words.put("not", TokenType.OPERATOR); words.put("above", TokenType.OPERATOR);
-        words.put("below", TokenType.OPERATOR);
+        words.put("below", TokenType.OPERATOR); words.put("read", TokenType.OPERATOR);
+        words.put("write",TokenType.OPERATOR);
 
         // Keywords
         words.put("until", TokenType.KEYWORD); words.put("end", TokenType.KEYWORD);
@@ -45,8 +46,10 @@ public class Scanner
         words.put("number", TokenType.KEYWORD);  words.put("text", TokenType.KEYWORD);
         words.put("character", TokenType.KEYWORD); words.put("list", TokenType.KEYWORD);
         words.put("of", TokenType.KEYWORD); words.put("digital", TokenType.KEYWORD);
-        /*words.put("analog", TokenType.KEYWORD);
-        words.put("high", TokenType.KEYWORD); words.put("low", TokenType.KEYWORD);*/
+        words.put("analog", TokenType.KEYWORD); words.put("pin", TokenType.KEYWORD);
+        words.put("high", TokenType.KEYWORD); words.put("low", TokenType.KEYWORD);
+        words.put("input",TokenType.KEYWORD); words.put("output",TokenType.KEYWORD);
+        words.put("from",TokenType.KEYWORD); words.put("to",TokenType.KEYWORD);
 
         // Other
         words.put("false", TokenType.BOOLEAN_LITERAL); words.put("true", TokenType.BOOLEAN_LITERAL);

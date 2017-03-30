@@ -53,10 +53,6 @@ public class TypeConverter
             case KEYWORD:
                 if(token.Value.equals("void"))
                     return Types.VOID;
-                else if(token.Value.equals("digital"))
-                    return Types.DIGITAL;
-                else if(token.Value.equals("analog"))
-                    return Types.ANALOG;
             default:
                 return null;
         }

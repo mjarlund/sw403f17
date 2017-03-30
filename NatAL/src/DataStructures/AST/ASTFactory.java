@@ -2,13 +2,13 @@ package DataStructures.AST;
 
 import DataStructures.AST.NodeTypes.Declarations.*;
 import DataStructures.AST.NodeTypes.Expressions.*;
+import DataStructures.AST.NodeTypes.Modes;
 import DataStructures.AST.NodeTypes.Statements.*;
 import DataStructures.AST.NodeTypes.Types;
 import DataStructures.DefaultHashMap;
 import Syntax.Tokens.Token;
 import Syntax.Tokens.TokenType;
 import Utilities.TypeConverter;
-import jdk.nashorn.internal.ir.Block;
 
 import java.util.ArrayList;
 import java.util.Stack;
@@ -53,6 +53,8 @@ public class ASTFactory
         SemanticAction.put("BuildUnaryExpr", ASTFactory.this::CreateUnaryExpr);
         SemanticAction.put("BuildListDeclaration", ASTFactory.this::CreateListDcl);
         SemanticAction.put("BuildStructDeclaration", ASTFactory.this::CreateStructDcl);
+        SemanticAction.put("BuildIOStmt", ASTFactory.this::CreateIOStmt);
+        SemanticAction.put("BuildIOExpr", ASTFactory.this::CreateIOExpr);
     }
     public void CreateAbstractTree(String action, int lineNumber)
     {
@@ -64,6 +66,25 @@ public class ASTFactory
         }
         else
             throw new Error("Semantic action not found please come again (indian accent)");
+    }
+    private void CreateIOExpr()
+    {
+        terminals.pop();
+        Token op = terminals.pop();
+        Token mode = terminals.pop();
+        IdExpr id = (IdExpr) astStack.pop();
+        Expr io = new IOExpr(GetMode(mode),op,id);
+        astStack.push(io);
+    }
+    private void CreateIOStmt()
+    {
+        // remove natural keyword to or from
+        terminals.pop();
+        Token op = terminals.pop();
+        Token mode = terminals.pop();
+        IdExpr id = (IdExpr) astStack.pop();
+        IOStmt io = new IOStmt(GetMode(mode),op,id);
+        astStack.push(io);
     }
     /* Combines the top of the tree stack with the one below it */
     private void CombineDown()
@@ -318,7 +339,21 @@ public class ASTFactory
                 return Types.CHAR;
             case "text":
                 return Types.STRING;
+            case "pin":
+                return Types.PIN;
         }
         return null;
+    }
+    private Modes GetMode(Token token)
+    {
+        switch (token.Value)
+        {
+            case "analog":
+                return Modes.ANALOG;
+            case "digital":
+                return Modes.DIGITAL;
+            default:
+                return null;
+        }
     }
 }

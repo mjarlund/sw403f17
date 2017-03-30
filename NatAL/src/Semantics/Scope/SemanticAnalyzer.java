@@ -3,10 +3,7 @@ package Semantics.Scope;
 import DataStructures.AST.AST;
 import DataStructures.AST.NodeTypes.Declarations.*;
 import DataStructures.AST.NodeTypes.Expressions.*;
-import DataStructures.AST.NodeTypes.Statements.AssignStmt;
-import DataStructures.AST.NodeTypes.Statements.IfStmt;
-import DataStructures.AST.NodeTypes.Statements.ReturnStmt;
-import DataStructures.AST.NodeTypes.Statements.UntilStmt;
+import DataStructures.AST.NodeTypes.Statements.*;
 import DataStructures.AST.NodeTypes.Types;
 import Exceptions.*;
 import Utilities.Reporter;
@@ -99,11 +96,29 @@ public class SemanticAnalyzer {
             case "StructDcl":
                 VisitStructDcl((StructDcl) child);
                 break;
+            case "IOStmt":
+                VisitIOStmt((IOStmt)child);
+                break;
+            case "IOExpr":
+                return VisitIOExpr((IOExpr) child);
             default:
                 AnalyzeSemantics(child);
                 break;
         }
         return null;
+    }
+    private void VisitIOStmt(IOStmt stmt)
+    {
+        Types type = (Types)VisitId(stmt.GetPin());
+        if(!type.equals(Types.PIN))
+            Reporter.Error(new IncompatibleValueException("Must be a pin type on line " + stmt.GetLineNumber()));
+    }
+    private Object VisitIOExpr(IOExpr expr)
+    {
+        Types type = (Types)VisitId(expr.GetPin());
+        if(!type.equals(Types.PIN))
+            Reporter.Error(new IncompatibleValueException("Must be a pin type on line " + expr.GetLineNumber()));
+        return type;
     }
     private void VisitIfStmt(IfStmt stmt)
     {
@@ -197,6 +212,11 @@ public class SemanticAnalyzer {
         AST right = stmt.GetRight();
         Object lType = VisitValue(left.GetValue(),left);
         Object rType = VisitValue(right.GetValue(),right);
+        // Pin types are integers
+        if(lType.equals(Types.PIN))
+            lType = Types.INT;
+        if(rType.equals(Types.PIN))
+            rType = Types.INT;
         // left hand side is the same type as the right hand side type
         if(!lType.equals(rType))
             Reporter.Error(new IncompatibleValueException(lType,rType,stmt.GetLineNumber()));
@@ -227,7 +247,7 @@ public class SemanticAnalyzer {
             if (visited == node) return null;
         }
         String varID  = node.Identifier;
-        Types varType = node.Type;
+        Types varType = node.GetType();
         Symbol var = new Symbol(varID,varType);
         var.SetDclType(DclType.Variable);
         currentScope.AddSymbol(var);

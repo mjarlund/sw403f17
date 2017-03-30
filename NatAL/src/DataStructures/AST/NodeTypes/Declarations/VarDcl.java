@@ -16,4 +16,10 @@ public class VarDcl extends Dcl
 
     public final Types Type;
     public final String Identifier;
+    public Types GetType()
+    {
+        //if(Type.equals(Types.PIN)) return Types.INT;
+        //else
+        return Type;
+    }
 }

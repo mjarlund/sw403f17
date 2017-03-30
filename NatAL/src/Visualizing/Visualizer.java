@@ -2,8 +2,8 @@ package Visualizing;
 
 import DataStructures.AST.AST;
 import Semantics.Scope.SemanticAnalyzer;
-import Syntax.Scanner.Scanner;
 import Syntax.Parser.Parser;
+import Syntax.Scanner.Scanner;
 import processing.core.PApplet;
 import processing.core.PVector;
 
@@ -43,7 +43,8 @@ public class Visualizer extends PApplet {
                            " number b \n" +
                            " end struct\n" ;
         String code1 = "text func1()\n" +
-                       "number a is 2\n" +
+                       "pin a is 2\n" +
+                        "a is digital read from a\n" +
                         "boolean b is true and false\n" +
                         "return \"a\"\n" +
                         "end func1\n" +
