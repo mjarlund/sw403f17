@@ -64,10 +64,10 @@ PrimaryExpression -> BooleanLiteral BuildValExpr
 PrimaryExpression -> CharacterLiteral BuildValExpr
 PrimaryExpression -> ( Expression )
 ExpressionStatement -> Identifier IdentifierAppendantOptional BuildIdentifier ExpressionStatementPrime
+ExpressionStatement -> Mode IOStatement BuildIOStmt CombineDown
 ExpressionStatementPrime -> is Expression BuildAssign CombineDown
 ExpressionStatementPrime -> ParameterList BuildFuncCall CombineDown
-ExpressionStatementPrime -> Mode IOStatement BuildIOStmt CombineDown
-IOStatement ->  write to Identifier BuildIdentifier
+IOStatement ->  write Expression to Identifier BuildIdentifier
 IOStatement ->  read from Identifier BuildIdentifier
 ProcedureCall -> ParameterList BuildFuncCall
 ProcedureCall -> EPSILON

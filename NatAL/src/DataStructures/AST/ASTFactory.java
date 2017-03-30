@@ -83,7 +83,16 @@ public class ASTFactory
         Token op = terminals.pop();
         Token mode = terminals.pop();
         IdExpr id = (IdExpr) astStack.pop();
-        IOStmt io = new IOStmt(GetMode(mode),op,id);
+        IOStmt io = null;
+        if(op.Value.equals("write"))
+        {
+            Expr writeExpr = (Expr) astStack.pop();
+            io = new IOStmt(GetMode(mode),op,writeExpr,id);
+        }
+        else
+        {
+           io = new IOStmt(GetMode(mode),op,id);
+        }
         astStack.push(io);
     }
     /* Combines the top of the tree stack with the one below it */

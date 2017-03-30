@@ -1,6 +1,7 @@
 package DataStructures.AST.NodeTypes.Statements;
 
 
+import DataStructures.AST.NodeTypes.Expressions.Expr;
 import DataStructures.AST.NodeTypes.Expressions.IdExpr;
 import DataStructures.AST.NodeTypes.Modes;
 import Syntax.Tokens.Token;
@@ -17,6 +18,11 @@ public class IOStmt extends Stmt
         children.add(pin);
         SetValue("IOStmt");
     }
+    public IOStmt(Modes mode, Token op, Expr writeExpr, IdExpr pin)
+    {
+        this(mode,op,pin);
+        children.add(writeExpr);
+    }
     private Modes mode;
     private Token operation;
     private Token pin;
@@ -31,5 +37,10 @@ public class IOStmt extends Stmt
     public IdExpr GetPin()
     {
         return (IdExpr) children.get(0);
+    }
+    public Expr GetWriteVal()
+    {
+        if((Expr)children.get(1)!=null)return (Expr)children.get(1);
+        else return null;
     }
 }
