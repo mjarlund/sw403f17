@@ -45,7 +45,7 @@ public class Visualizer extends PApplet {
         String code1 = "text func1()\n" +
                        "pin a is 2\n" +
                         "a is digital read from a\n" +
-                         "digital write 2 to a\n" +
+                         "digital write high to a\n" +
                         "boolean b is true and false\n" +
                         "return \"a\"\n" +
                         "end func1\n" +

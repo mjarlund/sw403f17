@@ -62,6 +62,7 @@ PrimaryExpression -> FloatingPointLiteral BuildValExpr
 PrimaryExpression -> StringLiteral BuildValExpr
 PrimaryExpression -> BooleanLiteral BuildValExpr
 PrimaryExpression -> CharacterLiteral BuildValExpr
+PrimaryExpression -> DigitalLiteral BuildValExpr
 PrimaryExpression -> ( Expression )
 ExpressionStatement -> Identifier IdentifierAppendantOptional BuildIdentifier ExpressionStatementPrime
 ExpressionStatement -> Mode IOStatement BuildIOStmt CombineDown
@@ -77,6 +78,7 @@ Parameter -> FloatingPointLiteral
 Parameter -> StringLiteral
 Parameter -> BooleanLiteral
 Parameter -> CharacterLiteral
+Parameter-> DigitalLiteral
 IdentifierAppendantOptional -> . Identifier
 IdentifierAppendantOptional -> [ IntegerLiteral ]
 IdentifierAppendantOptional -> EPSILON

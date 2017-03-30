@@ -26,6 +26,8 @@ public class TypeConverter
                 return "StringLiteral";
             case CHAR_LITERAL:
                 return "CharacterLiteral";
+            case DIGITAL_LITERAL:
+                return "DigitalLiteral";
             case EOF:
                 return "$";
             case SEPARATOR:

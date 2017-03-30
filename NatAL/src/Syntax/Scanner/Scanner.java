@@ -47,12 +47,12 @@ public class Scanner
         words.put("character", TokenType.KEYWORD); words.put("list", TokenType.KEYWORD);
         words.put("of", TokenType.KEYWORD); words.put("digital", TokenType.KEYWORD);
         words.put("analog", TokenType.KEYWORD); words.put("pin", TokenType.KEYWORD);
-        words.put("high", TokenType.KEYWORD); words.put("low", TokenType.KEYWORD);
         words.put("input",TokenType.KEYWORD); words.put("output",TokenType.KEYWORD);
         words.put("from",TokenType.KEYWORD); words.put("to",TokenType.KEYWORD);
 
         // Other
         words.put("false", TokenType.BOOLEAN_LITERAL); words.put("true", TokenType.BOOLEAN_LITERAL);
+        words.put("high", TokenType.DIGITAL_LITERAL); words.put("low", TokenType.DIGITAL_LITERAL);
         
         while (IsWS() || currentChar == '\n')
     	{

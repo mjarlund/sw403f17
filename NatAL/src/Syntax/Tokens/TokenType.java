@@ -15,5 +15,6 @@ public enum TokenType
     OPERATOR,
     KEYWORD,
     ACCESSOR,
-    EOF
+    EOF,
+    DIGITAL_LITERAL
 }
