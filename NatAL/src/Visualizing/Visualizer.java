@@ -42,15 +42,12 @@ public class Visualizer extends PApplet {
                            " number a\n" +
                            " number b \n" +
                            " end struct\n" ;
-        String code1 = "text func1()\n" +
-                       "pin a is 2\n" +
-                        "a is digital read from a\n" +
-                         "digital write high to a\n" +
-                        "boolean b is true and false\n" +
-                        "return \"a\"\n" +
-                        "end func1\n" +
-                        "void func2()\n" +
-                         "text b is func1()\n end func2\n";
+        String code1 =  "structure lol\n" +
+                         "number a\n" +
+                         "end lol\n" +
+                        "void func1()\n" +
+                         "number a is 2\n" +
+                        "end func1\n";
         sc = new Scanner(code1);
         parser = new Parser(sc);
         AST programTree = parser.ParseProgram();
