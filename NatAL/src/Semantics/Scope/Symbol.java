@@ -18,6 +18,10 @@ public class Symbol {
         Type = type;
     }
 
+    public Symbol(String name){
+        Name = name;
+    }
+
     public Symbol(String name, ArrayList<Types> typeSignature){
         Name = name;
         Type = null;

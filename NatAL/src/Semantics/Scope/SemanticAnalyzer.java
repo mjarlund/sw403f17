@@ -102,11 +102,21 @@ public class SemanticAnalyzer {
                 break;
             case "IOExpr":
                 return VisitIOExpr((IOExpr) child);
+            case "StructVarDcl":
+                VisitStructVarDcl((StructVarDcl) child);
             default:
                 AnalyzeSemantics(child);
                 break;
         }
         return null;
+    }
+
+    private void VisitStructVarDcl(StructVarDcl dcl){
+        if (currentScope.FindSymbol(dcl.Type.ID) == null){
+            Reporter.Error(new UndeclaredSymbolException("Struct type \" " + dcl.Type.ID + " \" not declared. "));
+        } else {
+            currentScope.AddSymbol(new Symbol(dcl.ID.ID));
+        }
     }
 
     private void VisitIOStmt(IOStmt stmt)
