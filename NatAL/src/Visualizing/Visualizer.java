@@ -28,20 +28,12 @@ public class Visualizer extends PApplet {
 
         /* Scanner and parser */
         String code =
-                      "void func1()\n" +
-                        "number a is -2\n" +
-                        "number b is 2\n" +
-                        "until (a above b)\n " +
-                            "b is a+1\n" +
-                            "end until\n"+
-                        "end func1 \n " +
                       "void func2(number a, number b)\n"+
                         "a is a + b\n"+
-                        "end func2\n "+
-                      "structure struct \n" +
-                           " number a\n" +
-                           " number b \n" +
-                           " end struct\n" ;
+                        "foreach ( number s in a )\n" +
+                              " s is a \n" +
+                              " end foreach\n"+
+                        "end func2\n ";
         String code1 = "text func1()\n" +
                        "pin a is 2\n" +
                         "a is digital read from a\n" +
@@ -51,7 +43,7 @@ public class Visualizer extends PApplet {
                         "end func1\n" +
                         "void func2()\n" +
                          "text b is func1()\n end func2\n";
-        sc = new Scanner(code1);
+        sc = new Scanner(code);
         parser = new Parser(sc);
         AST programTree = parser.ParseProgram();
 
@@ -59,14 +51,15 @@ public class Visualizer extends PApplet {
         sm.AnalyzeSemantics(programTree);
         System.out.println("No variables out of scope!");
         BuildVisualTree(programTree);
-    }
-
-    /* Runs once every frame */
-    public void draw(){
         background(255);
         if (visTree != null){
             visTree.Show(this);
         }
+    }
+
+    /* Runs once every frame */
+    public void draw(){
+
     }
 
     /* Builds the visual tree from an AST */

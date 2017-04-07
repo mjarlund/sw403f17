@@ -55,6 +55,7 @@ public class ASTFactory
         SemanticAction.put("BuildStructDeclaration", ASTFactory.this::CreateStructDcl);
         SemanticAction.put("BuildIOStmt", ASTFactory.this::CreateIOStmt);
         SemanticAction.put("BuildIOExpr", ASTFactory.this::CreateIOExpr);
+        SemanticAction.put("BuildForeachStatement", ASTFactory.this::CreateForeachStmt);
     }
     public void CreateAbstractTree(String action, int lineNumber)
     {
@@ -364,5 +365,27 @@ public class ASTFactory
             default:
                 return null;
         }
+    }
+
+    private void CreateForeachStmt(){
+        System.out.println("Building Foreach: ");
+        String terminal = terminals.pop().Value;
+        while (! terminal.equals(")")){
+            terminal = terminals.pop().Value;
+        }
+
+        String collectionID = terminals.pop().Value;
+        terminals.pop(); // in
+        String elementID = terminals.pop().Value;
+        Types elementType = GetType(terminals.pop());
+
+        BlockStmt code = (BlockStmt) astStack.pop();
+        IdExpr collection = new IdExpr(collectionID);
+        VarDcl element = new VarDcl(elementType, elementID);
+
+        ForEachStmt forStmt = new ForEachStmt(element, collection, code);
+        forStmt.SetValue("ForeachStmt");
+        astStack.push(forStmt);
+        System.out.println("Built foreach");
     }
 }
