@@ -10,6 +10,7 @@ import Syntax.Tokens.Token;
 import Syntax.Tokens.TokenType;
 import Utilities.TypeConverter;
 
+import java.sql.Struct;
 import java.util.ArrayList;
 import java.util.Stack;
 
@@ -56,7 +57,18 @@ public class ASTFactory
         SemanticAction.put("BuildIOStmt", ASTFactory.this::CreateIOStmt);
         SemanticAction.put("BuildIOExpr", ASTFactory.this::CreateIOExpr);
         SemanticAction.put("BuildForeachStatement", ASTFactory.this::CreateForeachStmt);
+        SemanticAction.put("BuildStructVarDcl", ASTFactory.this::CreateStructVarDcl);
     }
+
+    private void CreateStructVarDcl(){
+        String id = terminals.pop().Value;
+        IdExpr Type = (IdExpr)astStack.pop();
+        IdExpr ID = new IdExpr(id);
+        StructVarDcl struct = new StructVarDcl(Type, ID);
+        struct.SetValue("StructVarDcl");
+        astStack.push(struct);
+    }
+
     public void CreateAbstractTree(String action, int lineNumber)
     {
         Runnable method = SemanticAction.get(action);
