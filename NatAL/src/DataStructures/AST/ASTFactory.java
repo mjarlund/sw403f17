@@ -351,6 +351,9 @@ public class ASTFactory
                 return Types.STRING;
             case "pin":
                 return Types.PIN;
+            case "high":
+            case "low":
+                return Types.DIGITAL;
         }
         return null;
     }

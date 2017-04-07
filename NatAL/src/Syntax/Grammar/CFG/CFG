@@ -46,14 +46,10 @@ RelationalExpressionPrime -> AdditiveExpressionPrime AdditiveExpression
 AdditiveExpression -> + AdditiveExpressionPrime BuildBinaryExpr AdditiveExpression
 AdditiveExpression -> - AdditiveExpressionPrime BuildBinaryExpr AdditiveExpression
 AdditiveExpression -> EPSILON
-AdditiveExpressionPrime -> MultiplicativeExpressionPrime MultiplicativeExpression
+AdditiveExpressionPrime -> UnaryExpression MultiplicativeExpression
 MultiplicativeExpression -> * PrimaryExpression BuildBinaryExpr MultiplicativeExpression
 MultiplicativeExpression -> / PrimaryExpression BuildBinaryExpr MultiplicativeExpression
 MultiplicativeExpression -> EPSILON
-MultiplicativeExpressionPrime -> UnaryExpression
-MultiplicativeExpressionPrime -> IOExpression
-IOExpression -> Mode read from Identifier BuildIdentifier BuildIOExpr
-IOExpression -> EPSILON
 UnaryExpression -> - PrimaryExpression BuildUnaryExpr
 UnaryExpression -> PrimaryExpression
 PrimaryExpression -> Identifier BuildIdentifier IdentifierAppendantOptional ProcedureCall

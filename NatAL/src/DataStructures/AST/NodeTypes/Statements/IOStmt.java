@@ -11,6 +11,7 @@ import Syntax.Tokens.Token;
  */
 public class IOStmt extends Stmt
 {
+    // read stmt
     public IOStmt(Modes mode, Token op, IdExpr pin)
     {
         this.mode = mode;
@@ -18,6 +19,7 @@ public class IOStmt extends Stmt
         children.add(pin);
         SetValue("IOStmt");
     }
+    // write stmt
     public IOStmt(Modes mode, Token op, Expr writeExpr, IdExpr pin)
     {
         this(mode,op,pin);

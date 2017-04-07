@@ -55,6 +55,8 @@ public class TypeConverter
             case KEYWORD:
                 if(token.Value.equals("void"))
                     return Types.VOID;
+            case DIGITAL_LITERAL:
+                return Types.DIGITAL;
             default:
                 return null;
         }
