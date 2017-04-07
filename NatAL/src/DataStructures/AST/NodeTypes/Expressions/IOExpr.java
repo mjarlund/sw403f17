@@ -8,7 +8,7 @@ import Syntax.Tokens.Token;
  */
 public class IOExpr extends Expr
 {
-    public IOExpr(Modes mode, Token op, IdExpr pin)
+    public IOExpr(Modes mode, Token op,IdExpr pin)
     {
         this.mode = mode;
         this.operation = op;

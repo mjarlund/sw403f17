@@ -3,6 +3,7 @@ package Semantics.Scope;
 import DataStructures.AST.AST;
 import DataStructures.AST.NodeTypes.Declarations.*;
 import DataStructures.AST.NodeTypes.Expressions.*;
+import DataStructures.AST.NodeTypes.Modes;
 import DataStructures.AST.NodeTypes.Statements.*;
 import DataStructures.AST.NodeTypes.Types;
 import Exceptions.*;
@@ -112,6 +113,21 @@ public class SemanticAnalyzer {
         Types type = (Types)VisitId(stmt.GetPin());
         if(!type.equals(Types.PIN))
             Reporter.Error(new IncompatibleValueException("Must be a pin type on line " + stmt.GetLineNumber()));
+        if(stmt.GetWriteVal() != null)
+        {
+            Object expr = VisitValue(stmt.GetWriteVal().GetValue(), stmt.GetWriteVal());
+            System.out.println(((ValExpr)stmt.GetWriteVal()).Type);
+            if(expr==null)
+                Reporter.Error(new ArgumentsException("Missing expression on line " + stmt.GetLineNumber()));
+            else
+            {
+                Types exprType = (Types)expr;
+                if(stmt.GetMode().equals(Modes.DIGITAL) && !exprType.equals(Types.DIGITAL))
+                    Reporter.Error(new IncompatibleValueException("Incompatible digital mode or expression on line " + stmt.GetLineNumber()));
+                if(stmt.GetMode().equals(Modes.ANALOG) && !exprType.equals(Types.ANALOG))
+                    Reporter.Error(new IncompatibleValueException("Incompatible analog mode or expression on line " + stmt.GetLineNumber()));
+            }
+        }
     }
     private Object VisitIOExpr(IOExpr expr)
     {
