@@ -48,7 +48,7 @@ public class SemanticAnalyzer {
                 switchValue = (child.GetValue() != null) ? child.GetValue() : ((IdExpr) child).ID;
                 VisitValue(switchValue, child);
             } catch (ClassCastException e){
-                System.out.println(e.getCause().toString());
+                //System.out.println(e.getCause().toString());
             }
         }
     }
@@ -108,6 +108,7 @@ public class SemanticAnalyzer {
         }
         return null;
     }
+
     private void VisitIOStmt(IOStmt stmt)
     {
         Types type = (Types)VisitId(stmt.GetPin());

@@ -46,14 +46,10 @@ RelationalExpressionPrime -> AdditiveExpressionPrime AdditiveExpression
 AdditiveExpression -> + AdditiveExpressionPrime BuildBinaryExpr AdditiveExpression
 AdditiveExpression -> - AdditiveExpressionPrime BuildBinaryExpr AdditiveExpression
 AdditiveExpression -> EPSILON
-AdditiveExpressionPrime -> MultiplicativeExpressionPrime MultiplicativeExpression
+AdditiveExpressionPrime -> UnaryExpression MultiplicativeExpression
 MultiplicativeExpression -> * PrimaryExpression BuildBinaryExpr MultiplicativeExpression
 MultiplicativeExpression -> / PrimaryExpression BuildBinaryExpr MultiplicativeExpression
 MultiplicativeExpression -> EPSILON
-MultiplicativeExpressionPrime -> UnaryExpression
-MultiplicativeExpressionPrime -> IOExpression
-IOExpression -> Mode read from Identifier BuildIdentifier BuildIOExpr
-IOExpression -> EPSILON
 UnaryExpression -> - PrimaryExpression BuildUnaryExpr
 UnaryExpression -> PrimaryExpression
 PrimaryExpression -> Identifier BuildIdentifier IdentifierAppendantOptional ProcedureCall
@@ -91,7 +87,7 @@ SelectionStatement -> if Condition BuildBlock NewLine Statements BuildIfStmt Sel
 SelectionStatementPrime -> else BuildBlock NewLine Statements BuildElseStmt CombineDown end else if
 SelectionStatementPrime -> end if
 IterationStatement -> until Condition BuildBlock NewLine Statements BuildUntilStmt end until CombineDown
-IterationStatement -> foreach ( FormalParameter in Parameter ) BuildBlock NewLine Statements end foreach
+IterationStatement -> foreach ( FormalParameter in Parameter ) BuildBlock NewLine Statements BuildForeachStatement end foreach CombineDown
 Condition -> ( Expression )
 Type -> text
 Type -> number
