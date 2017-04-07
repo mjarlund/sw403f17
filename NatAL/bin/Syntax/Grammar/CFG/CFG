@@ -27,6 +27,7 @@ Expression -> AssignmentExpressionPrime AssignmentExpression
 AssignmentExpression -> is AssignmentExpressionPrime BuildAssign AssignmentExpression
 AssignmentExpression -> EPSILON
 AssignmentExpressionPrime -> NotExpressionPrime NotExpression
+AssugnmentExpressionPrime -> IOExpression
 NotExpression -> not NotExpressionPrime BuildBoolExpr NotExpression
 NotExpression -> EPSILON
 NotExpressionPrime -> OrExpressionPrime OrExpression
@@ -51,8 +52,7 @@ MultiplicativeExpression -> * PrimaryExpression BuildBinaryExpr MultiplicativeEx
 MultiplicativeExpression -> / PrimaryExpression BuildBinaryExpr MultiplicativeExpression
 MultiplicativeExpression -> EPSILON
 MultiplicativeExpressionPrime -> UnaryExpression
-MultiplicativeExpressionPrime -> IOExpression
-IOExpression -> Mode read from Identifier BuildIdentifier BuildIOExpr
+IOExpression -> Mode read from Identifier BuildIdentifier BuildIOStatement CombineDown
 IOExpression -> EPSILON
 UnaryExpression -> - PrimaryExpression BuildUnaryExpr
 UnaryExpression -> PrimaryExpression
@@ -68,6 +68,7 @@ ExpressionStatement -> Identifier IdentifierAppendantOptional BuildIdentifier Ex
 ExpressionStatement -> Mode IOStatement BuildIOStmt CombineDown
 ExpressionStatementPrime -> is Expression BuildAssign CombineDown
 ExpressionStatementPrime -> ParameterList BuildFuncCall CombineDown
+ExpressionStatementPrime -> Identifier BuildStructVarDcl CombineDown
 IOStatement ->  write Expression to Identifier BuildIdentifier
 IOStatement ->  read from Identifier BuildIdentifier
 ProcedureCall -> ParameterList BuildFuncCall
@@ -91,7 +92,7 @@ SelectionStatement -> if Condition BuildBlock NewLine Statements BuildIfStmt Sel
 SelectionStatementPrime -> else BuildBlock NewLine Statements BuildElseStmt CombineDown end else if
 SelectionStatementPrime -> end if
 IterationStatement -> until Condition BuildBlock NewLine Statements BuildUntilStmt end until CombineDown
-IterationStatement -> foreach ( FormalParameter in Parameter ) BuildBlock NewLine Statements end foreach
+IterationStatement -> foreach ( FormalParameter in Parameter ) BuildBlock NewLine Statements BuildForeachStatement end foreach CombineDown
 Condition -> ( Expression )
 Type -> text
 Type -> number

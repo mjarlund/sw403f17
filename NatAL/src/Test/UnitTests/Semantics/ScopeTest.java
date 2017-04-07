@@ -17,6 +17,7 @@ import DataStructures.AST.AST;
 import Exceptions.DuplicatedSymbolException;
 import Exceptions.IncompatibleValueException;
 import Exceptions.InvalidIdentifierException;
+import Exceptions.InvalidScopeException;
 import Exceptions.MissingProductionsException;
 import Exceptions.UndeclaredSymbolException;
 import Exceptions.UnexpectedTokenException;
@@ -149,6 +150,10 @@ public class ScopeTest {
 				thrown = true;
 			}
 			catch (IncompatibleValueException ex)
+			{
+				thrown = true;
+			}
+			catch (InvalidScopeException ex)
 			{
 				thrown = true;
 			}

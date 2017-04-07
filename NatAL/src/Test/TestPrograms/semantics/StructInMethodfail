@@ -1,0 +1,8 @@
+void structTest()
+structure teststruct
+number a
+text b
+character c
+end teststruct
+teststruct.b is "john"
+end structTest
