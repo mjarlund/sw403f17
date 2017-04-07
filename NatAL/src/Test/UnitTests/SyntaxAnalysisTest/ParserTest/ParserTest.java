@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 
 import org.junit.Test;
@@ -81,25 +82,61 @@ public class ParserTest {
 	}
 	
 	
-	/*
-	public static class multipleInputParserTest
+	@RunWith(Parameterized.class)
+	public static class multipleInputParserFailTest
 	{
+		private String inputString;
+
+		public multipleInputParserFailTest(String input)
+		{
+			this.inputString = input;
+		}
+
+		@Parameters(name = "{index}: Scan({0})={1}")
+		public static Collection<Object[]> generateData()
+		{
+			return Arrays.asList(new Object[][]{
+				{"text shouldBeNumber is analog read from motor1"},
+				{"number shouldBeText is Digital read from motor2"},
+				{"digital write 2 to motor1"},
+				{"analog write high to motor2"},
+				{"character shouldBeText is digital read from motor1"},
+			});
+		}
 		@Test
-		public void voidMainTest()
-		{	
-			try{
-			Scanner multipleInputScanner = new Scanner("void main()" + System.lineSeparator() + "Interger a is 4"
-					+ "hej mor etc" );
-			Parser parser = new Parser(multipleInputScanner);
-			parser.ParseProgram();
-			}
-			catch (MissingProductionsException ex)
+		public void MultiInputFailTest() throws Exception
+		{				
+			boolean thrown = false;
+			String input = "void main()" + System.lineSeparator() + 
+					"pin motor1 is 1" +
+					"pin motor2 is 2" +
+					inputString + 
+					System.lineSeparator() + "end main";
+			try 
+			{
+				Scanner testScanner = new Scanner(input);
+				Parser parser = new Parser(testScanner);
+				parser.ParseProgram();
+			} 
+			catch (UnexpectedTokenException ex)
 			{					
-				assertEquals(true, true);
+				thrown = true;
 			}			
+			catch (MissingProductionsException ex)
+			{
+				thrown = true;
+			}
+			catch (StringIndexOutOfBoundsException e){
+				thrown = true;
+			}
+			catch (InvalidIdentifierException e)
+			{
+				thrown = true;
+			}
+			assertEquals(true, thrown);		
 		}	
 	}
-	*/
+	
 	@RunWith(Parameterized.class)
 	public static class AllFailableTests{
 		

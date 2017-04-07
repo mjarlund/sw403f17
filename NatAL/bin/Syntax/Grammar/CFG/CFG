@@ -46,10 +46,14 @@ RelationalExpressionPrime -> AdditiveExpressionPrime AdditiveExpression
 AdditiveExpression -> + AdditiveExpressionPrime BuildBinaryExpr AdditiveExpression
 AdditiveExpression -> - AdditiveExpressionPrime BuildBinaryExpr AdditiveExpression
 AdditiveExpression -> EPSILON
-AdditiveExpressionPrime -> UnaryExpression MultiplicativeExpression
+AdditiveExpressionPrime -> MultiplicativeExpressionPrime MultiplicativeExpression
 MultiplicativeExpression -> * PrimaryExpression BuildBinaryExpr MultiplicativeExpression
 MultiplicativeExpression -> / PrimaryExpression BuildBinaryExpr MultiplicativeExpression
 MultiplicativeExpression -> EPSILON
+MultiplicativeExpressionPrime -> UnaryExpression
+MultiplicativeExpressionPrime -> IOExpression
+IOExpression -> Mode read from Identifier BuildIdentifier BuildIOExpr
+IOExpression -> EPSILON
 UnaryExpression -> - PrimaryExpression BuildUnaryExpr
 UnaryExpression -> PrimaryExpression
 PrimaryExpression -> Identifier BuildIdentifier IdentifierAppendantOptional ProcedureCall
@@ -58,10 +62,14 @@ PrimaryExpression -> FloatingPointLiteral BuildValExpr
 PrimaryExpression -> StringLiteral BuildValExpr
 PrimaryExpression -> BooleanLiteral BuildValExpr
 PrimaryExpression -> CharacterLiteral BuildValExpr
+PrimaryExpression -> DigitalLiteral BuildValExpr
 PrimaryExpression -> ( Expression )
 ExpressionStatement -> Identifier IdentifierAppendantOptional BuildIdentifier ExpressionStatementPrime
+ExpressionStatement -> Mode IOStatement BuildIOStmt CombineDown
 ExpressionStatementPrime -> is Expression BuildAssign CombineDown
 ExpressionStatementPrime -> ParameterList BuildFuncCall CombineDown
+IOStatement ->  write Expression to Identifier BuildIdentifier
+IOStatement ->  read from Identifier BuildIdentifier
 ProcedureCall -> ParameterList BuildFuncCall
 ProcedureCall -> EPSILON
 Parameter -> Identifier
@@ -70,6 +78,7 @@ Parameter -> FloatingPointLiteral
 Parameter -> StringLiteral
 Parameter -> BooleanLiteral
 Parameter -> CharacterLiteral
+Parameter-> DigitalLiteral
 IdentifierAppendantOptional -> . Identifier
 IdentifierAppendantOptional -> [ IntegerLiteral ]
 IdentifierAppendantOptional -> EPSILON
@@ -90,5 +99,8 @@ Type -> fraction
 Type -> character
 Type -> boolean
 Type -> void
+Type -> pin
+Mode -> analog
+Mode -> digital
 NewLine -> EOL NewLine
 NewLine -> EPSILON

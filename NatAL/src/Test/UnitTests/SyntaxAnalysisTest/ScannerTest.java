@@ -80,6 +80,12 @@ public class ScannerTest {
 					{"jajajaj", TokenType.IDENTIFIER},
 					{"j", TokenType.IDENTIFIER},
 					{"z84", TokenType.IDENTIFIER},
+					{"High", TokenType.IDENTIFIER},
+					{"Low", TokenType.IDENTIFIER},
+					{"HIGH", TokenType.IDENTIFIER},
+					{"LOW", TokenType.IDENTIFIER},
+					{"HiGh", TokenType.IDENTIFIER},
+					{"highlowfunny", TokenType.IDENTIFIER},
 
 					//Integer Literals
 					{"1", TokenType.INTEGER_LITERAL},
@@ -100,6 +106,7 @@ public class ScannerTest {
 					{"\"hejm \n ???` ?#*^+or63\"", TokenType.STRING_LITERAL},//mangler newline token 
 					{"\"hej#�&/()=/())=?mor63\"", TokenType.STRING_LITERAL},
 					{"\"hej "+ System.lineSeparator() +"mor63\"", TokenType.STRING_LITERAL},
+
 					
 					//Char Literals
 					{"'A'",TokenType.CHAR_LITERAL},
@@ -109,7 +116,9 @@ public class ScannerTest {
 					{"'w'",TokenType.CHAR_LITERAL},
 					{"'U'",TokenType.CHAR_LITERAL},
 					
-					
+					//Digital Literal
+					{"high", TokenType.DIGITAL_LITERAL},
+					{"low", TokenType.DIGITAL_LITERAL},
 					/*//Separators
 					{"\n", TokenType.SEPARATOR},
 					*/
