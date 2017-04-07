@@ -8,8 +8,8 @@ import DataStructures.AST.NodeTypes.Types;
  */
 public class StructVarDcl extends Dcl{
 
-    IdExpr Type;
-    IdExpr ID;
+    public IdExpr Type;
+    public IdExpr ID;
     public StructVarDcl(IdExpr structType, IdExpr id){
         Type = structType;
         ID = id;
