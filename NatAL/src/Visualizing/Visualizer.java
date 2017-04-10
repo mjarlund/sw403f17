@@ -34,8 +34,8 @@ public class Visualizer extends PApplet {
                         "book z \n" +
                         "z.c is 2\n" +
                         "end func2\n " +
-                      "void func3(bool a, bool b)\n" +
-                        "bool c is a + b\n" +
+                      "void func3(boolean a, boolean b)\n" +
+                        "boolean c is a and b\n" +
                       "end func3\n";
         String code1 = "text func1()\n" +
                        "pin a is 2\n" +
@@ -46,7 +46,7 @@ public class Visualizer extends PApplet {
                         "end func1\n" +
                         "void func2()\n" +
                          "text b is func1()\n end func2\n";
-        sc = new Scanner(code1);
+        sc = new Scanner(code);
         parser = new Parser(sc);
         AST programTree = parser.ParseProgram();
 

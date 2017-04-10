@@ -9,7 +9,7 @@ import java.util.ArrayList;
  * Created by Anders Brams on 3/20/2017.
  * A "Symbol table" implemented in a tree structure.
  */
-public class Scope {
+public class Scope implements IScope {
 
     public int Depth = 0;
     private ArrayList<Symbol> symbols;
@@ -50,5 +50,13 @@ public class Scope {
     public void AddChildScope(Scope child){
         child.Depth = Depth+1;
         child.Parent = this;
+    }
+    public IScope GetParent()
+    {
+        return Parent;
+    }
+    public int GetDepth()
+    {
+        return Depth;
     }
 }

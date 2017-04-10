@@ -17,7 +17,7 @@ import java.util.ArrayList;
  */
 public class SemanticAnalyzer {
 
-    Scope currentScope = new Scope();
+    IScope currentScope = new Scope();
     ArrayList<AST> visitedVarDcls = new ArrayList<>();
     public Symbol FindSymbol(String identifier){
         return currentScope.FindSymbol(identifier);
@@ -34,7 +34,7 @@ public class SemanticAnalyzer {
     /* Overrides the current scope with that of its parent,
      * effectively closing the current scope */
     public void CloseScope(){
-        currentScope = currentScope.Parent;
+        currentScope = currentScope.GetParent();
     }
 
     /* Open a new scope in every block. No FuncDcls allowed past global,
@@ -112,10 +112,12 @@ public class SemanticAnalyzer {
     }
 
     private void VisitStructVarDcl(StructVarDcl dcl){
-        if (currentScope.FindSymbol(dcl.Type.ID) == null){
-            Reporter.Error(new UndeclaredSymbolException("Struct type \" " + dcl.Type.ID + " \" not declared. "));
+        if (currentScope.FindSymbol(dcl.GetStructType().ID) == null){
+            Reporter.Error(new UndeclaredSymbolException("Struct type \" " + dcl.GetStructType().ID + " \" not declared. "));
         } else {
-            currentScope.AddSymbol(new Symbol(dcl.ID.ID));
+            Symbol structId = new Symbol(dcl.GetIdentifier().ID, dcl.GetStructType().ID);
+            structId.dclType = DclType.Struct;
+            currentScope.AddSymbol(structId);
         }
     }
 
@@ -245,6 +247,9 @@ public class SemanticAnalyzer {
         AST right = stmt.GetRight();
         Object lType = VisitValue(left.GetValue(),left);
         Object rType = VisitValue(right.GetValue(),right);
+        // left value must be assignable i.e. a variable
+        if(!IsAssignable(left))
+            throw new Error("LHS not assignable " + left);
         // Pin types are integers
         if(lType.equals(Types.PIN))
             lType = Types.INT;
@@ -253,9 +258,6 @@ public class SemanticAnalyzer {
         // left hand side is the same type as the right hand side type
         if(!lType.equals(rType))
             Reporter.Error(new IncompatibleValueException(lType,rType,stmt.GetLineNumber()));
-        // left value must be assignable i.e. a variable
-        if(!IsAssignable(left))
-            throw new Error("LHS not assignable " + left);
         return null;
     }
     private boolean IsAssignable(AST lhs)
@@ -284,7 +286,6 @@ public class SemanticAnalyzer {
         Symbol var = new Symbol(varID,varType);
         var.SetDclType(DclType.Variable);
         currentScope.AddSymbol(var);
-        Reporter.Log(varID + " added to scope at depth = " + currentScope.Depth);
         visitedVarDcls.add(node);
 
         return varType;
@@ -297,6 +298,20 @@ public class SemanticAnalyzer {
             Reporter.Error(new UndeclaredSymbolException(id + " not declared.", node.GetLineNumber()));
         if(identifier.dclType.equals(DclType.Function))
             Reporter.Error(new InvalidIdentifierException("Not a variable " + identifier.Name));
+        if(identifier.dclType.equals(DclType.Struct)){
+            if(node.children.size() == 0) {
+                return identifier.GetType();
+            }
+            else
+            {
+                StructSymbol structSymbol = (StructSymbol) currentScope.FindSymbol(identifier.CustomType);
+                IdExpr expr = (IdExpr) node.children.get(0);
+                identifier = structSymbol.FindSymbol(expr.ID);
+                if(identifier == null)
+                    Reporter.Error(new UndeclaredSymbolException(id + " not declared.", node.GetLineNumber()));
+                return identifier.GetType();
+            }
+        }
         return identifier.Type;
     }
 
@@ -306,7 +321,6 @@ public class SemanticAnalyzer {
             String paramID  = ((FParamDcl)param).Identifier;
             Types paramType = ((FParamDcl)param).Type;
             currentScope.AddSymbol(new Symbol(paramID, paramType));
-            Reporter.Log(paramID + " added to scope at depth = " + currentScope.Depth);
         }
     }
 
@@ -323,7 +337,7 @@ public class SemanticAnalyzer {
     }
 
     public void VisitFuncDcl(FuncDcl node){
-        if (currentScope.Depth > 0){
+        if (currentScope.GetDepth() > 0){
             Reporter.Error(new InvalidScopeException(node.GetVarDcl().Identifier + ": Functions can only be declared in global scope."));
             //throw new Error(node.GetValue() + ": functions can only be declared in global scope. ");
         }
@@ -347,12 +361,18 @@ public class SemanticAnalyzer {
     }
 
     public void VisitStructDcl(StructDcl node){
-        if (currentScope.Depth > 0){
+        if (currentScope.GetDepth() > 0){
             Reporter.Error(new InvalidScopeException(
                     node.GetVarDcl().Identifier + ": Structs can only be declared in global scope."));
         }
-        VisitVarDcl(node.GetVarDcl());
-        EnterScope(node);
+        String varID  = node.GetVarDcl().Identifier;
+        Types varType = node.GetVarDcl().GetType();
+        StructSymbol symbol = new StructSymbol(varID, varType);
+        currentScope.AddSymbol(symbol);
+        IScope prevScope = currentScope;
+        currentScope = symbol;
+        AnalyzeSemantics(node);
+        currentScope = prevScope;
     }
 
     public void EnterScope(AST node){

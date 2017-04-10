@@ -64,7 +64,7 @@ PrimaryExpression -> BooleanLiteral BuildValExpr
 PrimaryExpression -> CharacterLiteral BuildValExpr
 PrimaryExpression -> DigitalLiteral BuildValExpr
 PrimaryExpression -> ( Expression )
-ExpressionStatement -> Identifier IdentifierAppendantOptional BuildIdentifier ExpressionStatementPrime
+ExpressionStatement -> Identifier BuildIdentifier IdentifierAppendantOptional ExpressionStatementPrime
 ExpressionStatement -> Mode IOStatement BuildIOStmt CombineDown
 ExpressionStatementPrime -> is Expression BuildAssign CombineDown
 ExpressionStatementPrime -> ParameterList BuildFuncCall CombineDown
@@ -80,7 +80,7 @@ Parameter -> StringLiteral
 Parameter -> BooleanLiteral
 Parameter -> CharacterLiteral
 Parameter-> DigitalLiteral
-IdentifierAppendantOptional -> . Identifier
+IdentifierAppendantOptional -> . Identifier BuildIdentifier CombineDown
 IdentifierAppendantOptional -> [ IntegerLiteral ]
 IdentifierAppendantOptional -> EPSILON
 ParameterList -> ( ParameterListBody ) BuildActualParams
