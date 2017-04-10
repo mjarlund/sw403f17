@@ -33,7 +33,10 @@ public class Visualizer extends PApplet {
                       "void func2(number a, number b)\n"+
                         "book z \n" +
                         "z.c is 2\n" +
-                        "end func2\n ";
+                        "end func2\n " +
+                      "void func3(bool a, bool b)\n" +
+                        "bool c is a + b\n" +
+                      "end func3\n";
         String code1 = "text func1()\n" +
                        "pin a is 2\n" +
                         "a is digital read from a\n" +

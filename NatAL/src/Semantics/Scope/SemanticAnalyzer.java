@@ -217,9 +217,15 @@ public class SemanticAnalyzer {
         AST right = expr.GetRightExpr();
         Object lType = VisitValue(left.GetValue(),left);
         Object rType = VisitValue(right.GetValue(),right);
+
         // checks that the left hand side is the same as the right hand side
         if(!lType.equals(rType))
             Reporter.Error(new IncompatibleValueException(lType,rType,expr.GetLineNumber()));
+
+        // checks that the type is a valid type for binary expressions
+        if(lType.equals(Types.BOOL))
+            Reporter.Error(new InvalidTypeException(lType, expr.GetLineNumber()));
+
         return lType;
     }
     private Object VisitBoolExpr(BoolExpr expr)
