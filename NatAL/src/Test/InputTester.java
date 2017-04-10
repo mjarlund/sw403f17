@@ -11,43 +11,8 @@ import java.nio.file.Paths;
 /**
  * Created by Nikolaj on 3/16/2017.
  */
-public class InputTester {
-
-	public static void main(String args[])
-	{
-		InputTester.TestFiles();
-	}
-
-	public static void TestFiles()
-	{
-    	String currentFile;
-    	Scanner scanner;
-
-    	try {
-    		File folder = new File(System.getProperty("user.dir") + "/src/Test/TestPrograms/");
-    		File[] listOfFiles = folder.listFiles();
-
-    		for (File file : listOfFiles) {
-    			System.out.println("----------------" + file.getName() + "----------------");
-    		    if (file.isFile() && !file.getName().contains("fail")) {
-    		        currentFile = "";
-    		    	currentFile = readFile(System.getProperty("user.dir") + "/src/Test/TestPrograms/" + file.getName());
-    		    	scanner = new Scanner(currentFile);
-    		        try 
-    		        {
-						Parser parser = new Parser(scanner);
-						parser.ParseProgram();
-    		        }
-    		        catch (Exception e)//catch exception if any
-    		        {
-    		            System.out.println("Mistakes were made: " + e);
-    		        }
-    		    }
-    		}
-		} catch (Exception e){//Catch exception if any
-			  System.out.println("Error: " + e.getMessage());
-		}
-    }
+public class InputTester
+{
     public static String readFile(String path) throws IOException
     {
 	    byte[] encoded = Files.readAllBytes(Paths.get(path));
