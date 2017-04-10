@@ -6,7 +6,7 @@ pin break2 is 4
 
 digital write high to motor1
 analog write 1 to motor2
-text hejmor is digital read from motor1
+number hejmor is digital read from motor1
 number hejfar is analog read from motor2
 hejmor is digital read from motor2
 end main
