@@ -135,7 +135,7 @@ public class SemanticAnalyzer {
                 Types exprType = (Types)expr;
                 if(stmt.GetMode().equals(Modes.DIGITAL) && !exprType.equals(Types.DIGITAL))
                     Reporter.Error(new IncompatibleValueException("Incompatible digital mode or expression on line " + stmt.GetLineNumber()));
-                if(stmt.GetMode().equals(Modes.ANALOG) && !exprType.equals(Types.ANALOG))
+                if(stmt.GetMode().equals(Modes.ANALOG) && !exprType.equals(Types.INT))
                     Reporter.Error(new IncompatibleValueException("Incompatible analog mode or expression on line " + stmt.GetLineNumber()));
             }
         }

@@ -28,16 +28,16 @@ public class Visualizer extends PApplet {
 
         /* Scanner and parser */
         String code = "structure book\n" +
-                        "number a\n" +
+                        "number c\n" +
                         "end book\n" +
                       "void func2(number a, number b)\n"+
                         "book z \n" +
-                        "z.a is 2\n" +
+                        "z.c is 2\n" +
                         "end func2\n ";
         String code1 = "text func1()\n" +
                        "pin a is 2\n" +
                         "a is digital read from a\n" +
-                         "digital write high to a\n" +
+                         "analog write 2 to a\n" +
                         "boolean b is true and false\n" +
                         "return \"a\"\n" +
                         "end func1\n" +
