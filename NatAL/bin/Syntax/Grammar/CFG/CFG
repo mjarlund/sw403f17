@@ -27,7 +27,7 @@ Expression -> AssignmentExpressionPrime AssignmentExpression
 AssignmentExpression -> is AssignmentExpressionPrime BuildAssign AssignmentExpression
 AssignmentExpression -> EPSILON
 AssignmentExpressionPrime -> NotExpressionPrime NotExpression
-AssugnmentExpressionPrime -> IOExpression
+AssignmentExpressionPrime -> IOExpression
 NotExpression -> not NotExpressionPrime BuildBoolExpr NotExpression
 NotExpression -> EPSILON
 NotExpressionPrime -> OrExpressionPrime OrExpression
@@ -52,7 +52,7 @@ MultiplicativeExpression -> * PrimaryExpression BuildBinaryExpr MultiplicativeEx
 MultiplicativeExpression -> / PrimaryExpression BuildBinaryExpr MultiplicativeExpression
 MultiplicativeExpression -> EPSILON
 MultiplicativeExpressionPrime -> UnaryExpression
-IOExpression -> Mode read from Identifier BuildIdentifier BuildIOStatement CombineDown
+IOExpression -> Mode read from Identifier BuildIdentifier BuildIOExpr
 IOExpression -> EPSILON
 UnaryExpression -> - PrimaryExpression BuildUnaryExpr
 UnaryExpression -> PrimaryExpression
