@@ -18,6 +18,7 @@ import Exceptions.DuplicatedSymbolException;
 import Exceptions.IncompatibleValueException;
 import Exceptions.InvalidIdentifierException;
 import Exceptions.InvalidScopeException;
+import Exceptions.InvalidTypeException;
 import Exceptions.MissingProductionsException;
 import Exceptions.UndeclaredSymbolException;
 import Exceptions.UnexpectedTokenException;
@@ -157,7 +158,11 @@ public class ScopeTest {
 			{
 				thrown = true;
 			}
-			assertEquals(true, thrown);
+			catch (InvalidTypeException ex)
+			{
+				thrown = true;
+			}
+			assertEquals(true, thrown);			
 		}		
 	}
 	
