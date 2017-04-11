@@ -7,9 +7,13 @@ import Syntax.Tokens.Token;
  */
 public class UnaryExpr extends Expr
 {
+    Token operator;
+    public Token GetOperator () { return operator; }
     public UnaryExpr(Token op, Expr valExpr)
     {
+        operator = op;
         children.add(valExpr);
+
         SetValue("UnaryExpr");
     }
     public Expr GetValExpr()

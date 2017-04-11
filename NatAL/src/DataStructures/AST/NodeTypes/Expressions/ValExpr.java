@@ -9,12 +9,12 @@ import Syntax.Tokens.Token;
 public class ValExpr extends Expr
 {
     public ValExpr(Types type, Token literalValue)
-
     {
-        LiteralValue = literalValue;
         Type = type;
+        LiteralValue = literalValue;
         SetValue("ValExpr");
     }
+
     public ValExpr(Token literalValue)
     {
         LiteralValue = literalValue;

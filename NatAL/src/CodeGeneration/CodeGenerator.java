@@ -6,6 +6,7 @@ import DataStructures.AST.NodeTypes.Expressions.*;
 import DataStructures.AST.NodeTypes.Statements.*;
 import Utilities.Reporter;
 
+import javax.swing.plaf.nimbus.State;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,7 +20,7 @@ import java.io.*;
 
 // TODO: Nogle steder bruger vi ArrayList andre steder List. Det skal både rettes her og inde i AST-noderene
 // TODO: Flyt nogle Get-funktioner op i superklassen, så som GetStatement in de forskellige Stmt-klasser.
-// TODO: Mere sigende navne når man skal gette noget fra de forskellige AST-noder,
+// TODO: Mere sigende navne / konsistente navne når man skal gette noget fra de forskellige AST-noder. Plus ikke alle AST-node har getter-metoder
 
 public class CodeGenerator
 {
@@ -31,78 +32,88 @@ public class CodeGenerator
         Emit("void setup ()");
         Emit("{");
         Emit("}");
+        //Statement(programTree);
+        /*Declaration((StructDcl) programTree.children.get(0));
+        Declaration((FuncDcl) programTree.children.get(1));
+        Declaration((FuncDcl) programTree.children.get(2));*/
     }
 
     // region <Code Generation - Declarations>
 
-    public void VisitDcl(Dcl AST)
+    public void Declaration (Dcl AST)
     {
         Emit("VisitDcl - Not implemented");
     }
 
-    public void VisitFParamDcl (FParamDcl AST)
+    public void Declaration (FParamDcl AST)
     {
         Emit("VisitFParamDcl - Not implemented");
     }
 
-    public void VisitFParamsDcl (FParamsDcl AST)
+    public void Declaration (FParamsDcl AST)
     {
         Emit("VisitFParamsDcl - Not implemented");
     }
 
     // TODO Still need separation with "," in parameters
     // TODO Need separation with " " in parameters between type and identifier
-    public void VisitFuncDcl (FuncDcl AST)
+    public void Declaration (FuncDcl AST)
     {
         String returnType = AST.GetVarDcl().GetType().toString();
-        String id = AST.GetVarDcl().Identifier;
-        String parameters = null;
+        String ID = AST.GetVarDcl().Identifier;
+        String parameters = "";
 
         for (FParamDcl param : AST.GetFormalParamsDcl().GetFParams())
-            parameters += param.Type + param.Identifier;
-
-        if (parameters == null)
-            // DO what?
+        {
+            parameters += param.Type + " " + param.Identifier + ",";
+        }
 
         // Emit code for the function declaration
-        Emit(returnType + " " + id + "(" + parameters + ")");
-
+        Emit(returnType + " " + ID + "(" + parameters + ")");
+        Emit("{");
         // Generate code for the block statement
-        VisitBlockStmt(AST.GetFuncBlockStmt());
+        Statement(AST.GetFuncBlockStmt());
+
+        Emit("}");
     }
 
-    public void VisitListDcl (ListDcl AST)
+    public void Declaration (ListDcl AST)
     {
         Emit("VisitListDcl - Not implemented");
     }
-    public void VisitStructDcl (StructDcl AST)
+    public void Declaration (StructDcl AST)
     {
         Emit("VisitStructDcl - Not implemented");
     }
 
-    public void VisitStructVarDcl (StructVarDcl AST)
+    public void Declaration (StructVarDcl AST)
     {
         Emit("VisitStructVarDcl - Not implemented");
     }
 
-    public void VisitVarDcl (VarDcl AST)
+    public void Declaration (VarDcl AST)
     {
         Emit("VisitVarDcl - Not implemented");
+
+     //   Emit(AST.GetType().toString() + " " + AST.Identifier + "=" + AST.SOMETHING);
     }
 
     // endregion
 
     // region <Code Generation - Expressions>
 
-    public void VisitBinaryOPExpr(BinaryOPExpr AST)
+    public void Expression (BinaryOPExpr AST)
     {
         Emit(AST.GetLeftExpr() + AST.Operation.toString() + AST.GetRightExpr());
     }
 
-    public void FuncCallExpr (FuncCallExpr AST)
+    // TODO Mangler stadig "," seperator mellem parameter
+    public void Expression (FuncCallExpr AST)
     {
+        IdExpr identifier = AST.GetFuncId();
         ArgsExpr arguments = AST.GetFuncArgs();
-        String instruction = AST.GetFuncId().ID + "(";
+
+        String instruction = identifier + "(";
 
         for (ArgExpr a : arguments.GetArgs())
             instruction += a.GetArg();
@@ -111,69 +122,74 @@ public class CodeGenerator
         Emit(instruction);
     }
 
-    public void VisitUnaryExpr (UnaryExpr AST)
+    // TODO Hvordan ved vi om operatoren kommer før eller efter identifier
+    // TODO undersøg om C skelner mellem i++ og ++i. Det mener jeg den gør i nogle tilfælde
+    public void Expression (UnaryExpr AST)
     {
-        Emit("VisitUnaryExpr - Not implemented");
+        Emit(AST.GetOperator() + AST.GetValExpr().GetValue());
     }
 
     // endregion
 
     // region <Code Generation - Statements>
 
-    public void VisitAssignStmt (AssignStmt AST)
+    // TODO Giv AssignStmt mere signende funktioner end "GetLeft" og "GetRight"
+    public void Statement (AssignStmt AST)
     {
         Emit(AST.GetLeft() + " = " + AST.GetRight());
     }
 
-    public void VisitBlockStmt (BlockStmt AST)
+    public void Statement (BlockStmt AST)
     {
         // Every block begins with a '{'
-        String instruction = "{";
+        String instruction = "";
 
-        List<Stmt> statements = AST.GetStatements();
+       // List<AST> statements = AST.GetStatements();
 
-        for(Stmt s : statements)
+        /*for(AST s : statements)
         {
             VisitStmt(s);
-        }
+        }*/
         // Magic
 
+        instruction += "IMAGINARY STMT HERE";
 
-
-        instruction += "}";
+       // instruction += "}";
 
         Emit(instruction);
         // Every block ends with a '}'
     }
 
-    public void VisitElseStmt (ElseStmt AST)
+    public void Statement (ElseStmt AST)
     {
         Emit("else");
-        VisitStmt(AST.GetStatement());
+        Statement(AST.GetStatement());
+        Emit("end else");
     }
 
-    public void VisitEmptyStmt (EmptyStmt AST)
+    public void Statement (EmptyStmt AST)
     {
         Emit("VisitEmptyStmt - Not implemented");
     }
 
-    public void VisitForEachStmt (ForEachStmt AST)
+    public void Statement (ForEachStmt AST)
     {
         Emit("VisitForEachStmt - Not implemented");
     }
 
-    public void VisitIfStmt (IfStmt AST)
+    public void Statement (IfStmt AST)
     {
         Emit("if(" + AST.GetCondition() + ")");
-        VisitBlockStmt(AST.GetBlock());
+        Statement(AST.GetBlock());
+        Emit("end if");
     }
 
-    public void VisitIOStmt (IOStmt AST)
+    public void Statement (IOStmt AST)
     {
         Emit("VisitIOStmt - Not implemented");
     }
 
-    public void VisitProcCallStmt (ProcCallStmt AST)
+    public void Statement (ProcCallStmt AST)
     {
         String ID = AST.GetIdentifier().toString();
         ArgsExpr actualParams = AST.GetActualParameters();
@@ -186,13 +202,52 @@ public class CodeGenerator
         }
     }
 
-    public void VisitReturnStmt (ReturnStmt AST)
+    public void Statement (ReturnStmt AST)
     {
         Emit("return " + AST.GetReturnExpr() + ";");
     }
 
-    // TODO this is bad ¯\_(ツ)_/¯ Eventuelt brug method overloading i stedet for
-    public void VisitStmt (Stmt AST)
+    public void Statement (UntilStmt AST)
+    {
+        Emit("VisitUntilStmt - Not implemented");
+    }
+
+    // endregion
+
+    /* Adds an Arduino C instruction to a list */
+    public void Emit (String instruction)
+    {
+        instructions.add(instruction);
+
+        Reporter.Log("Emitting: " + instruction);
+    }
+
+    /* Writes all Arduino C instructions to a file */
+    public void ToFile ()
+    {
+        try{
+            PrintWriter writer = new PrintWriter("the-file-name.txt", "UTF-8");
+            writer.println("The first line");
+            writer.println("The second line");
+            writer.close();
+        } catch (IOException e) {
+            // do something
+        }
+
+        /*for(String s : instructions)
+        {
+            // Magic
+        }*/
+    }
+}
+
+
+
+
+
+
+// TODO this is bad ¯\_(ツ)_/¯ Eventuelt brug method overloading i stedet for
+    /*public void VisitStmt (AST AST)
     {
         if (AST instanceof AssignStmt)
         {
@@ -234,36 +289,8 @@ public class CodeGenerator
         {
             VisitUntilStmt((UntilStmt) AST);
         }
-    }
-
-    public void VisitUntilStmt (UntilStmt AST)
-    {
-        Emit("VisitUntilStmt - Not implemented");
-    }
-
-    // endregion
-
-    /* Adds an Arduino C instruction to a list */
-    public void Emit (String instruction)
-    {
-        instructions.add(instruction);
-    }
-
-    /* Writes all Arduino C instructions to a file */
-    public void ToFile ()
-    {
-        try{
-            PrintWriter writer = new PrintWriter("the-file-name.txt", "UTF-8");
-            writer.println("The first line");
-            writer.println("The second line");
-            writer.close();
-        } catch (IOException e) {
-            // do something
-        }
-
-        /*for(String s : instructions)
+        else
         {
-            // Magic
-        }*/
-    }
-}
+            Reporter.Log("RIP");
+        }
+    }*/

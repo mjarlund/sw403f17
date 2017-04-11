@@ -1,5 +1,6 @@
 package DataStructures.AST.NodeTypes.Declarations;
 
+import CodeGeneration.CodeGenerator;
 import DataStructures.AST.NodeTypes.Statements.BlockStmt;
 
 /**
@@ -15,6 +16,9 @@ public class FuncDcl extends Dcl {
         children.add(parameters);
         children.add(block);
         SetValue("FuncDcl");
+
+        //CodeGenerator c = new CodeGenerator();
+        //c.Declaration(this);
     }
     private String endIdentifier;
     public void SetEndIdentifier(String endId)

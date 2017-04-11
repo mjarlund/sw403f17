@@ -7,7 +7,7 @@ import java.util.ArrayList;
 /**
  * Created by Anders Brams on 3/21/2017.
  */
-public class FParamsDcl extends AST
+public class FParamsDcl extends Dcl
 {
     public FParamsDcl()
     {
