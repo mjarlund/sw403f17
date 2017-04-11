@@ -1,5 +1,6 @@
 package Visualizing;
 
+import CodeGeneration.CodeGenerator;
 import DataStructures.AST.AST;
 import Semantics.Scope.SemanticAnalyzer;
 import Syntax.Parser.Parser;
@@ -53,6 +54,9 @@ public class Visualizer extends PApplet {
         SemanticAnalyzer sm = new SemanticAnalyzer();
         sm.AnalyzeSemantics(programTree);
         System.out.println("No variables out of scope!");
+
+        CodeGenerator codeGen = new CodeGenerator(programTree);
+
         BuildVisualTree(programTree);
         background(255);
         if (visTree != null){

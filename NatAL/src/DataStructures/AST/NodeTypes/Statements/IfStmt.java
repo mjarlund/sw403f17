@@ -17,7 +17,7 @@ public class IfStmt extends Stmt
     {
         return (Expr)children.get(0);
     }
-    public BlockStmt GetBlcok()
+    public BlockStmt GetBlock()
     {
         return (BlockStmt) children.get(1);
     }
