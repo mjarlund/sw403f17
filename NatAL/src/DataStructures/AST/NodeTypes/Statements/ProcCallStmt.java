@@ -13,4 +13,6 @@ public class ProcCallStmt extends Stmt
         children.add(funcIdentifier);
         children.add(args);
     }
-}
+
+    public IdExpr GetIdentifier () {return (IdExpr)children.get(0);}
+    public ArgsExpr GetActualParameters () {return (ArgsExpr)children.get(1);}}

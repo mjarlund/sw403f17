@@ -1,5 +1,7 @@
 package DataStructures.AST.NodeTypes.Expressions;
 
+import CodeGeneration.CodeGenerator;
+
 /**
  * Created by Anders Brams on 3/21/2017.
  */
