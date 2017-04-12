@@ -4,6 +4,8 @@ import DataStructures.AST.AST;
 import DataStructures.AST.NodeTypes.Declarations.*;
 import DataStructures.AST.NodeTypes.Expressions.*;
 import DataStructures.AST.NodeTypes.Statements.*;
+import Syntax.Parser.Parser;
+import Syntax.Scanner.Scanner;
 import Utilities.Reporter;
 
 import javax.swing.plaf.nimbus.State;
@@ -164,7 +166,6 @@ public class CodeGenerator
     {
         Emit("else");
         Statement(AST.GetStatement());
-        Emit("end else");
     }
 
     public void Statement (EmptyStmt AST)
@@ -181,7 +182,6 @@ public class CodeGenerator
     {
         Emit("if(" + AST.GetCondition() + ")");
         Statement(AST.GetBlock());
-        Emit("end if");
     }
 
     public void Statement (IOStmt AST)
@@ -209,7 +209,8 @@ public class CodeGenerator
 
     public void Statement (UntilStmt AST)
     {
-        Emit("VisitUntilStmt - Not implemented");
+        Emit("while(!("+AST.GetCondition()+"))");
+        Statement(AST.GetBlock());
     }
 
     // endregion
@@ -227,17 +228,32 @@ public class CodeGenerator
     {
         try{
             PrintWriter writer = new PrintWriter("the-file-name.txt", "UTF-8");
-            writer.println("The first line");
-            writer.println("The second line");
+            for(String s : instructions)
+            {
+                writer.println(s);
+            }
             writer.close();
         } catch (IOException e) {
             // do something
         }
+    }
+    public static void main(String args[])
+    {
+        String code = "text func1()\n" +
+                "pin a is 2\n" +
+                "a is digital read from a\n" +
+                "analog write 2 to a\n" +
+                "boolean b is true and false\n" +
+                "return \"a\"\n" +
+                "end func1\n" +
+                "void func2()\n" +
+                "text b is func1()\n end func2\n";
+        Scanner sc = new Scanner(code);
+        Parser parser = new Parser(sc);
+        AST programTree = parser.ParseProgram();
 
-        /*for(String s : instructions)
-        {
-            // Magic
-        }*/
+        new CodeGenerator(programTree);
+
     }
 }
 
