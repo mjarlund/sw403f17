@@ -32,8 +32,9 @@ public class CodeGenerator implements IVisitor
         // ¯\_(ツ)_/¯
         Emit("void setup ()");
         Emit("{");
-        Emit("}");
         VisitChildren(programTree);
+        Emit("}");
+
     }
 
 
@@ -59,10 +60,6 @@ public class CodeGenerator implements IVisitor
         //Statement(AST.GetStatement());
     }
 
-    public void Statement (ForEachStmt AST)
-    {
-        Emit("VisitForEachStmt - Not implemented");
-    }
 
 
 
@@ -144,13 +141,19 @@ public class CodeGenerator implements IVisitor
     public Object Visit(IfStmt stmt) {
 
         Emit("if(" + stmt.GetCondition() + ")");
-        //Statement(stmt.GetBlock());
+        VisitChildren(stmt.GetBlock());
         return null;
     }
 
     public Object Visit(UntilStmt stmt) {
         Emit("while(!("+stmt.GetCondition()+"))");
-        //Statement(stmt.GetBlock());
+        VisitChildren(stmt.GetBlock());
+        return null;
+    }
+
+    @Override
+    public Object Visit(ForEachStmt stmt) {
+        Emit("VisitForEachStmt - Not implemented");
         return null;
     }
 
@@ -237,7 +240,7 @@ public class CodeGenerator implements IVisitor
         Emit(returnType + " " + ID + "(" + parameters + ")");
 
         // Generate code for the block statement
-        //Statement(node.GetFuncBlockStmt());
+        VisitChildren(node.GetFuncBlockStmt());
         return null;
     }
 
@@ -264,6 +267,7 @@ public class CodeGenerator implements IVisitor
 
         for (AST node : statements)
         {
+            VisitChildren(node);
             //VisitNode(node);
         }
 
