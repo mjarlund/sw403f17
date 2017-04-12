@@ -16,12 +16,9 @@ import org.junit.runners.Parameterized.Parameters;
 import DataStructures.AST.AST;
 import Exceptions.DuplicatedSymbolException;
 import Exceptions.IncompatibleValueException;
-import Exceptions.InvalidIdentifierException;
 import Exceptions.InvalidScopeException;
 import Exceptions.InvalidTypeException;
-import Exceptions.MissingProductionsException;
 import Exceptions.UndeclaredSymbolException;
-import Exceptions.UnexpectedTokenException;
 import Semantics.Scope.SemanticAnalyzer;
 import Syntax.Parser.Parser;
 import Syntax.Scanner.Scanner;
@@ -77,7 +74,7 @@ public class ScopeTest {
 				Parser parser = new Parser(testScanner);
 				AST programTree = parser.ParseProgram();
 			    SemanticAnalyzer sm = new SemanticAnalyzer();
-			    sm.AnalyzeSemantics(programTree);
+			    sm.VisitChildren(programTree);
 			} 
 			catch (Throwable ex)
 			{					
@@ -140,7 +137,7 @@ public class ScopeTest {
 				Parser parser = new Parser(testScanner);
 				AST programTree = parser.ParseProgram();
 			    SemanticAnalyzer sm = new SemanticAnalyzer();
-			    sm.AnalyzeSemantics(programTree);
+			    sm.VisitChildren(programTree);
 			} 
 			catch (UndeclaredSymbolException ex)
 			{					

@@ -52,7 +52,7 @@ public class Visualizer extends PApplet {
         AST programTree = parser.ParseProgram();
 
         SemanticAnalyzer sm = new SemanticAnalyzer();
-        sm.AnalyzeSemantics(programTree);
+        sm.VisitChildren(programTree);
         System.out.println("No variables out of scope!");
 
         CodeGenerator codeGen = new CodeGenerator(programTree);

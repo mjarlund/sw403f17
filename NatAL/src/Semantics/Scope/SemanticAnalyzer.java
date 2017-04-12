@@ -7,15 +7,17 @@ import DataStructures.AST.NodeTypes.Modes;
 import DataStructures.AST.NodeTypes.Statements.*;
 import DataStructures.AST.NodeTypes.Types;
 import Exceptions.*;
+import Utilities.IVisitor;
 import Utilities.Reporter;
 import Utilities.TypeConverter;
+import Utilities.VisitorDriver;
 
 import java.util.ArrayList;
 
 /**
  * Created by Anders Brams on 3/21/2017.
  */
-public class SemanticAnalyzer {
+public class SemanticAnalyzer implements IVisitor{
 
     IScope currentScope = new Scope();
     ArrayList<AST> visitedVarDcls = new ArrayList<>();
@@ -23,6 +25,7 @@ public class SemanticAnalyzer {
         return currentScope.FindSymbol(identifier);
     }
 
+    private VisitorDriver visitValue = new VisitorDriver(this);
     // Made changes on 27/03
     /* Creates a new scope as a child of the current */
     public void OpenScope(){
@@ -41,77 +44,23 @@ public class SemanticAnalyzer {
      * so only need to worry about VarDcls. Called recursively for all
      * nodes, opening and closing scopes every time a code-block or a
      * function declaration is entered or exited, respectively. */
-    public void AnalyzeSemantics(AST root){
+    public void VisitChildren(AST root){
         for (AST child : root.children) {
             try {
                 String switchValue;
                 switchValue = (child.GetValue() != null) ? child.GetValue() : ((IdExpr) child).ID;
-                Visit(switchValue, child);
+                visitValue.Visit(switchValue, child);
             } catch (ClassCastException e){
                 //System.out.println(e.getCause().toString());
             }
         }
     }
-    private Object Visit(String astName, AST child)
-    {
-        switch (astName){
-            case "VarDcl": /* Add it to this scope (works for FuncDcls too) */
-                return Visit((VarDcl) child);
-            case "IdExpr": /* Just check whether or not it's there */
-                return Visit((IdExpr) child);
-            case "BlockStmt": /* Open a new scope, continue */
-                EnterScope(child);
-                break;
-            case "FParamsDcl": /* Used as declarations, add them to that scope */
-                Visit((FParamsDcl) child);
-                break;
-            case "ArgsExpr": /* Not much different from IDs */
-                Visit((ArgsExpr) child);
-                break;
-            case "FuncDcl": /* Only in global scope. Open scope so its formal parameters
-                                 * are not seen as symbols in the global scope. */
-                Visit((FuncDcl) child);
-                break;
-            case "ValExpr":
-                return Visit((ValExpr) child);
-            case "AssignStmt":
-                Visit((AssignStmt) child);
-                break;
-            case "BinaryOPExpr":
-                return Visit((BinaryOPExpr)child);
-            case "UnaryExpr":
-                return Visit((UnaryExpr)child);
-            case "BoolExpr":
-                return Visit((BoolExpr)child);
-            case "FuncCallExpr":
-                return Visit((FuncCallExpr)child);
-            case "ReturnStmt":
-                Visit((ReturnStmt)child);
-                break;
-            case "IfStmt":
-                Visit((IfStmt)child);
-                break;
-            case "UntilStmt":
-                Visit((UntilStmt)child);
-                break;
-            case "StructDcl":
-                Visit((StructDcl) child);
-                break;
-            case "IOStmt":
-                Visit((IOStmt)child);
-                break;
-            case "IOExpr":
-                return Visit((IOExpr) child);
-            case "StructVarDcl":
-                Visit((StructVarDcl) child);
-            default:
-                AnalyzeSemantics(child);
-        }
-
+    public Object Visit(BlockStmt block){
+        EnterScope(block);
         return null;
     }
 
-    private Object Visit(StructVarDcl dcl){
+    public Object Visit(StructVarDcl dcl){
         if (currentScope.FindSymbol(dcl.GetStructType().ID) == null){
             Reporter.Error(new UndeclaredSymbolException("Struct type \" " + dcl.GetStructType().ID + " \" not declared. "));
         } else {
@@ -123,14 +72,14 @@ public class SemanticAnalyzer {
         return null;
     }
 
-    private Object Visit(IOStmt stmt)
+    public Object Visit(IOStmt stmt)
     {
         Types type = (Types) Visit(stmt.GetPin());
         if(!type.equals(Types.PIN))
             Reporter.Error(new IncompatibleValueException("Must be a pin type on line " + stmt.GetLineNumber()));
         if(stmt.GetWriteVal() != null)
         {
-            Object expr = Visit(stmt.GetWriteVal().GetValue(), stmt.GetWriteVal());
+            Object expr = visitValue.Visit(stmt.GetWriteVal().GetValue(), stmt.GetWriteVal());
             System.out.println(((ValExpr)stmt.GetWriteVal()).Type);
             if(expr==null)
                 Reporter.Error(new ArgumentsException("Missing expression on line " + stmt.GetLineNumber()));
@@ -147,7 +96,7 @@ public class SemanticAnalyzer {
         return null;
     }
     
-    private Object Visit(IOExpr expr)
+    public Object Visit(IOExpr expr)
     {
         Types type = (Types) Visit(expr.GetPin());
         if(!type.equals(Types.PIN))
@@ -155,32 +104,32 @@ public class SemanticAnalyzer {
         return type;
     }
     
-    private Object Visit(IfStmt stmt)
+    public Object Visit(IfStmt stmt)
     {
         Expr condition = stmt.GetCondition();
         // if condition check must result in a bool expression
         if(!(condition instanceof BoolExpr))
             Reporter.Error(new IncompatibleValueException("Expected boolean expression in " + stmt + " on line " + stmt.GetLineNumber()));
-        AnalyzeSemantics(stmt);
+        VisitChildren(stmt);
         
         return null;
     }
     
-    private Object Visit(UntilStmt stmt)
+    public Object Visit(UntilStmt stmt)
     {
         Expr condition = stmt.GetCondition();
         // until condition check must result in a bool expression
         if(!(condition instanceof BoolExpr))
             Reporter.Error(new IncompatibleValueException("Expected boolean expression in " + stmt + " on line " + stmt.GetLineNumber()));
-        AnalyzeSemantics(stmt);
+        VisitChildren(stmt);
         
         return null;
     }
-    private Object Visit(ReturnStmt stmt)
+    public Object Visit(ReturnStmt stmt)
     {
         Expr returnValue = stmt.GetReturnExpr();
         // Get the value after the return stmt
-        Object returnedType = Visit(returnValue.GetValue(), returnValue);
+        Object returnedType = visitValue.Visit(returnValue.GetValue(), returnValue);
         FuncDcl func = (FuncDcl) stmt.GetParent().GetParent();
         // Get function return type
         Types returnType = func.GetVarDcl().Type;
@@ -192,7 +141,7 @@ public class SemanticAnalyzer {
     }
     
     /* Checks symbol table for function identifier and checks correct usage of arguments */
-    private Object Visit(FuncCallExpr expr)
+    public Object Visit(FuncCallExpr expr)
     {
         IdExpr funcId = expr.GetFuncId();
         Symbol identifier = FindSymbol(funcId.ID);
@@ -202,7 +151,7 @@ public class SemanticAnalyzer {
         if(!identifier.dclType.equals( DclType.Function))
             Reporter.Error(new InvalidIdentifierException("Not used as a function call"));
         // Checks that args are used declared before usage
-        Visit(expr.GetFuncArgs().GetValue(),expr.GetFuncArgs());
+        visitValue.Visit(expr.GetFuncArgs().GetValue(),expr.GetFuncArgs());
         ArrayList<ArgExpr> args = expr.GetFuncArgs().GetArgs();
         if(identifier.TypeSignature.size()>0 || args.size()>0)
         {
@@ -227,12 +176,12 @@ public class SemanticAnalyzer {
         // returns function return type
         return identifier.Type;
     }
-    private Object Visit(BinaryOPExpr expr)
+    public Object Visit(BinaryOPExpr expr)
     {
         AST left = expr.GetLeftExpr();
         AST right = expr.GetRightExpr();
-        Object lType = Visit(left.GetValue(),left);
-        Object rType = Visit(right.GetValue(),right);
+        Object lType = visitValue.Visit(left.GetValue(),left);
+        Object rType = visitValue.Visit(right.GetValue(),right);
 
         // checks that the left hand side is the same as the right hand side
         if(!lType.equals(rType))
@@ -244,23 +193,23 @@ public class SemanticAnalyzer {
 
         return lType;
     }
-    private Object Visit(BoolExpr expr)
+    public Object Visit(BoolExpr expr)
     {
         AST left = expr.GetLeftExpr();
         AST right = expr.GetRightExpr();
-        Object lType = Visit(left.GetValue(),left);
-        Object rType = Visit(right.GetValue(),right);
+        Object lType = visitValue.Visit(left.GetValue(),left);
+        Object rType = visitValue.Visit(right.GetValue(),right);
         // checks that the left hand side type is the same as the right hand side type
         if(!lType.equals(rType))
             Reporter.Error(new IncompatibleValueException(lType,rType,expr.GetLineNumber()));
         return lType;
     }
-    private Object Visit(AssignStmt stmt)
+    public Object Visit(AssignStmt stmt)
     {
         AST left = stmt.GetLeft();
         AST right = stmt.GetRight();
-        Object lType = Visit(left.GetValue(),left);
-        Object rType = Visit(right.GetValue(),right);
+        Object lType = visitValue.Visit(left.GetValue(),left);
+        Object rType = visitValue.Visit(right.GetValue(),right);
         // left value must be assignable i.e. a variable
         if(!IsAssignable(left))
             throw new Error("LHS not assignable " + left);
@@ -275,7 +224,7 @@ public class SemanticAnalyzer {
         return null;
     }
     
-    private boolean IsAssignable(AST lhs)
+    public boolean IsAssignable(AST lhs)
     {
         // left hand side must be a variable
         if(lhs instanceof IdExpr || lhs instanceof VarDcl)
@@ -283,18 +232,18 @@ public class SemanticAnalyzer {
         return false;
     }
     
-    private Object Visit(UnaryExpr expr)
+    public Object Visit(UnaryExpr expr)
     {
-        Object res = Visit(expr.GetValExpr().GetValue(),expr.GetValExpr());
+        Object res = visitValue.Visit(expr.GetValExpr().GetValue(),expr.GetValExpr());
         return res;
     }
     
-    private Object Visit(ValExpr lit)
+    public Object Visit(ValExpr lit)
     {
         return TypeConverter.TypetoTypes(lit.LiteralValue);
     }
 
-    private Object Visit(VarDcl node){
+    public Object Visit(VarDcl node){
         for (AST visited : visitedVarDcls){
             if (visited == node) return null;
         }
@@ -351,7 +300,7 @@ public class SemanticAnalyzer {
                 Reporter.Error(new UndeclaredSymbolException(argID + " not declared, but is used as an argument."));
                 //throw new Error(argID + " not declared, but is used as an argument. ");
             }*/
-            Visit(argID,arg.GetArg());
+            visitValue.Visit(argID,arg.GetArg());
         }
         
         return null;
@@ -394,7 +343,7 @@ public class SemanticAnalyzer {
         currentScope.AddSymbol(symbol);
         IScope prevScope = currentScope;
         currentScope = symbol;
-        AnalyzeSemantics(node);
+        VisitChildren(node);
         currentScope = prevScope;
         
         return null;
@@ -402,7 +351,7 @@ public class SemanticAnalyzer {
 
     public void EnterScope(AST node){
         OpenScope();
-        AnalyzeSemantics(node);
+        VisitChildren(node);
         CloseScope();
     }
 }
