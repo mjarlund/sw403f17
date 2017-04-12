@@ -54,6 +54,9 @@ public class VisitorDriver
             case "IfStmt":
                 visit.Visit((IfStmt)child);
                 break;
+            case "ForEachStmt":
+                visit.Visit((ForEachStmt)child);
+                break;
             case "UntilStmt":
                 visit.Visit((UntilStmt)child);
                 break;

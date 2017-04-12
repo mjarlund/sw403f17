@@ -125,6 +125,13 @@ public class SemanticAnalyzer implements IVisitor{
         
         return null;
     }
+
+    public Object Visit(ForEachStmt stmt) {
+
+        VisitChildren(stmt);
+        return null;
+    }
+
     public Object Visit(ReturnStmt stmt)
     {
         Expr returnValue = stmt.GetReturnExpr();

@@ -22,6 +22,8 @@ public interface IVisitor
 
     Object Visit(UntilStmt stmt);
 
+    Object Visit(ForEachStmt stmt);
+
     Object Visit(ReturnStmt stmt);
 
     Object Visit(FuncCallExpr expr);

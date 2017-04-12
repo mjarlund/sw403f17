@@ -28,16 +28,13 @@ public class Visualizer extends PApplet {
         textSize(12);
 
         /* Scanner and parser */
-        String code = "structure book\n" +
-                        "number c\n" +
-                        "end book\n" +
-                      "void func2(number a, number b)\n"+
-                        "book z \n" +
-                        "z.c is 2\n" +
-                        "end func2\n " +
-                      "void func3(boolean a, boolean b)\n" +
-                        "boolean c is a and b\n" +
-                      "end func3\n";
+        String code =   "void main()\n" +
+                        "list of number a is (1,2)\n" +
+                        "number sum\n" +
+                        "foreach(number num in a)\n" +
+                        "sum is sum + num\n" +
+                        "end foreach\n" +
+                        "end main\n";
         String code1 = "text func1()\n" +
                        "pin a is 2\n" +
                         "a is digital read from a\n" +
