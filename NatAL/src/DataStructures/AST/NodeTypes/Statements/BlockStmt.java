@@ -1,7 +1,9 @@
 package DataStructures.AST.NodeTypes.Statements;
 
+import java.util.ArrayList;
 import java.util.List;
 import DataStructures.AST.AST;
+import DataStructures.AST.NodeTypes.Declarations.VarDcl;
 import Utilities.Reporter;
 
 /**
@@ -25,7 +27,7 @@ public class BlockStmt extends Stmt
 
     public List<AST> GetStatements ()
     {
-        List<AST> stmts = null;
+        List<AST> stmts = new ArrayList<AST>();
         for(AST a : children)
         {
             stmts.add(a);
