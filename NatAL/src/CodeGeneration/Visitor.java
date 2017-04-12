@@ -38,7 +38,7 @@ public interface Visitor
     Object VisitForEachStmt(ForEachStmt AST, Object o);
     Object VisitIfStmt(IfStmt AST, Object o);
     Object VisitIOStmt(IOExpr AST, Object o);
-    Object VisitProcCallStmt(ProcCallStmt AST, Object o);
+    //Object VisitProcCallStmt(ProcCallStmt AST, Object o);
     Object VisitReturnStmt(ReturnStmt AST, Object o);
     Object VisitStmt(Stmt AST, Object o);
     Object VisitUntilStmt(UntilStmt AST, Object o);

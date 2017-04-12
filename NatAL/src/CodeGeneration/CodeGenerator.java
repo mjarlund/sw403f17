@@ -189,7 +189,7 @@ public class CodeGenerator
         Emit("VisitIOStmt - Not implemented");
     }
 
-    public void Statement (ProcCallStmt AST)
+/*    public void Statement (ProcCallStmt AST)
     {
         String ID = AST.GetIdentifier().toString();
         ArgsExpr actualParams = AST.GetActualParameters();
@@ -201,7 +201,7 @@ public class CodeGenerator
             //instruction += a.toString()
         }
     }
-
+*/
     public void Statement (ReturnStmt AST)
     {
         Emit("return " + AST.GetReturnExpr() + ";");

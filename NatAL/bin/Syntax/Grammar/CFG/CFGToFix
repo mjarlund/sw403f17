@@ -8,15 +8,17 @@ Statement -> IterationStatement NewLine
 DeclarationStatement -> Type Identifier BuildVarDCL DeclarationStatementPrime CombineDown
 DeclarationStatement -> StructDeclarationStatement
 DeclarationStatement -> ListDeclarationStatement
-DeclarationStatementPrime -> FormalParameterList BuildBlock NewLine Statements ReturnStatement end Identifier BuildFuncDcl
+DeclarationStatementPrime -> FormalParameterList BuildBlock NewLine Block ReturnStatement end Identifier BuildFuncDcl
 DeclarationStatementPrime -> is Expression BuildAssign
 DeclarationStatementPrime -> EPSILON
 ReturnStatement -> return Expression BuildReturnStmt CombineDown NewLine
 ReturnStatement -> EPSILON
-StructDeclarationStatement -> structure Identifier BuildVarDCL NewLine BuildBlock StructDeclarationBlock BuildStructDeclaration CombineDown
-StructDeclarationBlock -> DeclarationStatement NewLine StructDeclarationBlock
+StructDeclarationStatement -> struct Identifier BuildVarDCL StructDeclarationStatementPrime CombineDown
+StructDeclarationStatementPrime -> BuildBlock NewLine StructDeclarationBlock
+StructDeclarationStatementPrime -> Identifier BuildIdentifier EPSILON
+StructDeclarationBlock -> DeclarationStatement StructDeclaration
 StructDeclarationBlock -> end Identifier
-ListDeclarationStatement -> list of Type Identifier BuildVarDCL is ParameterList BuildListDeclaration CombineDown
+ListDeclarationStatement -> list of Type Identifier is ParameterList
 FormalParameter -> Type Identifier
 FormalParameterList -> ( FormalParameterListBody ) BuildFormalParams
 FormalParameterListBody -> FormalParameter FormalParameterListBodyPrime
@@ -27,7 +29,6 @@ Expression -> AssignmentExpressionPrime AssignmentExpression
 AssignmentExpression -> is AssignmentExpressionPrime BuildAssign AssignmentExpression
 AssignmentExpression -> EPSILON
 AssignmentExpressionPrime -> NotExpressionPrime NotExpression
-AssignmentExpressionPrime -> IOExpression
 NotExpression -> not NotExpressionPrime BuildBoolExpr NotExpression
 NotExpression -> EPSILON
 NotExpressionPrime -> OrExpressionPrime OrExpression
@@ -47,40 +48,29 @@ RelationalExpressionPrime -> AdditiveExpressionPrime AdditiveExpression
 AdditiveExpression -> + AdditiveExpressionPrime BuildBinaryExpr AdditiveExpression
 AdditiveExpression -> - AdditiveExpressionPrime BuildBinaryExpr AdditiveExpression
 AdditiveExpression -> EPSILON
-AdditiveExpressionPrime -> MultiplicativeExpressionPrime MultiplicativeExpression
+AdditiveExpressionPrime -> UnaryExpression MultiplicativeExpression
 MultiplicativeExpression -> * PrimaryExpression BuildBinaryExpr MultiplicativeExpression
 MultiplicativeExpression -> / PrimaryExpression BuildBinaryExpr MultiplicativeExpression
 MultiplicativeExpression -> EPSILON
-MultiplicativeExpressionPrime -> UnaryExpression
-IOExpression -> Mode read from Identifier BuildIdentifier BuildIOExpr
-IOExpression -> EPSILON
 UnaryExpression -> - PrimaryExpression BuildUnaryExpr
 UnaryExpression -> PrimaryExpression
-PrimaryExpression -> Identifier BuildIdentifier IdentifierAppendantOptional ProcedureCall
+PrimaryExpression -> Identifier BuildIdentifier IdentifierAppendantOptional
 PrimaryExpression -> IntegerLiteral BuildValExpr
 PrimaryExpression -> FloatingPointLiteral BuildValExpr
 PrimaryExpression -> StringLiteral BuildValExpr
 PrimaryExpression -> BooleanLiteral BuildValExpr
-PrimaryExpression -> CharacterLiteral BuildValExpr
-PrimaryExpression -> DigitalLiteral BuildValExpr
 PrimaryExpression -> ( Expression )
-ExpressionStatement -> Identifier BuildIdentifier IdentifierAppendantOptional ExpressionStatementPrime
-ExpressionStatement -> Mode IOStatement BuildIOStmt CombineDown
-ExpressionStatementPrime -> is Expression BuildAssign CombineDown
+ExpressionStatement -> Identifier BuildIdentifier ExpressionStatementPrime
+ExpressionStatementPrime -> StructExpressionStatement is Expression BuildAssign CombineDown
 ExpressionStatementPrime -> ParameterList BuildFuncCall CombineDown
-ExpressionStatementPrime -> Identifier BuildStructVarDcl CombineDown
-IOStatement ->  write Expression to Identifier BuildIdentifier
-IOStatement ->  read from Identifier BuildIdentifier
-ProcedureCall -> ParameterList BuildFuncCall
-ProcedureCall -> EPSILON
+StructExpressionStatement -> .Identifier
+StructExpressionStatement -> EPSILON
 Parameter -> Identifier
 Parameter -> IntegerLiteral
 Parameter -> FloatingPointLiteral
 Parameter -> StringLiteral
 Parameter -> BooleanLiteral
-Parameter -> CharacterLiteral
-Parameter-> DigitalLiteral
-IdentifierAppendantOptional -> . Identifier BuildIdentifier CombineDown
+IdentifierAppendantOptional -> ParameterList BuildFuncCall
 IdentifierAppendantOptional -> [ IntegerLiteral ]
 IdentifierAppendantOptional -> EPSILON
 ParameterList -> ( ParameterListBody ) BuildActualParams
@@ -88,20 +78,18 @@ ParameterListBody -> Parameter ParameterListBodyPrime
 ParameterListBody -> EPSILON
 ParameterListBodyPrime -> , ParameterListBody
 ParameterListBodyPrime -> EPSILON
-SelectionStatement -> if Condition BuildBlock NewLine Statements BuildIfStmt SelectionStatementPrime CombineDown
-SelectionStatementPrime -> else BuildBlock NewLine Statements BuildElseStmt CombineDown end else if
+SelectionStatement -> if Condition BuildBlock NewLine Block BuildIfStmt SelectionStatementPrime CombineDown
+SelectionStatementPrime -> else BuildBlock NewLine Block BuildElseStmt CombineDown end else if
 SelectionStatementPrime -> end if
-IterationStatement -> until Condition BuildBlock NewLine Statements BuildUntilStmt end until CombineDown
-IterationStatement -> foreach ( FormalParameter in Parameter ) BuildBlock NewLine Statements BuildForeachStatement end foreach CombineDown
+IterationStatement -> until Condition BuildBlock NewLine Block BuildUntilStmt end until CombineDown
+IterationStatement -> foreach ( FormalParameter in Parameter ) BuildBlock NewLine Block end foreach
 Condition -> ( Expression )
+Block -> Statements
 Type -> text
 Type -> number
 Type -> fraction
 Type -> character
 Type -> boolean
 Type -> void
-Type -> pin
-Mode -> analog
-Mode -> digital
 NewLine -> EOL NewLine
 NewLine -> EPSILON
