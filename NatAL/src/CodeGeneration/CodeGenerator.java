@@ -6,7 +6,9 @@ import DataStructures.AST.NodeTypes.Expressions.*;
 import DataStructures.AST.NodeTypes.Statements.*;
 import Syntax.Parser.Parser;
 import Syntax.Scanner.Scanner;
+import Utilities.IVisitor;
 import Utilities.Reporter;
+import Utilities.VisitorDriver;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,46 +23,19 @@ import java.io.*;
 // TODO: Flyt nogle Get-funktioner op i superklassen, så som GetStatement in de forskellige Stmt-klasser.
 // TODO: Mere sigende navne / konsistente navne når man skal gette noget fra de forskellige AST-noder. Plus ikke alle AST-node har getter-metoder
 
-public class CodeGenerator
+public class CodeGenerator implements IVisitor
 {
     public ArrayList<String> instructions = new ArrayList<>();
-
+    private VisitorDriver visitValue = new VisitorDriver(this);
     public CodeGenerator (AST programTree)
     {
         // ¯\_(ツ)_/¯
         Emit("void setup ()");
         Emit("{");
         Emit("}");
-
-        // TODO Traverse the AST somehow this is just hardcoded
-        /*Declaration((StructDcl) programTree.children.get(0));
-        Declaration((FuncDcl) programTree.children.get(1));
-        Declaration((FuncDcl) programTree.children.get(2));*/
+        VisitChildren(programTree);
     }
 
-    private void VisitNode (AST node)
-    {
-        if (node instanceof AssignStmt)
-            Statement((AssignStmt) node);
-        else if (node instanceof  BlockStmt)
-            Statement((BlockStmt) node);
-        else if (node instanceof ElseStmt)
-            Statement((ElseStmt) node);
-        else if (node instanceof EmptyStmt)
-            Statement((EmptyStmt) node);
-        else if (node instanceof  ForEachStmt)
-            Statement((ForEachStmt) node);
-        else if (node instanceof  IfStmt)
-            Statement((IfStmt) node);
-        else if (node instanceof IOStmt)
-            Statement((IOStmt) node);
-        else if (node instanceof ReturnStmt)
-            Statement((ReturnStmt) node);
-        else if (node instanceof UntilStmt)
-            Statement((UntilStmt) node);
-    }
-
-    // region <Code Generation - Declarations>
 
     public void Declaration (Dcl AST)
     {
@@ -72,164 +47,28 @@ public class CodeGenerator
         Emit("VisitFParamDcl - Not implemented");
     }
 
-    public void Declaration (FParamsDcl AST)
-    {
-        Emit("VisitFParamsDcl - Not implemented");
-    }
-
-    public void Declaration (FuncDcl AST)
-    {
-        String returnType = AST.GetVarDcl().GetType().toString();
-        String ID = AST.GetVarDcl().Identifier;         // TODO lave disse om til getter funktion
-        String parameters = "";
-
-        // Concatenates every parameter in a string separated by a space and a comma
-        for (FParamDcl param : AST.GetFormalParamsDcl().GetFParams())
-            parameters += param.Type + " " + param.Identifier + ",";
-
-        // Removes the last comma that is created in the for loop
-        if (parameters.endsWith(","))
-            parameters = parameters.substring(0, parameters.length() - 1);
-
-        // Emit code for the function declaration
-        Emit(returnType + " " + ID + "(" + parameters + ")");
-
-        // Generate code for the block statement
-        Statement(AST.GetFuncBlockStmt());
-    }
-
     public void Declaration (ListDcl AST)
     {
         Emit("VisitListDcl - Not implemented");
-
         // Lav array, lav funktion der ændrer størrelsen, sætter ind, fjerne, mm.
-    }
-
-    public void Declaration (StructDcl AST)
-    {
-        Emit("struct " + AST.GetVarDcl().Identifier);
-        Emit("{");
-
-        // Emits all content of the struct
-        // NOTE: variables do not need to be initialized in Arduino C
-        for (VarDcl dcl : AST.GetContents())
-            Emit(dcl.GetType() + " " + dcl.Identifier + ";");
-
-        Emit("}");
-    }
-
-    public void Declaration (StructVarDcl AST)
-    {
-        Emit(AST.GetStructType() + "." + AST.GetIdentifier());
-    }
-
-    public void Declaration (VarDcl AST)
-    {
-        Emit("VisitVarDcl - Not implemented");
-
-        //   Emit(AST.GetType().toString() + " " + AST.Identifier + "=" + AST.SOMETHING);
-    }
-
-    // endregion
-
-    // region <Code Generation - Expressions>
-
-    public void Expression (BinaryOPExpr AST)
-    {
-        Emit(AST.GetLeftExpr() + AST.Operation.toString() + AST.GetRightExpr());
-    }
-
-    // TODO Mangler stadig "," seperator mellem parameter
-    public void Expression (FuncCallExpr AST)
-    {
-        IdExpr identifier = AST.GetFuncId();
-        ArgsExpr arguments = AST.GetFuncArgs();
-
-        String instruction = identifier + "(";
-
-        for (ArgExpr a : arguments.GetArgs())
-            instruction += a.GetArg();
-
-        instruction += ");";
-        Emit(instruction);
-    }
-
-    // TODO Outputer vist ikke det rigtige
-    // TODO Hvordan ved vi om operatoren kommer før eller efter identifier
-    // TODO undersøg om C skelner mellem i++ og ++i. Det mener jeg den gør i nogle tilfælde
-    public void Expression (UnaryExpr AST)
-    {
-        Emit(AST.GetOperator() + AST.GetValExpr().GetValue());
-    }
-
-    // endregion
-
-    // region <Code Generation - Statements>
-
-    // TODO Giv AssignStmt mere signende funktioner end "GetLeft" og "GetRight"
-    public void Statement (AssignStmt AST)
-    {
-        Emit("Test: " + AST.GetLeft().GetValue() + " = " + AST.GetRight().GetValue());
-    }
-
-    public void Statement (BlockStmt AST)
-    {
-        // Every block begins with a '{'
-        Emit("{");
-        String instruction = "";
-
-        List<AST> statements = AST.GetStatements();
-
-        for (AST node : statements)
-        {
-            VisitNode(node);
-        }
-
-        Emit(instruction);
-        Emit("}"); // Every block ends with a '}'
     }
 
     public void Statement (ElseStmt AST)
     {
         Emit("else");
-        Statement(AST.GetStatement());
-    }
-
-    public void Statement (EmptyStmt AST)
-    {
-        Emit("VisitEmptyStmt - Not implemented");
+        //Statement(AST.GetStatement());
     }
 
     public void Statement (ForEachStmt AST)
     {
         Emit("VisitForEachStmt - Not implemented");
-
-
     }
 
-    public void Statement (IfStmt AST)
-    {
-        Emit("if(" + AST.GetCondition() + ")");
-        Statement(AST.GetBlock());
-    }
 
-    public void Statement (IOStmt AST)
-    {
-        Emit("VisitIOStmt - Not implemented");
-    }
 
-    public void Statement (ReturnStmt AST)
-    {
-        Emit("return " + AST.GetReturnExpr() + ";");
-    }
 
-    public void Statement (UntilStmt AST)
-    {
-        Emit("while(!("+AST.GetCondition()+"))");
-        Statement(AST.GetBlock());
-    }
 
-    // endregion
+
 
     /* Adds an Arduino C instruction to a list */
     public void Emit (String instruction)
@@ -256,77 +95,185 @@ public class CodeGenerator
 
     public static void main(String args[])
     {
-        String code = "text func1()\n" +
-                "pin a is 2\n" +
-                "a is digital read from a\n" +
-                "analog write 2 to a\n" +
-                "boolean b is true and false\n" +
-                "return \"a\"\n" +
-                "end func1\n" +
-                "void func2()\n" +
-                "text b is func1()\n end func2\n";
-        Scanner sc = new Scanner(code);
-        Parser parser = new Parser(sc);
-        AST programTree = parser.ParseProgram();
+        String code = "structure book\n" +
+                "number c\n" +
+                "end book\n" +
+                "void func2(number a, number b)\n"+
+                "book z \n" +
+                "z.c is 2\n" +
+                "end func2\n " +
+                "void func3(boolean a, boolean b)\n" +
+                "boolean c is a and b\n" +
+                "end func3\n";
 
-        new CodeGenerator(programTree);
+            Scanner sc = new Scanner(code);
+            Parser parser = new Parser(sc);
+            AST programTree = parser.ParseProgram();
+            CodeGenerator c = new CodeGenerator(programTree);
+            c.ToFile();
 
+
+
+    }
+
+    public void VisitChildren(AST root) {
+        for (AST child : root.children) {
+            try {
+                String switchValue = (child.GetValue() != null) ? child.GetValue() : ((IdExpr) child).ID;
+                visitValue.Visit(switchValue, child);
+            } catch (ClassCastException e){
+                //System.out.println(e.getCause().toString());
+            }
+        }
+    }
+
+    public Object Visit(StructVarDcl dcl) {
+        Emit(dcl.GetStructType() + "." + dcl.GetIdentifier());
+        return null;
+    }
+
+    public Object Visit(IOStmt stmt) {
+        Emit("VisitIOStmt - Not implemented");
+        return null;
+    }
+
+    public Object Visit(IOExpr expr) {
+        return null;
+    }
+
+    public Object Visit(IfStmt stmt) {
+
+        Emit("if(" + stmt.GetCondition() + ")");
+        //Statement(stmt.GetBlock());
+        return null;
+    }
+
+    public Object Visit(UntilStmt stmt) {
+        Emit("while(!("+stmt.GetCondition()+"))");
+        //Statement(stmt.GetBlock());
+        return null;
+    }
+
+    public Object Visit(ReturnStmt stmt) {
+        Emit("return " + stmt.GetReturnExpr() + ";");
+        return null;
+    }
+
+    public Object Visit(FuncCallExpr expr) {
+        // TODO Mangler stadig "," seperator mellem parameter
+            IdExpr identifier = expr.GetFuncId();
+            ArgsExpr arguments = expr.GetFuncArgs();
+
+            String instruction = identifier + "(";
+
+            for (ArgExpr a : arguments.GetArgs())
+                instruction += a.GetArg();
+
+            instruction += ");";
+            Emit(instruction);
+        return null;
+    }
+
+    public Object Visit(BinaryOPExpr expr) {
+        Emit(expr.GetLeftExpr() + expr.Operation.toString() + expr.GetRightExpr());
+        return null;
+    }
+
+    public Object Visit(BoolExpr expr) {
+        return null;
+    }
+
+    public Object Visit(AssignStmt stmt) {
+        Emit("Test: " + stmt.GetLeft().GetValue() + " = " + stmt.GetRight().GetValue());
+        return null;
+    }
+
+    public Object Visit(UnaryExpr expr) {
+        // TODO Outputer vist ikke det rigtige
+        // TODO Hvordan ved vi om operatoren kommer før eller efter identifier
+        // TODO undersøg om C skelner mellem i++ og ++i. Det mener jeg den gør i nogle tilfælde
+        Emit(expr.GetOperator() + expr.GetValExpr().GetValue());
+        return null;
+    }
+
+    public Object Visit(ValExpr lit) {
+        return null;
+    }
+
+    public Object Visit(VarDcl node) {
+        Emit("VisitVarDcl - Not implemented");
+
+        //   Emit(node.GetType().toString() + " " + node.Identifier + "=" + node.SOMETHING);
+        return null;
+    }
+
+    public Object Visit(IdExpr node) {
+        return null;
+    }
+
+    public Object Visit(FParamsDcl node) {
+        Emit("VisitFParamsDcl - Not implemented");
+        return null;
+    }
+
+    public Object Visit(ArgsExpr node) {
+        return null;
+    }
+
+    public Object Visit(FuncDcl node) {
+        String returnType = node.GetVarDcl().GetType().toString();
+        String ID = node.GetVarDcl().Identifier;         // TODO lave disse om til getter funktion
+        String parameters = "";
+
+        // Concatenates every parameter in a string separated by a space and a comma
+        for (FParamDcl param : node.GetFormalParamsDcl().GetFParams())
+            parameters += param.Type + " " + param.Identifier + ",";
+
+        // Removes the last comma that is created in the for loop
+        if (parameters.endsWith(","))
+            parameters = parameters.substring(0, parameters.length() - 1);
+
+        // Emit code for the function declaration
+        Emit(returnType + " " + ID + "(" + parameters + ")");
+
+        // Generate code for the block statement
+        //Statement(node.GetFuncBlockStmt());
+        return null;
+    }
+
+    public Object Visit(StructDcl node) {
+        Emit("struct " + node.GetVarDcl().Identifier);
+        Emit("{");
+
+        // Emits all content of the struct
+        // NOTE: variables do not need to be initialized in Arduino C
+        for (VarDcl dcl : node.GetContents())
+            Emit(dcl.GetType() + " " + dcl.Identifier + ";");
+
+        Emit("}");
+        return null;
+    }
+
+    public Object Visit(BlockStmt block) {
+        // TODO Giv AssignStmt mere signende funktioner end "GetLeft" og "GetRight"
+        // Every block begins with a '{'
+        Emit("{");
+        String instruction = "";
+
+        List<AST> statements = block.GetStatements();
+
+        for (AST node : statements)
+        {
+            //VisitNode(node);
+        }
+
+        Emit(instruction);
+        Emit("}"); // Every block ends with a '}'
+        return null;
     }
 }
 
 
-
-
-
-
-// TODO this is bad ¯\_(ツ)_/¯ Eventuelt brug method overloading i stedet for
-    /*public void VisitStmt (AST AST)
-    {
-        if (AST instanceof AssignStmt)
-        {
-            VisitAssignStmt((AssignStmt) AST);
-        }
-        else if (AST instanceof BlockStmt)  // Er det her farligt? Stackoverflow?
-        {
-            VisitBlockStmt((BlockStmt) AST);
-        }
-        else if (AST instanceof ElseStmt)
-        {
-            VisitElseStmt((ElseStmt) AST);
-        }
-        else if (AST instanceof EmptyStmt)
-        {
-            VisitEmptyStmt((EmptyStmt) AST);
-        }
-        else if (AST instanceof ForEachStmt)
-        {
-            VisitForEachStmt((ForEachStmt) AST);
-        }
-        else if (AST instanceof IfStmt)
-        {
-            VisitIfStmt((IfStmt) AST);
-        }
-        else if (AST instanceof IOStmt)
-        {
-            VisitIOStmt((IOStmt) AST);
-        }
-        else if (AST instanceof ProcCallStmt)
-        {
-            VisitProcCallStmt((ProcCallStmt) AST);
-        }
-        else if (AST instanceof ReturnStmt)
-        {
-            VisitReturnStmt((ReturnStmt) AST);
-        }
-        else if (AST instanceof UntilStmt)
-        {
-            VisitUntilStmt((UntilStmt) AST);
-        }
-        else
-        {
-            Reporter.Log("RIP");
-        }
-    }*/
 
     /*
         public void Statement (ProcCallStmt AST)

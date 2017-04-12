@@ -1,0 +1,9 @@
+void setup ()
+{
+}
+struct book
+{
+INT c;
+}
+VOID func2(INT b,INT a)
+VOID func3(BOOL b,BOOL a)
