@@ -8,12 +8,9 @@ import Syntax.Parser.Parser;
 import Syntax.Scanner.Scanner;
 import Utilities.Reporter;
 
-import javax.swing.plaf.nimbus.State;
 import java.util.ArrayList;
 import java.util.List;
 
-import static java.nio.file.StandardOpenOption.*;
-import java.nio.file.*;
 import java.io.*;
 
 /**
@@ -34,10 +31,33 @@ public class CodeGenerator
         Emit("void setup ()");
         Emit("{");
         Emit("}");
-        //Statement(programTree);
+
+        // TODO Traverse the AST somehow this is just hardcoded
         /*Declaration((StructDcl) programTree.children.get(0));
         Declaration((FuncDcl) programTree.children.get(1));
         Declaration((FuncDcl) programTree.children.get(2));*/
+    }
+
+    private void VisitNode (AST node)
+    {
+        if (node instanceof AssignStmt)
+            Statement((AssignStmt) node);
+        else if (node instanceof  BlockStmt)
+            Statement((BlockStmt) node);
+        else if (node instanceof ElseStmt)
+            Statement((ElseStmt) node);
+        else if (node instanceof EmptyStmt)
+            Statement((EmptyStmt) node);
+        else if (node instanceof  ForEachStmt)
+            Statement((ForEachStmt) node);
+        else if (node instanceof  IfStmt)
+            Statement((IfStmt) node);
+        else if (node instanceof IOStmt)
+            Statement((IOStmt) node);
+        else if (node instanceof ReturnStmt)
+            Statement((ReturnStmt) node);
+        else if (node instanceof UntilStmt)
+            Statement((UntilStmt) node);
     }
 
     // region <Code Generation - Declarations>
@@ -57,47 +77,57 @@ public class CodeGenerator
         Emit("VisitFParamsDcl - Not implemented");
     }
 
-    // TODO Still need separation with "," in parameters
-    // TODO Need separation with " " in parameters between type and identifier
     public void Declaration (FuncDcl AST)
     {
         String returnType = AST.GetVarDcl().GetType().toString();
-        String ID = AST.GetVarDcl().Identifier;
+        String ID = AST.GetVarDcl().Identifier;         // TODO lave disse om til getter funktion
         String parameters = "";
 
+        // Concatenates every parameter in a string separated by a space and a comma
         for (FParamDcl param : AST.GetFormalParamsDcl().GetFParams())
-        {
             parameters += param.Type + " " + param.Identifier + ",";
-        }
+
+        // Removes the last comma that is created in the for loop
+        if (parameters.endsWith(","))
+            parameters = parameters.substring(0, parameters.length() - 1);
 
         // Emit code for the function declaration
         Emit(returnType + " " + ID + "(" + parameters + ")");
-        Emit("{");
+
         // Generate code for the block statement
         Statement(AST.GetFuncBlockStmt());
-
-        Emit("}");
     }
 
     public void Declaration (ListDcl AST)
     {
         Emit("VisitListDcl - Not implemented");
+
+        // Lav array, lav funktion der ændrer størrelsen, sætter ind, fjerne, mm.
     }
+
     public void Declaration (StructDcl AST)
     {
-        Emit("VisitStructDcl - Not implemented");
+        Emit("struct " + AST.GetVarDcl().Identifier);
+        Emit("{");
+
+        // Emits all content of the struct
+        // NOTE: variables do not need to be initialized in Arduino C
+        for (VarDcl dcl : AST.GetContents())
+            Emit(dcl.GetType() + " " + dcl.Identifier + ";");
+
+        Emit("}");
     }
 
     public void Declaration (StructVarDcl AST)
     {
-        Emit("VisitStructVarDcl - Not implemented");
+        Emit(AST.GetStructType() + "." + AST.GetIdentifier());
     }
 
     public void Declaration (VarDcl AST)
     {
         Emit("VisitVarDcl - Not implemented");
 
-     //   Emit(AST.GetType().toString() + " " + AST.Identifier + "=" + AST.SOMETHING);
+        //   Emit(AST.GetType().toString() + " " + AST.Identifier + "=" + AST.SOMETHING);
     }
 
     // endregion
@@ -124,6 +154,7 @@ public class CodeGenerator
         Emit(instruction);
     }
 
+    // TODO Outputer vist ikke det rigtige
     // TODO Hvordan ved vi om operatoren kommer før eller efter identifier
     // TODO undersøg om C skelner mellem i++ og ++i. Det mener jeg den gør i nogle tilfælde
     public void Expression (UnaryExpr AST)
@@ -138,28 +169,24 @@ public class CodeGenerator
     // TODO Giv AssignStmt mere signende funktioner end "GetLeft" og "GetRight"
     public void Statement (AssignStmt AST)
     {
-        Emit(AST.GetLeft() + " = " + AST.GetRight());
+        Emit("Test: " + AST.GetLeft().GetValue() + " = " + AST.GetRight().GetValue());
     }
 
     public void Statement (BlockStmt AST)
     {
         // Every block begins with a '{'
+        Emit("{");
         String instruction = "";
 
-       // List<AST> statements = AST.GetStatements();
+        List<AST> statements = AST.GetStatements();
 
-        /*for(AST s : statements)
+        for (AST node : statements)
         {
-            VisitStmt(s);
-        }*/
-        // Magic
-
-        instruction += "IMAGINARY STMT HERE";
-
-       // instruction += "}";
+            VisitNode(node);
+        }
 
         Emit(instruction);
-        // Every block ends with a '}'
+        Emit("}"); // Every block ends with a '}'
     }
 
     public void Statement (ElseStmt AST)
@@ -176,6 +203,8 @@ public class CodeGenerator
     public void Statement (ForEachStmt AST)
     {
         Emit("VisitForEachStmt - Not implemented");
+
+
     }
 
     public void Statement (IfStmt AST)
@@ -189,19 +218,6 @@ public class CodeGenerator
         Emit("VisitIOStmt - Not implemented");
     }
 
-/*    public void Statement (ProcCallStmt AST)
-    {
-        String ID = AST.GetIdentifier().toString();
-        ArgsExpr actualParams = AST.GetActualParameters();
-
-        String instruction = ID;
-
-        for(ArgExpr a : actualParams.GetArgs())
-        {
-            //instruction += a.toString()
-        }
-    }
-*/
     public void Statement (ReturnStmt AST)
     {
         Emit("return " + AST.GetReturnExpr() + ";");
@@ -237,6 +253,7 @@ public class CodeGenerator
             // do something
         }
     }
+
     public static void main(String args[])
     {
         String code = "text func1()\n" +
@@ -310,3 +327,19 @@ public class CodeGenerator
             Reporter.Log("RIP");
         }
     }*/
+
+    /*
+        public void Statement (ProcCallStmt AST)
+    {
+        String ID = AST.GetIdentifier().toString();
+        ArgsExpr actualParams = AST.GetActualParameters();
+
+        String instruction = ID;
+
+        for(ArgExpr a : actualParams.GetArgs())
+        {
+            //instruction += a.toString()
+        }
+    }
+
+     */

@@ -7,7 +7,7 @@ import DataStructures.AST.NodeTypes.Expressions.IdExpr;
 public class StructVarDcl extends Dcl{
 
     public IdExpr Type;
-    public IdExpr ID;
+    IdExpr ID;
     public StructVarDcl(IdExpr structType, IdExpr id){
         children.add(structType);
         children.add(id);
