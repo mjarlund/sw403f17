@@ -15,6 +15,7 @@ public class StructDcl extends Dcl {
         for (AST dcl : contents.children){
             children.add(dcl);
         }
+        SetValue("StructDcl");
     }
 
     public VarDcl GetVarDcl(){

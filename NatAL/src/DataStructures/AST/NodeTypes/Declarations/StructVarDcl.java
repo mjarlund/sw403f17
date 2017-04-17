@@ -13,6 +13,7 @@ public class StructVarDcl extends Dcl{
         children.add(id);
         Type = structType;
         ID = id;
+        SetValue("StructVarDcl");
     }
     public IdExpr GetStructType()
     {

@@ -13,7 +13,7 @@ public class BlockStmt extends Stmt
 {
     public BlockStmt ()
     {
-
+        SetValue("BlockStmt");
     }
 
     /*public BlockStmt (List<Stmt> statements)

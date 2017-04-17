@@ -61,7 +61,16 @@ public class SemanticAnalyzer implements IVisitor{
     }
 
     public Object Visit(ListDcl dcl) {
-        Symbol listId = new Symbol(dcl.GetDeclaration().Identifier, dcl.GetDeclaration().Type);
+        String dclId = dcl.GetDeclaration().Identifier;
+        Types dclType = dcl.GetDeclaration().Type;
+        ArrayList<ArgExpr> elements = dcl.GetElements().GetArgs();
+
+        for(ArgExpr arg : elements) {
+            if(!arg.GetArg().Type.equals(dclType))
+                Reporter.Error(new InvalidTypeException("\"" + arg.GetArg().LiteralValue + "\" is not a " + dclType + " on line " + dcl.GetLineNumber()));
+        }
+
+        Symbol listId = new Symbol(dclId, dclType);
         listId.dclType = DclType.List;
         currentScope.AddSymbol(listId);
         return null;
@@ -185,9 +194,7 @@ public class SemanticAnalyzer implements IVisitor{
             {
                 ArgExpr argument = args.get(i);
 
-                Types argType = argument.GetArg() instanceof ValExpr ?
-                        ((ValExpr)argument.GetArg()).Type :
-                        (Types) Visit((IdExpr) argument.GetArg());
+                Types argType = argument.GetArg().Type;
 
                 if(!argType.equals(identifier.TypeSignature.get(i)))
                     Reporter.Error(new IncompatibleValueException("Incompatible argument types in " + identifier.Name + " on line " + expr.GetLineNumber()));

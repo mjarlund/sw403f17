@@ -65,7 +65,6 @@ public class ASTFactory
         IdExpr Type = (IdExpr)astStack.pop();
         IdExpr ID = new IdExpr(id);
         StructVarDcl struct = new StructVarDcl(Type, ID);
-        struct.SetValue("StructVarDcl");
         astStack.push(struct);
     }
 
@@ -258,7 +257,6 @@ public class ASTFactory
     private void CreateBlockTree()
     {
         BlockStmt block = new BlockStmt();
-        block.SetValue("BlockStmt");
         astStack.push(block);
     }
     private void CreateFuncDclTree()
@@ -330,7 +328,6 @@ public class ASTFactory
         /* BuildVarDcl put the declaration on the astStack */
         AST dcl = astStack.pop();
         listDcl = new ListDcl((VarDcl) dcl, (ArgsExpr) listContents);
-        listDcl.SetValue("ListDcl");
 
         astStack.push(listDcl);
     }
@@ -341,7 +338,6 @@ public class ASTFactory
         VarDcl dcl = (VarDcl) astStack.pop();
 
         StructDcl struct = new StructDcl(dcl, block);
-        struct.SetValue("StructDcl");
         astStack.push(struct);
     }
 

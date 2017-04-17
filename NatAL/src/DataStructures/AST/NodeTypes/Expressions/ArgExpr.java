@@ -16,8 +16,8 @@ public class ArgExpr extends Expr
     {
         children.add(id);
     }
-    public AST GetArg()
+    public ValExpr GetArg()
     {
-        return children.get(0);
+        return (ValExpr) children.get(0);
     }
 }
