@@ -60,6 +60,12 @@ public class SemanticAnalyzer implements IVisitor{
         return null;
     }
 
+    public Object Visit(ListDcl dcl) {
+        Symbol listId = new Symbol(dcl.GetDeclaration().Identifier, dcl.GetDeclaration().Type);
+        listId.dclType = DclType.List;
+        return null;
+    }
+
     public Object Visit(StructVarDcl dcl){
         if (currentScope.FindSymbol(dcl.GetStructType().ID) == null){
             Reporter.Error(new UndeclaredSymbolException("Struct type \" " + dcl.GetStructType().ID + " \" not declared. "));
@@ -127,8 +133,15 @@ public class SemanticAnalyzer implements IVisitor{
     }
 
     public Object Visit(ForEachStmt stmt) {
-
         VisitChildren(stmt);
+        Symbol smb = currentScope.FindSymbol(stmt.GetCollectionId());
+
+        if(!smb.dclType.equals(DclType.List))
+            Reporter.Error(new InvalidIdentifierException("Identifier " + stmt.GetCollectionId() + " on line " + stmt.GetLineNumber() + "is not a list."));
+
+        if(!stmt.GetElementType().equals(smb.Type))
+            Reporter.Error(new InvalidTypeException("Type of " + stmt.GetElementId() + " is not equal to the type of " + stmt.GetCollectionId()));
+
         return null;
     }
 

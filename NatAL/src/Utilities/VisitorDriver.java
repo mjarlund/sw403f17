@@ -5,6 +5,8 @@ import DataStructures.AST.NodeTypes.Declarations.*;
 import DataStructures.AST.NodeTypes.Expressions.*;
 import DataStructures.AST.NodeTypes.Statements.*;
 
+import java.util.List;
+
 /**
  * Created by mysjkin on 4/12/17.
  */
@@ -34,6 +36,9 @@ public class VisitorDriver
             case "FuncDcl": /* Only in global scope. Open scope so its formal parameters
                                  * are not seen as symbols in the global scope. */
                 visit.Visit((FuncDcl) child);
+                break;
+            case "ListDcl":
+                visit.Visit((ListDcl) child);
                 break;
             case "ValExpr":
                 return visit.Visit((ValExpr) child);

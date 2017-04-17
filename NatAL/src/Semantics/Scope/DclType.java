@@ -6,5 +6,6 @@ package Semantics.Scope;
 public enum DclType {
     Variable,
     Function,
-    Struct
+    Struct,
+    List
 }

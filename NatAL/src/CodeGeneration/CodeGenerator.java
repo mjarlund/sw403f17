@@ -210,6 +210,11 @@ public class CodeGenerator implements IVisitor
         return null;
     }
 
+    @Override
+    public Object Visit(ListDcl node) {
+        return null;
+    }
+
     public Object Visit(IdExpr node) {
         return null;
     }

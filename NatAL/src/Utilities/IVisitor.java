@@ -40,6 +40,8 @@ public interface IVisitor
 
     Object Visit(VarDcl node);
 
+    Object Visit(ListDcl node);
+
     Object Visit(IdExpr node);
 
     Object Visit(FParamsDcl node);

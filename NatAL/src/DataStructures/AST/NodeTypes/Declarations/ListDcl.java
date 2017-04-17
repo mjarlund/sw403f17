@@ -10,4 +10,10 @@ public class ListDcl extends Dcl{
         children.add(declaration);
         children.add(elements);
     }
+
+
+    public VarDcl GetDeclaration()
+    {
+        return (VarDcl) children.get(0);
+    }
 }
