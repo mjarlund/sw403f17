@@ -63,6 +63,7 @@ public class SemanticAnalyzer implements IVisitor{
     public Object Visit(ListDcl dcl) {
         Symbol listId = new Symbol(dcl.GetDeclaration().Identifier, dcl.GetDeclaration().Type);
         listId.dclType = DclType.List;
+        currentScope.AddSymbol(listId);
         return null;
     }
 
@@ -135,7 +136,6 @@ public class SemanticAnalyzer implements IVisitor{
     public Object Visit(ForEachStmt stmt) {
         VisitChildren(stmt);
         Symbol smb = currentScope.FindSymbol(stmt.GetCollectionId());
-
         if(!smb.dclType.equals(DclType.List))
             Reporter.Error(new InvalidIdentifierException("Identifier " + stmt.GetCollectionId() + " on line " + stmt.GetLineNumber() + "is not a list."));
 

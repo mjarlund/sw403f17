@@ -399,7 +399,6 @@ public class ASTFactory
         VarDcl element = new VarDcl(elementType, elementID);
 
         ForEachStmt forStmt = new ForEachStmt(element, collection, code);
-        forStmt.SetValue("ForeachStmt");
         astStack.push(forStmt);
         System.out.println("Built foreach");
     }

@@ -15,6 +15,7 @@ public class ForEachStmt extends Stmt{
         children.add(element);
         children.add(collection);
         children.add(code);
+        SetValue("ForEachStmt");
     }
 
     public Types GetElementType() {

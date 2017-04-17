@@ -26,10 +26,9 @@ public class Visualizer extends PApplet {
     public void setup(){
         /* Visualizer settings */
         textSize(12);
-
         /* Scanner and parser */
         String code =   "void main()\n" +
-                        "list of number a is (1,2)\n" +
+                        "list of boolean a is (true, false, true, false)\n" +
                         "number sum\n" +
                         "foreach(number num in a)\n" +
                         "sum is sum + num\n" +

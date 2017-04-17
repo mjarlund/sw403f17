@@ -1,0 +1,6 @@
+void main()
+number sum
+foreach (number num in a)
+sum is sum + num
+end foreach
+end main
