@@ -14,6 +14,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
+import Exceptions.InvalidCharacterException;
 import Exceptions.InvalidIdentifierException;
 import Exceptions.MissingProductionsException;
 import Exceptions.UnexpectedTokenException;

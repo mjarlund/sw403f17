@@ -104,7 +104,7 @@ public class ScannerTest {
 					{"\"hejmor..,.63\"", TokenType.STRING_LITERAL},
 					{"\"hejm o383r63\"", TokenType.STRING_LITERAL},
 					{"\"hejm \n ???` ?#*^+or63\"", TokenType.STRING_LITERAL},//mangler newline token 
-					{"\"hej#ÔøΩ&/()=/())=?mor63\"", TokenType.STRING_LITERAL},
+					{"\"hej#&/()=/())=?mor63\"", TokenType.STRING_LITERAL},
 					{"\"hej "+ System.lineSeparator() +"mor63\"", TokenType.STRING_LITERAL},
 
 					
@@ -282,6 +282,57 @@ public class ScannerTest {
 			catch(InvalidCharacterSequenceException e)
 			{
 				// Der er sikkert en smartere m√•de at g√∏re dette p√•, men det virker - Mathias
+				assertEquals(true, true);
+			}
+		}
+		
+		@Test
+		public void CharSizeTestFail()
+		{
+			try
+			{
+				Scanner testScanner = new Scanner("void main()" + System.lineSeparator() + "character a is \'gjgj\'" + System.lineSeparator() + "end main");
+				while(true)
+				{
+					testScanner.NextToken();
+				}
+			}
+			catch(InvalidCharacterSequenceException e)
+			{
+				assertEquals(true, true);
+			}
+		}
+		
+		@Test
+		public void CharAsciiTestFail()
+		{
+			try
+			{
+				Scanner testScanner = new Scanner("void main()" + System.lineSeparator() + "character a is \'Ω\'" + System.lineSeparator() + "end main");
+				while(true)
+				{
+					testScanner.NextToken();
+				}
+			}
+			catch(InvalidCharacterException e)
+			{
+				assertEquals(true, true);
+			}
+		}
+		
+		@Test
+		public void StringAsciiTestFail()
+		{
+			try
+			{
+				Scanner testScanner = new Scanner("void main()" + System.lineSeparator() + "string a is \"gjΩgj\"" + System.lineSeparator() + "end main");
+				while(true)
+				{
+					testScanner.NextToken();
+				}
+			}
+			catch(InvalidCharacterException e)
+			{
 				assertEquals(true, true);
 			}
 		}

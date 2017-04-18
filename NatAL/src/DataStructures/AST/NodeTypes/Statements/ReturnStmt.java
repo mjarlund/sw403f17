@@ -2,9 +2,6 @@ package DataStructures.AST.NodeTypes.Statements;
 
 import DataStructures.AST.NodeTypes.Expressions.Expr;
 
-/**
- * Created by Anders Brams on 3/21/2017.
- */
 public class ReturnStmt extends Stmt
 {
     public ReturnStmt(Expr returnVal)
