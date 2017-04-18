@@ -1,0 +1,28 @@
+Setup {
+}
+Loop {
+struct teststruct{
+INT a;
+STRING b;
+CHAR c;
+}
+VOID main(){ 
+INT s=11+10; 
+INT a=-2; 
+if(true and true){ 
+s=s-1; 
+} 
+while(!(s equals 10)){ 
+s=s+1; 
+} 
+STRING q="hey"; 
+CHAR c='A'; 
+test(s,q);
+} 
+VOID test(INT nn,STRING tt){ 
+INT b=11+nn; 
+STRING a=tt; 
+INT aa[] = {1,2,3,4,5,6,7}
+aa=8; 
+} 
+}
