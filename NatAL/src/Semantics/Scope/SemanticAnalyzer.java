@@ -91,19 +91,24 @@ public class SemanticAnalyzer implements IVisitor{
     public Object Visit(IOStmt stmt)
     {
         Types type = (Types) Visit(stmt.GetPin());
+
         if(!type.equals(Types.PIN))
             Reporter.Error(new IncompatibleValueException("Must be a pin type on line " + stmt.GetLineNumber()));
+
         if(stmt.GetWriteVal() != null)
         {
             Object expr = visitValue.Visit(stmt.GetWriteVal().GetValue(), stmt.GetWriteVal());
             System.out.println(((ValExpr)stmt.GetWriteVal()).Type);
             if(expr==null)
                 Reporter.Error(new ArgumentsException("Missing expression on line " + stmt.GetLineNumber()));
+
             else
             {
                 Types exprType = (Types)expr;
+
                 if(stmt.GetMode().equals(Modes.DIGITAL) && !exprType.equals(Types.DIGITAL))
                     Reporter.Error(new IncompatibleValueException("Incompatible digital mode or expression on line " + stmt.GetLineNumber()));
+
                 if(stmt.GetMode().equals(Modes.ANALOG) && !exprType.equals(Types.INT))
                     Reporter.Error(new IncompatibleValueException("Incompatible analog mode or expression on line " + stmt.GetLineNumber()));
             }
@@ -115,17 +120,20 @@ public class SemanticAnalyzer implements IVisitor{
     public Object Visit(IOExpr expr)
     {
         Types type = (Types) Visit(expr.GetPin());
+
         if(!type.equals(Types.PIN))
             Reporter.Error(new IncompatibleValueException("Must be a pin type on line " + expr.GetLineNumber()));
+
         return type;
     }
     
     public Object Visit(IfStmt stmt)
     {
         Expr condition = stmt.GetCondition();
-        // if condition check must result in a bool expression
+
         if(!(condition instanceof BoolExpr))
             Reporter.Error(new IncompatibleValueException("Expected boolean expression in " + stmt + " on line " + stmt.GetLineNumber()));
+
         VisitChildren(stmt);
         
         return null;
@@ -134,9 +142,10 @@ public class SemanticAnalyzer implements IVisitor{
     public Object Visit(UntilStmt stmt)
     {
         Expr condition = stmt.GetCondition();
-        // until condition check must result in a bool expression
+
         if(!(condition instanceof BoolExpr))
             Reporter.Error(new IncompatibleValueException("Expected boolean expression in " + stmt + " on line " + stmt.GetLineNumber()));
+
         VisitChildren(stmt);
         
         return null;
@@ -177,8 +186,10 @@ public class SemanticAnalyzer implements IVisitor{
         // Check if function is declared before usage
         if(identifier==null)
             Reporter.Error(new UndeclaredSymbolException(funcId.ID+ " not declared.", expr.GetLineNumber()));
+
         if(!identifier.dclType.equals( DclType.Function))
             Reporter.Error(new InvalidIdentifierException("Not used as a function call"));
+
         // Checks that args are used declared before usage
         visitValue.Visit(expr.GetFuncArgs().GetValue(),expr.GetFuncArgs());
         ArrayList<ArgExpr> args = expr.GetFuncArgs().GetArgs();
@@ -289,8 +300,10 @@ public class SemanticAnalyzer implements IVisitor{
         Symbol identifier = FindSymbol(id);
         if (identifier == null)
             Reporter.Error(new UndeclaredSymbolException(id + " not declared.", node.GetLineNumber()));
+
         if(identifier.dclType.equals(DclType.Function))
             Reporter.Error(new InvalidIdentifierException("Not a variable " + identifier.Name));
+
         if(identifier.dclType.equals(DclType.Struct)){
             if(node.children.size() == 0) {
                 return identifier.GetType();
@@ -302,6 +315,7 @@ public class SemanticAnalyzer implements IVisitor{
                 identifier = structSymbol.FindSymbol(expr.ID);
                 if(identifier == null)
                     Reporter.Error(new UndeclaredSymbolException(id + " not declared.", node.GetLineNumber()));
+
                 return identifier.GetType();
             }
         }
@@ -336,7 +350,6 @@ public class SemanticAnalyzer implements IVisitor{
     public Object Visit(FuncDcl node){
         if (currentScope.GetDepth() > 0){
             Reporter.Error(new InvalidScopeException(node.GetVarDcl().Identifier + ": Functions can only be declared in global scope."));
-            //throw new Error(node.GetValue() + ": functions can only be declared in global scope. ");
         }
         Visit(node.GetVarDcl());
 
@@ -361,6 +374,7 @@ public class SemanticAnalyzer implements IVisitor{
 
     public Object Visit(StructDcl node){
         if (currentScope.GetDepth() > 0){
+
             Reporter.Error(new InvalidScopeException(
                     node.GetVarDcl().Identifier + ": Structs can only be declared in global scope."));
         }
