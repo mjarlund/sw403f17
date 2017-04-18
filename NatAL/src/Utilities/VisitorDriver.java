@@ -26,26 +26,26 @@ public class VisitorDriver
                 returnValue =  visit.Visit((IdExpr) child);
                 break;
             case "BlockStmt": /* Open a new scope, continue */
-                visit.Visit((BlockStmt) child);
+                returnValue = visit.Visit((BlockStmt) child);
                 break;
             case "FParamsDcl": /* Used as declarations, add them to that scope */
-                visit.Visit((FParamsDcl) child);
+                returnValue = visit.Visit((FParamsDcl) child);
                 break;
             case "ArgsExpr": /* Not much different from IDs */
-                visit.Visit((ArgsExpr) child);
+                returnValue = visit.Visit((ArgsExpr) child);
                 break;
             case "FuncDcl": /* Only in global scope. Open scope so its formal parameters
                                  * are not seen as symbols in the global scope. */
-                visit.Visit((FuncDcl) child);
+                returnValue = visit.Visit((FuncDcl) child);
                 break;
             case "ListDcl":
-                visit.Visit((ListDcl) child);
+                returnValue = visit.Visit((ListDcl) child);
                 break;
             case "ValExpr":
                 returnValue = visit.Visit((ValExpr) child);
                 break;
             case "AssignStmt":
-                 visit.Visit((AssignStmt) child);
+                returnValue = visit.Visit((AssignStmt) child);
                 break;
             case "BinaryOPExpr":
                 returnValue = visit.Visit((BinaryOPExpr)child);
@@ -60,33 +60,32 @@ public class VisitorDriver
                 returnValue = visit.Visit((FuncCallExpr)child);
                 break;
             case "ReturnStmt":
-                visit.Visit((ReturnStmt)child);
+                returnValue = visit.Visit((ReturnStmt)child);
                 break;
             case "IfStmt":
-                visit.Visit((IfStmt)child);
+                returnValue = visit.Visit((IfStmt)child);
                 break;
             case "ForEachStmt":
-                visit.Visit((ForEachStmt)child);
+                returnValue = visit.Visit((ForEachStmt)child);
                 break;
             case "UntilStmt":
-                visit.Visit((UntilStmt)child);
+                returnValue = visit.Visit((UntilStmt)child);
                 break;
             case "StructDcl":
-                visit.Visit((StructDcl) child);
+                returnValue = visit.Visit((StructDcl) child);
                 break;
             case "IOStmt":
-                visit.Visit((IOStmt)child);
+                returnValue = visit.Visit((IOStmt)child);
                 break;
             case "IOExpr":
                 returnValue = visit.Visit((IOExpr) child);
                 break;
             case "StructVarDcl":
-                visit.Visit((StructVarDcl) child);
+                returnValue = visit.Visit((StructVarDcl) child);
                 break;
             case "ListIndexExpr":
                 returnValue = visit.Visit((ListIndexExpr) child);
-            default:
-                visit.VisitChildren(child);
+                break;
         }
 
         return returnValue;

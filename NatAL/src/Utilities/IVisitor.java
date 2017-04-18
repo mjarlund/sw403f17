@@ -10,8 +10,6 @@ import DataStructures.AST.NodeTypes.Statements.*;
  */
 public interface IVisitor
 {
-    void VisitChildren(AST root);
-
     Object Visit(StructVarDcl dcl);
 
     Object Visit(IOStmt stmt);
