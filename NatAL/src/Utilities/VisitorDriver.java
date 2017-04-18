@@ -7,9 +7,6 @@ import DataStructures.AST.NodeTypes.Statements.*;
 
 import java.util.List;
 
-/**
- * Created by mysjkin on 4/12/17.
- */
 public class VisitorDriver
 {
     private IVisitor visit;
@@ -19,6 +16,7 @@ public class VisitorDriver
     }
     public Object Visit(String astName, AST child)
     {
+        System.out.println(astName);
         Object returnValue = null;
         switch (astName){
             case "VarDcl": /* Add it to this scope (works for FuncDcls too) */
@@ -45,8 +43,9 @@ public class VisitorDriver
                 break;
             case "ValExpr":
                 returnValue = visit.Visit((ValExpr) child);
+                break;
             case "AssignStmt":
-                visit.Visit((AssignStmt) child);
+                 visit.Visit((AssignStmt) child);
                 break;
             case "BinaryOPExpr":
                 returnValue = visit.Visit((BinaryOPExpr)child);

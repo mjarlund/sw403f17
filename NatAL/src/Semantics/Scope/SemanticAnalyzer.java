@@ -14,9 +14,6 @@ import Utilities.VisitorDriver;
 
 import java.util.ArrayList;
 
-/**
- * Created by Anders Brams on 3/21/2017.
- */
 public class SemanticAnalyzer implements IVisitor{
 
     IScope currentScope = new Scope();
@@ -265,7 +262,8 @@ public class SemanticAnalyzer implements IVisitor{
     public Object Visit(ListIndexExpr expr){
         return currentScope.FindSymbol(expr.Id.ID).Type;
     }
-    
+
+
     public boolean IsAssignable(AST lhs)
     {
         // left hand side must be a variable

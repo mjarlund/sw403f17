@@ -32,4 +32,7 @@ public class ForEachStmt extends Stmt{
         VarDcl tmp = (VarDcl) children.get(0);
         return tmp.Identifier;
     }
+    public BlockStmt GetBlock(){
+        return (BlockStmt) children.get(2);
+    }
 }

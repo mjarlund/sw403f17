@@ -5,6 +5,7 @@ import DataStructures.AST.AST;
 import Semantics.Scope.SemanticAnalyzer;
 import Syntax.Parser.Parser;
 import Syntax.Scanner.Scanner;
+import com.sun.org.apache.bcel.internal.classfile.Code;
 import processing.core.PApplet;
 import processing.core.PVector;
 
@@ -47,8 +48,6 @@ public class Visualizer extends PApplet {
         SemanticAnalyzer sm = new SemanticAnalyzer();
         sm.VisitChildren(programTree);
         System.out.println("No variables out of scope!");
-
-        CodeGenerator codeGen = new CodeGenerator(programTree);
 
         BuildVisualTree(programTree);
         background(255);

@@ -1,8 +1,5 @@
 package DataStructures.AST.NodeTypes.Expressions;
 
-/**
- * Created by Anders Brams on 4/18/2017.
- */
 public class ListIndexExpr extends Expr {
     public IdExpr Id;
     public int Index;
@@ -11,4 +8,6 @@ public class ListIndexExpr extends Expr {
         Id = id;
         Index = i;
     }
+    public IdExpr GetId(){return Id;}
+    public int GetIndex(){return Index;}
 }

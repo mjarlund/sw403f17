@@ -1,9 +1,7 @@
 package DataStructures.AST.NodeTypes.Declarations;
 
 import DataStructures.AST.NodeTypes.Expressions.IdExpr;
-/**
- * Created by Anders Brams on 3/23/2017.
- */
+
 public class StructVarDcl extends Dcl{
 
     public IdExpr Type;
