@@ -4,6 +4,8 @@ import Exceptions.*;
 import Syntax.Tokens.Token;
 import Syntax.Tokens.TokenType;
 import Utilities.Reporter;
+import java.nio.charset.Charset;
+import java.nio.charset.CharsetEncoder;
 
 public class Scanner
 {
@@ -126,19 +128,30 @@ public class Scanner
         return (currentChar >= 'a' && currentChar <= 'z') ||
                 (currentChar >= 'A' && currentChar <= 'Z');
     }
+    
     private Token ScanChar()
     {
         String val = "";
-        do
-        {
-            val += currentChar;
-            Advance();
-        } while(currentChar != '\'');
-        val+= currentChar;
+        val += currentChar;
         Advance();
-
-        return MakeToken(val, TokenType.CHAR_LITERAL);
+        if(AsciiCheck(currentChar))
+        {
+        	val += currentChar;
+            Advance();
+            if(currentChar == '\'')
+            {
+            	val+= currentChar;
+            	Advance();
+            }
+            else
+            	Reporter.Error(new InvalidCharacterSequenceException("Invalid character encountered: " + currentChar + "Expected '"));
+        }
+        else
+        	 Reporter.Error(new InvalidCharacterException("Invalid character encountered: " + currentChar + " is not a valid Ascii Character"));
+        
+        return MakeToken(val, TokenType.CHAR_LITERAL);     
     }
+    
     private Token ScanString()
     {
         StringBuilder sb = new StringBuilder();
@@ -149,6 +162,8 @@ public class Scanner
         } while(currentChar != '\"');
         sb.append(currentChar);
         Advance();
+        if(AsciiCheck(sb.toString()) == false)
+        	 Reporter.Error(new InvalidCharacterException("Invalid character encountered in string: " + sb + "contains a non-Ascii Character"));
         return MakeToken(sb.toString(), TokenType.STRING_LITERAL);
     }
 
@@ -194,5 +209,18 @@ public class Scanner
     private Token MakeToken (String value, TokenType type)
     {
         return new Token(value, type, lineNumber);
+    }
+    
+    private boolean AsciiCheck(String v){
+    CharsetEncoder asciiEncoder = Charset.forName("US-ASCII").newEncoder();
+    
+    return asciiEncoder.canEncode(v); 
+    }
+    
+    private boolean AsciiCheck(char v)
+    {
+    CharsetEncoder asciiEncoder = Charset.forName("US-ASCII").newEncoder();
+        
+    return asciiEncoder.canEncode(v); 
     }
 }
