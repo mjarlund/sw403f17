@@ -3,9 +3,6 @@ package DataStructures.AST.NodeTypes.Expressions;
 import DataStructures.AST.NodeTypes.Types;
 import Syntax.Tokens.Token;
 
-/**
- * Created by Anders Brams on 3/21/2017.
- */
 public class BinaryOPExpr extends Expr
 {
     public BinaryOPExpr(Expr expr1, Token operation, Expr expr2)
