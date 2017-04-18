@@ -53,4 +53,7 @@ public interface IVisitor
     Object Visit(StructDcl node);
 
     Object Visit(BlockStmt block);
+
+    Object Visit(ListIndexExpr block);
+
 }

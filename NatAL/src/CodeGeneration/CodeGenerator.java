@@ -280,6 +280,10 @@ public class CodeGenerator implements IVisitor
         Emit("}"); // Every block ends with a '}'
         return null;
     }
+
+    public Object Visit(ListIndexExpr expr){
+        return null;
+    }
 }
 
 

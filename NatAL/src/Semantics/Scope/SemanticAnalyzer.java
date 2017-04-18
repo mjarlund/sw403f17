@@ -250,11 +250,15 @@ public class SemanticAnalyzer implements IVisitor{
             Reporter.Error(new IncompatibleValueException(lType,rType,stmt.GetLineNumber()));
         return null;
     }
+
+    public Object Visit(ListIndexExpr expr){
+        return currentScope.FindSymbol(expr.Id.ID).Type;
+    }
     
     public boolean IsAssignable(AST lhs)
     {
         // left hand side must be a variable
-        if(lhs instanceof IdExpr || lhs instanceof VarDcl)
+        if(lhs instanceof IdExpr || lhs instanceof VarDcl || lhs instanceof ListIndexExpr)
             return true;
         return false;
     }

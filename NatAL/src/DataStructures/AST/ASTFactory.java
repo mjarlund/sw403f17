@@ -58,6 +58,18 @@ public class ASTFactory
         SemanticAction.put("BuildIOExpr", ASTFactory.this::CreateIOExpr);
         SemanticAction.put("BuildForeachStatement", ASTFactory.this::CreateForeachStmt);
         SemanticAction.put("BuildStructVarDcl", ASTFactory.this::CreateStructVarDcl);
+        SemanticAction.put("BuildListIndexExpression", ASTFactory.this::CreateListIndexExpr);
+    }
+
+    private void CreateListIndexExpr(){
+        System.out.println(terminals.pop().Value);
+        int index = Integer.parseInt(terminals.pop().Value);
+        System.out.println(terminals.pop().Value);
+        IdExpr listId = (IdExpr) astStack.pop();
+        ListIndexExpr listExpr = new ListIndexExpr(listId, index);
+        System.out.println("ListExpr created with Id: " + listExpr.Id.ID +" and index: " + index);
+        listExpr.SetValue("ListIndexExpr");
+        astStack.push(listExpr);
     }
 
     private void CreateStructVarDcl(){
