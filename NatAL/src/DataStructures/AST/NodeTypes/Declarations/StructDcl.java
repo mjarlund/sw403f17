@@ -5,9 +5,6 @@ import DataStructures.AST.NodeTypes.Statements.BlockStmt;
 
 import java.util.ArrayList;
 
-/**
- * Created by Anders Brams on 3/23/2017.
- */
 public class StructDcl extends Dcl {
 
     public StructDcl(VarDcl declaration, BlockStmt contents){

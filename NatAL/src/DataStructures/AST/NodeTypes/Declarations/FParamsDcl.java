@@ -16,10 +16,13 @@ public class FParamsDcl extends Dcl
     public ArrayList<FParamDcl> GetFParams()
     {
         ArrayList<FParamDcl> params = new ArrayList<>();
-        for(AST param : children)
+        for(int i=children.size()-1;i>=0;--i){
+            params.add((FParamDcl)children.get(i));
+        }
+        /*for(AST param : children)
         {
             params.add((FParamDcl) param);
-        }
+        }*/
         return params;
     }
 }
