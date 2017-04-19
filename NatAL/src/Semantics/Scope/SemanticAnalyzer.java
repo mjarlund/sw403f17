@@ -223,7 +223,7 @@ public class SemanticAnalyzer implements IVisitor{
             Reporter.Error(new IncompatibleValueException(lType,rType,expr.GetLineNumber()));
 
         // checks that the type is a valid type for binary expressions
-        if(lType.equals(Types.BOOL))
+        if(!lType.equals(Types.INT) && !lType.equals(Types.FLOAT))
             Reporter.Error(new InvalidTypeException(lType, expr.GetLineNumber()));
 
         return lType;
