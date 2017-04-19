@@ -11,10 +11,12 @@ import Utilities.IVisitor;
 import Utilities.Reporter;
 import Utilities.VisitorDriver;
 
+import java.sql.Struct;
 import java.util.ArrayList;
 import java.util.List;
 
 import java.io.*;
+import java.util.Objects;
 
 // TODO: Nogle steder bruger vi ArrayList andre steder List. Det skal både rettes her og inde i AST-noderene
 // TODO: Mere sigende navne / konsistente navne når man skal gette noget fra de forskellige AST-noder. Plus ikke alle AST-node har getter-metoder
@@ -112,7 +114,7 @@ public class CodeGenerator implements IVisitor
         visitValue.Visit(expr.GetRightExpr().GetValue(),expr.GetRightExpr());
         return null;
     }
-
+    
     public Object Visit(BoolExpr expr) {
         visitValue.Visit(expr.GetLeftExpr().GetValue(), expr.GetLeftExpr());
         Emit(" " + expr.Operator.Value+ " ");

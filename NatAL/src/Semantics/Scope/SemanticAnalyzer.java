@@ -273,7 +273,7 @@ public class SemanticAnalyzer implements IVisitor{
     public boolean IsAssignable(AST lhs)
     {
         // left hand side must be a variable
-        if(lhs instanceof IdExpr || lhs instanceof VarDcl || lhs instanceof ListIndexExpr)
+        if(lhs instanceof IdExpr || lhs instanceof VarDcl || lhs instanceof ListIndexExpr || lhs instanceof StructCompSelectExpr)
             return true;
         return false;
     }
