@@ -1,13 +1,41 @@
-VOID func1(){ 
-INT target=0;
-while(!(target equals 10)){ 
-target=target+1;
-func2();
-} 
-} 
+struct teststruct{
+INT a;
+STRING b;
+CHAR c;
+}
 INT func2(INT target){ 
-INT test=target;
-test=test*2;
-test=test/2;
+INT test = target;
+test = test*2;
+INT testlist[] = {1,2,3,4,5};
+testlist[1] = 8;
+test = test/2;
+INT one = 10;
+if(1 above 0){ 
+INT n;
+} 
+else{ 
+INT m;
+} 
 return 2;
+} 
+VOID func1(){ 
+INT target = 0;
+while(!(target equals 10)){ 
+target = target+1;
+func2(ArgExpr);
+} 
+} 
+VOID main(){ 
+INT a[] = {1,2,3,4};
+a[2] = 9;
+if(1 above 0){ 
+INT n;
+} 
+else{ 
+INT m;
+} 
+} 
+VOID func3(){ 
+StructVarDcl - Not implemented;
+Nope = 5;
 } 

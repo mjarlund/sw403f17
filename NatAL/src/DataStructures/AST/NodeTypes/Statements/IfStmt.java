@@ -2,9 +2,6 @@ package DataStructures.AST.NodeTypes.Statements;
 
 import DataStructures.AST.NodeTypes.Expressions.Expr;
 
-/**
- * Created by Anders Brams on 3/21/2017.
- */
 public class IfStmt extends Stmt
 {
     public IfStmt(Expr expr, BlockStmt statements)
@@ -21,4 +18,6 @@ public class IfStmt extends Stmt
     {
         return (BlockStmt) children.get(1);
     }
+    public ElseStmt GetElse(){ if(children.get(2)!=null) return (ElseStmt) children.get(2);
+    else return  null;}
 }

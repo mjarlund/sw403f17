@@ -18,6 +18,8 @@ public interface IVisitor
 
     Object Visit(IfStmt stmt);
 
+    Object Visit(ElseStmt stmt);
+
     Object Visit(UntilStmt stmt);
 
     Object Visit(ForEachStmt stmt);

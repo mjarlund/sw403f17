@@ -141,7 +141,11 @@ public class SemanticAnalyzer implements IVisitor{
         
         return null;
     }
-    
+    public Object Visit(ElseStmt stmt) {
+        VisitChildren(stmt);
+        return null;
+    }
+
     public Object Visit(UntilStmt stmt)
     {
         Expr condition = stmt.GetCondition();

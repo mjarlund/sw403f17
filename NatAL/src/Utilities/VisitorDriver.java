@@ -65,6 +65,9 @@ public class VisitorDriver
             case "IfStmt":
                 returnValue = visit.Visit((IfStmt)child);
                 break;
+            case "ElseStmt":
+                returnValue = visit.Visit((ElseStmt)child);
+                break;
             case "ForEachStmt":
                 returnValue = visit.Visit((ForEachStmt)child);
                 break;

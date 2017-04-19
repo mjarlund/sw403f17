@@ -11,12 +11,10 @@ import Utilities.IVisitor;
 import Utilities.Reporter;
 import Utilities.VisitorDriver;
 
-import java.sql.Struct;
 import java.util.ArrayList;
 import java.util.List;
 
 import java.io.*;
-import java.util.Objects;
 
 // TODO: Nogle steder bruger vi ArrayList andre steder List. Det skal både rettes her og inde i AST-noderene
 // TODO: Mere sigende navne / konsistente navne når man skal gette noget fra de forskellige AST-noder. Plus ikke alle AST-node har getter-metoder
@@ -33,10 +31,11 @@ public class CodeGenerator implements IVisitor
 
     public void VisitChildren(AST root) {
         try {
-        for (AST child : root.children) {
-            String switchValue = (child.GetValue() != null) ? child.GetValue() : ((IdExpr) child).ID;
-            visitValue.Visit(switchValue, child);
-        }
+            for (AST child : root.children) {
+                String switchValue = (child.GetValue() != null) ? child.GetValue() : ((IdExpr) child).ID;
+                visitValue.Visit(switchValue, child);
+
+            }
         }
         catch (ClassCastException e){
             System.out.println(e);
@@ -76,7 +75,17 @@ public class CodeGenerator implements IVisitor
         Emit("if(");
         visitValue.Visit(stmt.GetCondition().GetValue(), stmt.GetCondition());
         Emit( ")");
+        System.out.println(stmt.children.size());
+
         visitValue.Visit(stmt.GetBlock().GetValue(), stmt.GetBlock());
+        visitValue.Visit(stmt.GetElse().GetValue(), stmt.GetElse());
+
+        return null;
+    }
+
+    public Object Visit(ElseStmt stmt) {
+        Emit("else");
+        VisitChildren(stmt);
         return null;
     }
 
@@ -103,8 +112,6 @@ public class CodeGenerator implements IVisitor
 
     public Object Visit(FuncCallExpr expr) {
         VisitChildren(expr);
-        //visitValue.Visit(expr.GetFuncId().GetValue(), expr.GetFuncId());
-        //visitValue.Visit(expr.GetFuncArgs().GetValue(), expr.GetFuncArgs());
         return null;
     }
 
@@ -114,7 +121,7 @@ public class CodeGenerator implements IVisitor
         visitValue.Visit(expr.GetRightExpr().GetValue(),expr.GetRightExpr());
         return null;
     }
-    
+
     public Object Visit(BoolExpr expr) {
         visitValue.Visit(expr.GetLeftExpr().GetValue(), expr.GetLeftExpr());
         Emit(" " + expr.Operator.Value+ " ");
@@ -124,14 +131,12 @@ public class CodeGenerator implements IVisitor
 
     public Object Visit(AssignStmt stmt) {
         visitValue.Visit(stmt.GetLeft().GetValue(),stmt.GetLeft());
-        Emit("=");
+        Emit(" = ");
         visitValue.Visit(stmt.GetRight().GetValue(), stmt.GetRight());
         return null;
     }
 
     public Object Visit(UnaryExpr expr) {
-        // TODO Hvordan ved vi om operatoren kommer før eller efter identifier
-        // TODO undersøg om C skelner mellem i++ og ++i. Det mener jeg den gør i nogle tilfælde
         Emit(expr.GetOperator().Value);
         VisitChildren(expr);
         return null;
@@ -231,6 +236,10 @@ public class CodeGenerator implements IVisitor
         return null;
     }
 
+    public Object Visit(StructCompSelectExpr node) {
+
+        return null;
+    }
 
 
     /* Adds an Arduino C instruction to a list */
@@ -244,7 +253,6 @@ public class CodeGenerator implements IVisitor
     /* Writes all Arduino C instructions to a file */
     public void ToFile ()
     {
-        System.out.println(instructions.size());
         try{
             PrintWriter writer = new PrintWriter("Arduino-C-Program.txt", "UTF-8");
             for(String s : instructions)
@@ -259,21 +267,11 @@ public class CodeGenerator implements IVisitor
 
     public static void main(String args[]) throws IOException {
 
-            Scanner sc = new Scanner(InputTester.readFile("src/CodeGeneration/FinalProgram.txt"));
-            String code = "text func1()\n" +
-                    "pin a is 2\n" +
-                    "a is digital read from a\n" +
-                    "analog write 2 to a\n" +
-                    "boolean b is true and false\n" +
-                    "return \"a\"\n" +
-                    "end func1\n" +
-                    "void func2()\n" +
-                    "text b is func1()\n end func2\n";
-            //Scanner sc = new Scanner(code);
-            Parser parser = new Parser(sc);
-            AST programTree = parser.ParseProgram();
-            CodeGenerator c = new CodeGenerator(programTree);
-            c.ToFile();
+        Scanner sc = new Scanner(InputTester.readFile("src/CodeGeneration/FinalProgram.txt"));
+        Parser parser = new Parser(sc);
+        AST programTree = parser.ParseProgram();
+        CodeGenerator c = new CodeGenerator(programTree);
+        c.ToFile();
 
     }
 }
