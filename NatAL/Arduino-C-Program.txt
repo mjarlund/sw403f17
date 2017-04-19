@@ -36,6 +36,6 @@ INT m;
 } 
 } 
 VOID func3(){ 
-StructVarDcl - Not implemented;
-Nope = 5;
+teststruct test1 = { 0, 0, 0 };
+test1.a = 5;
 } 

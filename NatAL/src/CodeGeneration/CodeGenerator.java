@@ -10,10 +10,7 @@ import Test.InputTester;
 import Utilities.IVisitor;
 import Utilities.Reporter;
 import Utilities.VisitorDriver;
-
 import java.util.ArrayList;
-import java.util.List;
-
 import java.io.*;
 
 // TODO: Nogle steder bruger vi ArrayList andre steder List. Det skal både rettes her og inde i AST-noderene
@@ -34,7 +31,6 @@ public class CodeGenerator implements IVisitor
             for (AST child : root.children) {
                 String switchValue = (child.GetValue() != null) ? child.GetValue() : ((IdExpr) child).ID;
                 visitValue.Visit(switchValue, child);
-
             }
         }
         catch (ClassCastException e){
@@ -43,19 +39,11 @@ public class CodeGenerator implements IVisitor
     }
 
     public Object Visit(StructVarDcl dcl) {
-        Emit("StructVarDcl - Not implemented");
+        //Emit("StructVarDcl - Not implemented");
 
-        //Emit(dcl.GetStructType().ID);
-        //Emit(" ");
-        //Emit(dcl.GetIdentifier().ID + " = { 0, 0, 0 };\n");
-        //Emit(dcl.GetIdentifier().ID + "." + "??");
-
-        //visitValue.Visit(dcl.GetIdentifier().GetValue(), dcl.GetIdentifier());
-
-        //Emit(dcl.GetStructType() + "." + dcl.GetIdentifier());
-
-        //RGB variable = { 255 , 0 , 0 };
-        //variable.r = 0;
+        Emit(dcl.GetStructType().ID);
+        Emit(" ");
+        Emit(dcl.GetIdentifier().ID + " = { 0, 0, 0 }");
         return null;
     }
 
@@ -75,8 +63,6 @@ public class CodeGenerator implements IVisitor
         Emit("if(");
         visitValue.Visit(stmt.GetCondition().GetValue(), stmt.GetCondition());
         Emit( ")");
-        System.out.println(stmt.children.size());
-
         visitValue.Visit(stmt.GetBlock().GetValue(), stmt.GetBlock());
         visitValue.Visit(stmt.GetElse().GetValue(), stmt.GetElse());
 
@@ -214,7 +200,6 @@ public class CodeGenerator implements IVisitor
 
     public Object Visit(BlockStmt block) {
         Emit("{ \n");
-        //VisitChildren(block);
         for (AST child : block.children) {
             String switchValue = (child.GetValue() != null) ? child.GetValue() : ((IdExpr) child).ID;
             visitValue.Visit(switchValue, child);
@@ -237,10 +222,9 @@ public class CodeGenerator implements IVisitor
     }
 
     public Object Visit(StructCompSelectExpr node) {
-
+        Emit(node.StructVarId + "." + node.ComponentId);
         return null;
     }
-
 
     /* Adds an Arduino C instruction to a list */
     public void Emit (String instruction)
