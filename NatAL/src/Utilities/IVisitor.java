@@ -54,4 +54,6 @@ public interface IVisitor
 
     Object Visit(ListIndexExpr block);
 
+    Object Visit(StructCompSelectExpr node);
+
 }

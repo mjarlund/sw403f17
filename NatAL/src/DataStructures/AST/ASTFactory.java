@@ -59,6 +59,16 @@ public class ASTFactory
         SemanticAction.put("BuildForeachStatement", ASTFactory.this::CreateForeachStmt);
         SemanticAction.put("BuildStructVarDcl", ASTFactory.this::CreateStructVarDcl);
         SemanticAction.put("BuildListIndexExpression", ASTFactory.this::CreateListIndexExpr);
+        SemanticAction.put("BuildStructComponentSelectionExpression", ASTFactory.this::CreateStructCompSelectExpr);
+    }
+
+    private void CreateStructCompSelectExpr(){
+        IdExpr componentId = (IdExpr)astStack.pop();
+        terminals.pop(); // '.'
+        IdExpr structId = (IdExpr)astStack.pop();
+        StructCompSelectExpr expr = new StructCompSelectExpr(structId.ID, componentId.ID);
+        expr.SetValue("StructCompSelectExpr");
+        astStack.push(expr);
     }
 
     private void CreateListIndexExpr(){

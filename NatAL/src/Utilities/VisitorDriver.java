@@ -86,6 +86,9 @@ public class VisitorDriver
             case "ListIndexExpr":
                 returnValue = visit.Visit((ListIndexExpr) child);
                 break;
+            case "StructCompSelectExpr":
+                returnValue = visit.Visit((StructCompSelectExpr) child);
+                break;
         }
 
         return returnValue;

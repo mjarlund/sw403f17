@@ -80,7 +80,7 @@ Parameter -> StringLiteral
 Parameter -> BooleanLiteral
 Parameter -> CharacterLiteral
 Parameter-> DigitalLiteral
-IdentifierAppendantOptional -> . Identifier BuildIdentifier CombineDown
+IdentifierAppendantOptional -> . Identifier BuildIdentifier BuildStructComponentSelectionExpression
 IdentifierAppendantOptional -> [ IntegerLiteral ] BuildListIndexExpression
 IdentifierAppendantOptional -> EPSILON
 ParameterList -> ( ParameterListBody ) BuildActualParams

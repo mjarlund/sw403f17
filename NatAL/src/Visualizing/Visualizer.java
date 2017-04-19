@@ -21,16 +21,19 @@ public class Visualizer extends PApplet {
     Parser parser;
 
     public void settings(){
-        size(1920,1080); //Because for some reason this has to be here
+        size(1280,720); //Because for some reason this has to be here
     }
 
     public void setup(){
         /* Visualizer settings */
         textSize(12);
         /* Scanner and parser */
-        String code =   "void main()\n" +
-                        "list of number a is (1, 2, 3, 4)\n" +
-                        "a[2] is 9 \n" +
+        String code =   "structure book \n" +
+                        "   number year\n" +
+                        "   end book\n"+
+                        "void main()\n" +
+                        "book this\n" +
+                        "this.year is 2\n" +
                         "end main\n";
         String code1 = "text func1()\n" +
                        "pin a is 2\n" +

@@ -113,6 +113,12 @@ public class SemanticAnalyzer implements IVisitor{
         
         return null;
     }
+
+    public Object Visit(StructCompSelectExpr expr){
+        StructSymbol struct = (StructSymbol) currentScope.FindSymbol(expr.StructVarId);
+        Symbol comp = struct.FindSymbol(expr.ComponentId);
+        return comp.Type;
+    }
     
     public Object Visit(IOExpr expr)
     {
