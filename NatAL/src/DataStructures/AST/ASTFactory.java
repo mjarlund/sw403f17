@@ -67,7 +67,6 @@ public class ASTFactory
         System.out.println(terminals.pop().Value);
         IdExpr listId = (IdExpr) astStack.pop();
         ListIndexExpr listExpr = new ListIndexExpr(listId, index);
-        System.out.println("ListExpr created with Id: " + listExpr.Id.ID +" and index: " + index);
         listExpr.SetValue("ListIndexExpr");
         astStack.push(listExpr);
     }
