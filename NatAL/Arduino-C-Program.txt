@@ -36,6 +36,6 @@ INT m;
 } 
 } 
 VOID func3(){ 
-teststruct test1 = { 0, 0, 0 };
+teststruct test1;
 test1.a = 5;
 } 

@@ -39,9 +39,7 @@ public class CodeGenerator implements IVisitor
     }
 
     public Object Visit(StructVarDcl dcl) {
-        Emit(dcl.GetStructType().ID);
-        Emit(" ");
-        Emit(dcl.GetIdentifier().ID + " = { 0, 0, 0 }");
+        Emit(dcl.GetStructType().ID+ " " + dcl.GetIdentifier().ID);
         return null;
     }
 
