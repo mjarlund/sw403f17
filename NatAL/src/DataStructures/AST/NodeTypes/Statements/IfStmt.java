@@ -18,6 +18,5 @@ public class IfStmt extends Stmt
     {
         return (BlockStmt) children.get(1);
     }
-    public ElseStmt GetElse(){ if(children.get(2)!=null) return (ElseStmt) children.get(2);
-    else return  null;}
+    public ElseStmt GetElse(){ return (ElseStmt) children.get(2); }
 }

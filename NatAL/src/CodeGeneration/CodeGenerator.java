@@ -39,8 +39,6 @@ public class CodeGenerator implements IVisitor
     }
 
     public Object Visit(StructVarDcl dcl) {
-        //Emit("StructVarDcl - Not implemented");
-
         Emit(dcl.GetStructType().ID);
         Emit(" ");
         Emit(dcl.GetIdentifier().ID + " = { 0, 0, 0 }");
@@ -64,7 +62,8 @@ public class CodeGenerator implements IVisitor
         visitValue.Visit(stmt.GetCondition().GetValue(), stmt.GetCondition());
         Emit( ")");
         visitValue.Visit(stmt.GetBlock().GetValue(), stmt.GetBlock());
-        visitValue.Visit(stmt.GetElse().GetValue(), stmt.GetElse());
+        if (stmt.children.size() > 2)
+            visitValue.Visit(stmt.GetElse().GetValue(), stmt.GetElse());
 
         return null;
     }
