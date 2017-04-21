@@ -1,8 +1,9 @@
-/DataStructures/
 /CodeGeneration/
+/Compiler.class
+/DataStructures/
+/Exceptions/
 /Semantics/
-/Visualizing/
+/Syntax/
 /Test/
 /Utilities/
-/Exceptions/
-/Syntax/
+/Visualizing/
