@@ -10,7 +10,6 @@ import Syntax.Tokens.Token;
 import Syntax.Tokens.TokenType;
 import Utilities.TypeConverter;
 
-import java.sql.Struct;
 import java.util.ArrayList;
 import java.util.Stack;
 
@@ -171,8 +170,18 @@ public class ASTFactory
     private void CreateFuncCall()
     {
         ArgsExpr args = (ArgsExpr) astStack.pop();
-        IdExpr id = (IdExpr) astStack.pop();
-        FuncCallExpr funcCall = new FuncCallExpr(id,args);
+        Expr func = (Expr) astStack.pop();
+        IdExpr id=null; StructCompSelectExpr structMember=null;
+        FuncCallExpr funcCall = null;
+        if(func instanceof IdExpr){
+            id = (IdExpr)func;
+            funcCall = new FuncCallExpr(id,args);
+        }
+        else{
+            structMember = (StructCompSelectExpr)func;
+            funcCall = new FuncCallExpr(structMember,args);
+        }
+
         funcCall.SetLineNumber(currentLineNumber);
         astStack.push(funcCall);
     }
