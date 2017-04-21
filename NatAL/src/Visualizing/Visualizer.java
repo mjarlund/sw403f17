@@ -1,11 +1,9 @@
 package Visualizing;
 
-import CodeGeneration.CodeGenerator;
 import DataStructures.AST.AST;
 import Semantics.Scope.SemanticAnalyzer;
 import Syntax.Parser.Parser;
 import Syntax.Scanner.Scanner;
-import com.sun.org.apache.bcel.internal.classfile.Code;
 import processing.core.PApplet;
 import processing.core.PVector;
 
@@ -28,12 +26,9 @@ public class Visualizer extends PApplet {
         /* Visualizer settings */
         textSize(12);
         /* Scanner and parser */
-        String code =   "structure book \n" +
-                        "   number year\n" +
-                        "   end book\n"+
-                        "void main()\n" +
-                        "book this\n" +
-                        "this.year is 2\n" +
+        String code =   "void main()\n" +
+                        "list of number testlist is (1, 2, 3, 4, 5)\n" +
+                        "testlist.add(2)\n" +
                         "end main\n";
         String code1 = "text func1()\n" +
                        "pin a is 2\n" +
@@ -50,7 +45,7 @@ public class Visualizer extends PApplet {
 
         SemanticAnalyzer sm = new SemanticAnalyzer();
         sm.VisitChildren(programTree);
-        System.out.println("No variables out of scope!");
+        //System.out.println("No variables out of scope!");
 
         BuildVisualTree(programTree);
         background(255);

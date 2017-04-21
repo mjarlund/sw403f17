@@ -5,8 +5,6 @@ import DataStructures.AST.NodeTypes.Declarations.*;
 import DataStructures.AST.NodeTypes.Expressions.*;
 import DataStructures.AST.NodeTypes.Statements.*;
 
-import java.util.List;
-
 public class VisitorDriver
 {
     private IVisitor visit;
@@ -16,7 +14,6 @@ public class VisitorDriver
     }
     public Object Visit(String astName, AST child)
     {
-        System.out.println(astName);
         Object returnValue = null;
         switch (astName){
             case "VarDcl": /* Add it to this scope (works for FuncDcls too) */

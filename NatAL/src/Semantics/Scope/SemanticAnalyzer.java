@@ -67,7 +67,7 @@ public class SemanticAnalyzer implements IVisitor{
                 Reporter.Error(new InvalidTypeException("\"" + arg.GetArg().LiteralValue + "\" is not a " + dclType + " on line " + dcl.GetLineNumber()));
         }
 
-        Symbol listId = new Symbol(dclId, dclType);
+        Symbol listId = new ListSymbol(dclType,dclId);
         listId.dclType = DclType.List;
         currentScope.AddSymbol(listId);
         return null;
@@ -95,7 +95,6 @@ public class SemanticAnalyzer implements IVisitor{
         if(stmt.GetWriteVal() != null)
         {
             Object expr = visitValue.Visit(stmt.GetWriteVal().GetValue(), stmt.GetWriteVal());
-            System.out.println(((ValExpr)stmt.GetWriteVal()).Type);
             if(expr==null)
                 Reporter.Error(new ArgumentsException("Missing expression on line " + stmt.GetLineNumber()));
 
@@ -115,12 +114,23 @@ public class SemanticAnalyzer implements IVisitor{
     }
 
     public Object Visit(StructCompSelectExpr expr){
-    	if(currentScope.FindSymbol(expr.StructVarId) == null)
+        System.out.println(expr.StructVarId);
+        Symbol structSymbol = currentScope.FindSymbol(expr.StructVarId);
+    	if(structSymbol == null)
     		Reporter.Error(new UndeclaredSymbolException("struct: \"" + expr.StructVarId + "\" on line " + expr.GetLineNumber() + " does not exist in current scope"));
-    	
+    	if(structSymbol.dclType.equals(DclType.Struct)){
     	StructSymbol struct = (StructSymbol) currentScope.FindSymbol(expr.StructVarId);
         Symbol comp = struct.FindSymbol(expr.ComponentId);
         return comp.Type;
+    	}else if(structSymbol.equals(DclType.List)){
+    	    ListSymbol list = (ListSymbol) currentScope.FindSymbol(expr.StructVarId);
+    	    Symbol op = list.FindSymbol(expr.ComponentId);
+    	    if(op==null)
+    	        Reporter.Error(new UndeclaredSymbolException("list operation " + expr.ComponentId + " not defined"));
+    	    return null;
+        }else{
+    	    return null;
+        }
     }
     
     public Object Visit(IOExpr expr)

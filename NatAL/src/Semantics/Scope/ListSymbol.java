@@ -14,7 +14,7 @@ public class ListSymbol extends Symbol implements IScope {
     private static ArrayList<Symbol> symbols = new ArrayList<>();
 
     public ListSymbol(Types listtype, String name) {
-        super(name);
+        super(name,listtype);
         Symbol add = new Symbol("add");
         add.SetDclType(DclType.Function);
         ArrayList<Types> addSignatur = new ArrayList<>(Arrays.asList(listtype));

@@ -32,7 +32,7 @@ public class ASTFactory
         this.terminals = terminals;
         program = new AST();
     }
-    public void initFactory()
+    public void InitFactory()
     {
         SemanticAction.put("BuildVarDCL", ASTFactory.this::CreateDclTree);
         SemanticAction.put("CombineDown", ASTFactory.this::CombineDown);

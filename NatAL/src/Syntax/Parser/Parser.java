@@ -36,7 +36,7 @@ public class Parser
         parseStack = new Stack<String>();
         Stack<Token> terminalStack = new Stack<Token>();
         ASTFactory ASTFactory = new ASTFactory(terminalStack);
-        ASTFactory.initFactory();
+        ASTFactory.InitFactory();
 
         ApplyProduction("Program");
 
