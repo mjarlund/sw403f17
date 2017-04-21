@@ -115,7 +115,10 @@ public class SemanticAnalyzer implements IVisitor{
     }
 
     public Object Visit(StructCompSelectExpr expr){
-        StructSymbol struct = (StructSymbol) currentScope.FindSymbol(expr.StructVarId);
+    	if(currentScope.FindSymbol(expr.StructVarId) == null)
+    		Reporter.Error(new UndeclaredSymbolException("struct: \"" + expr.StructVarId + "\" on line " + expr.GetLineNumber() + " does not exist in current scope"));
+    	
+    	StructSymbol struct = (StructSymbol) currentScope.FindSymbol(expr.StructVarId);
         Symbol comp = struct.FindSymbol(expr.ComponentId);
         return comp.Type;
     }
