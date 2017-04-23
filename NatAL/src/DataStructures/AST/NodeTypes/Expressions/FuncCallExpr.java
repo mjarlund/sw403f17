@@ -13,13 +13,16 @@ public class FuncCallExpr extends Expr
     }
     public FuncCallExpr(StructCompSelectExpr funcIdentifier, ArgsExpr args)
     {
-        children.add(funcIdentifier);
-        children.add(args);
+        /* OBS all children.add should be replaced with AddChild */
+        AddChild(funcIdentifier);
+        AddChild(args);
+        //children.add(funcIdentifier);
+        //children.add(args);
         SetValue("FuncCallExpr");
     }
-    public IdExpr GetFuncId()
+    public Expr GetFuncId()
     {
-        return (IdExpr) children.get(0);
+        return (Expr) children.get(0);
     }
     public ArgsExpr GetFuncArgs()
     {

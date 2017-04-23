@@ -51,6 +51,12 @@ public class AST
     // TODO Remove only a test
     public ArrayList<AST> children = new ArrayList<AST>();
 
+    public void AddChild(AST child)
+    {
+        child.SetParent(this);
+        this.children.add(child);
+    }
+
     private AST parent;
     public AST GetParent(){
         return parent;

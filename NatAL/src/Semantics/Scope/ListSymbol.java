@@ -34,9 +34,11 @@ public class ListSymbol extends Symbol implements IScope {
     }
 
     @Override
-    public Symbol FindSymbol(String identifier) {
-        for(Symbol s : symbols){
-            if(s.equals(identifier))
+    public Symbol FindSymbol(String identifier)
+    {
+        for(Symbol s : symbols)
+        {
+            if(s.Name.equals(identifier))
                 return s;
         }
         return null;

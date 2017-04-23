@@ -66,7 +66,6 @@ public class SemanticAnalyzer implements IVisitor{
             if(!arg.GetArg().Type.equals(dclType))
                 Reporter.Error(new InvalidTypeException("\"" + arg.GetArg().LiteralValue + "\" is not a " + dclType + " on line " + dcl.GetLineNumber()));
         }
-
         Symbol listId = new ListSymbol(dclType,dclId);
         listId.dclType = DclType.List;
         currentScope.AddSymbol(listId);
@@ -114,21 +113,36 @@ public class SemanticAnalyzer implements IVisitor{
     }
 
     public Object Visit(StructCompSelectExpr expr){
-        System.out.println(expr.StructVarId);
         Symbol structSymbol = currentScope.FindSymbol(expr.StructVarId);
     	if(structSymbol == null)
     		Reporter.Error(new UndeclaredSymbolException("struct: \"" + expr.StructVarId + "\" on line " + expr.GetLineNumber() + " does not exist in current scope"));
-    	if(structSymbol.dclType.equals(DclType.Struct)){
+    	if(structSymbol.dclType.equals(DclType.Struct))
+    	{
     	StructSymbol struct = (StructSymbol) currentScope.FindSymbol(expr.StructVarId);
         Symbol comp = struct.FindSymbol(expr.ComponentId);
         return comp.Type;
-    	}else if(structSymbol.equals(DclType.List)){
-    	    ListSymbol list = (ListSymbol) currentScope.FindSymbol(expr.StructVarId);
+    	}
+    	else if(structSymbol.dclType.equals(DclType.List))
+    	{
+    	    ListSymbol list = (ListSymbol) structSymbol;
     	    Symbol op = list.FindSymbol(expr.ComponentId);
     	    if(op==null)
     	        Reporter.Error(new UndeclaredSymbolException("list operation " + expr.ComponentId + " not defined"));
+    	    ArrayList<ArgExpr> args = ((FuncCallExpr)expr.GetParent()).GetFuncArgs().GetArgs();
+            ArrayList<Types> funcSignature = op.GetTypeSignature();
+            if(args.size() > funcSignature.size())
+                Reporter.Error(new ArgumentsException("too many arguments in " + expr.ComponentId + " on line TODO"));
+            if(args.size() < funcSignature.size())
+                Reporter.Error(new ArgumentsException("too few arguments in " + expr.ComponentId + " on line TODO"));
+            for(int i=0;i<args.size();++i)
+            {
+                if(!args.get(i).GetArg().Type.equals(funcSignature.get(i)))
+                    Reporter.Error(new ArgumentsException("Argument not matching type signature in " + expr.ComponentId + " on line TODO"));
+            }
     	    return null;
-        }else{
+        }
+        else
+        {
     	    return null;
         }
     }
@@ -201,38 +215,41 @@ public class SemanticAnalyzer implements IVisitor{
     /* Checks symbol table for function identifier and checks correct usage of arguments */
     public Object Visit(FuncCallExpr expr)
     {
-        IdExpr funcId = expr.GetFuncId();
-        Symbol identifier = FindSymbol(funcId.ID);
-        // Check if function is declared before usage
-        if(identifier==null)
-            Reporter.Error(new UndeclaredSymbolException(funcId.ID+ " not declared.", expr.GetLineNumber()));
+        Expr Id = expr.GetFuncId();
+        if(Id instanceof StructCompSelectExpr)
+            return visitValue.Visit(Id.GetValue(),Id);
+        else {
+            IdExpr funcId = (IdExpr)Id;
+            Symbol identifier = FindSymbol(funcId.ID);
+            // Check if function is declared before usage
+            if (identifier == null)
+                Reporter.Error(new UndeclaredSymbolException(funcId.ID + " not declared.", expr.GetLineNumber()));
 
-        if(!identifier.dclType.equals( DclType.Function))
-            Reporter.Error(new InvalidIdentifierException("Not used as a function call"));
+            if (!identifier.dclType.equals(DclType.Function))
+                Reporter.Error(new InvalidIdentifierException("Not used as a function call"));
 
-        // Checks that args are used declared before usage
-        visitValue.Visit(expr.GetFuncArgs().GetValue(),expr.GetFuncArgs());
-        ArrayList<ArgExpr> args = expr.GetFuncArgs().GetArgs();
-        if(identifier.TypeSignature.size()>0 || args.size()>0)
-        {
-            int iterations = identifier.TypeSignature.size();
-            if(iterations > args.size())
-                Reporter.Error(new ArgumentsException("Too few Arguments in " + identifier.Name));
-            else if(iterations < args.size())
-                Reporter.Error(new ArgumentsException("Too many Arguments in " + identifier.Name));
-            // Checks that every argument type fits the function type signature
-            for (int i = 0; i<iterations;i++)
-            {
-                ArgExpr argument = args.get(i);
+            // Checks that args are used declared before usage
+            visitValue.Visit(expr.GetFuncArgs().GetValue(), expr.GetFuncArgs());
+            ArrayList<ArgExpr> args = expr.GetFuncArgs().GetArgs();
+            if (identifier.TypeSignature.size() > 0 || args.size() > 0) {
+                int iterations = identifier.TypeSignature.size();
+                if (iterations > args.size())
+                    Reporter.Error(new ArgumentsException("Too few Arguments in " + identifier.Name));
+                else if (iterations < args.size())
+                    Reporter.Error(new ArgumentsException("Too many Arguments in " + identifier.Name));
+                // Checks that every argument type fits the function type signature
+                for (int i = 0; i < iterations; i++) {
+                    ArgExpr argument = args.get(i);
 
-                Types argType = argument.GetArg().Type;
+                    Types argType = argument.GetArg().Type;
 
-                if(!argType.equals(identifier.TypeSignature.get(i)))
-                    Reporter.Error(new IncompatibleValueException("Incompatible argument types in " + identifier.Name + " on line " + expr.GetLineNumber()));
+                    if (!argType.equals(identifier.TypeSignature.get(i)))
+                        Reporter.Error(new IncompatibleValueException("Incompatible argument types in " + identifier.Name + " on line " + expr.GetLineNumber()));
+                }
             }
+            // returns function return type
+            return identifier.Type;
         }
-        // returns function return type
-        return identifier.Type;
     }
     public Object Visit(BinaryOPExpr expr)
     {

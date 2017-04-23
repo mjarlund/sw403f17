@@ -1,28 +1,23 @@
 package Test.UnitTests.Semantics;
 
-import static org.junit.Assert.*;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-
+import DataStructures.AST.AST;
+import Exceptions.*;
+import Semantics.Scope.SemanticAnalyzer;
+import Syntax.Parser.Parser;
+import Syntax.Scanner.Scanner;
+import Test.InputTester;
 import org.junit.Test;
 import org.junit.experimental.runners.Enclosed;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
-import DataStructures.AST.AST;
-import Exceptions.DuplicatedSymbolException;
-import Exceptions.IncompatibleValueException;
-import Exceptions.InvalidScopeException;
-import Exceptions.InvalidTypeException;
-import Exceptions.UndeclaredSymbolException;
-import Semantics.Scope.SemanticAnalyzer;
-import Syntax.Parser.Parser;
-import Syntax.Scanner.Scanner;
-import Test.InputTester;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
+
+import static org.junit.Assert.assertEquals;
 
 @RunWith(Enclosed.class)
 public class ScopeTest {
@@ -156,6 +151,10 @@ public class ScopeTest {
 				thrown = true;
 			}
 			catch (InvalidTypeException ex)
+			{
+				thrown = true;
+			}
+			catch (ArgumentsException ex)
 			{
 				thrown = true;
 			}

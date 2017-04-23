@@ -35,6 +35,7 @@ public class Symbol {
     {
         TypeSignature = typeSignature;
     }
+    public ArrayList<Types> GetTypeSignature(){return TypeSignature;}
     public void SetDclType(DclType type)
     {
         dclType = type;

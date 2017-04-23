@@ -27,8 +27,8 @@ public class Visualizer extends PApplet {
         textSize(12);
         /* Scanner and parser */
         String code =   "void main()\n" +
-                        "list of number testlist is (1, 2, 3, 4, 5)\n" +
-                        "testlist.add(2)\n" +
+                        "list of number testlist is (1)\n" +
+                        "testlist.add(2.0)\n" +
                         "end main\n";
         String code1 = "text func1()\n" +
                        "pin a is 2\n" +
@@ -45,7 +45,6 @@ public class Visualizer extends PApplet {
 
         SemanticAnalyzer sm = new SemanticAnalyzer();
         sm.VisitChildren(programTree);
-        //System.out.println("No variables out of scope!");
 
         BuildVisualTree(programTree);
         background(255);
