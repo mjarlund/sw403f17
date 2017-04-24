@@ -104,7 +104,7 @@ public class ASTFactory
 
     public void CreateAbstractTree(String action, int lineNumber)
     {
-    	System.out.println(astStack);
+    	//System.out.println(astStack);
         Runnable method = SemanticAction.get(action);
         if (method!=null)
         {

@@ -17,6 +17,7 @@ import java.util.ArrayList;
 public class SemanticAnalyzer implements IVisitor{
 
     IScope currentScope = new Scope();
+    IScope GlobalScope = currentScope;
     ArrayList<AST> visitedVarDcls = new ArrayList<>();
     public Symbol FindSymbol(String identifier){
         return currentScope.FindSymbol(identifier);
@@ -73,13 +74,13 @@ public class SemanticAnalyzer implements IVisitor{
     }
 
     public Object Visit(StructVarDcl dcl){
-    	//System.out.println("her er problemet: " + currentScope.GetDepth());
-        if (currentScope.FindSymbol(dcl.GetStructType().ID) == null){
+        if (GlobalScope.FindSymbol(dcl.GetStructType().ID) == null){
             Reporter.Error(new UndeclaredSymbolException("Struct type \" " + dcl.GetStructType().ID + " \" not declared on line: " + dcl.GetLineNumber()));
         } else {
             Symbol structId = new Symbol(dcl.GetIdentifier().ID, dcl.GetStructType().ID);
             structId.dclType = DclType.Struct;
             currentScope.AddSymbol(structId);
+            System.out.println("StructVarDcl   " + currentScope.GetDepth() + "  " + dcl.GetIdentifier().ID);
         }
         
         return null;
@@ -329,6 +330,7 @@ public class SemanticAnalyzer implements IVisitor{
             if (visited == node) return null;
         }
         String varID  = node.Identifier;
+        System.out.println("varDcl  " + currentScope.GetDepth() + "   " + node.Identifier);
         Types varType = node.GetType();
         Symbol var = new Symbol(varID,varType);
         var.SetDclType(DclType.Variable);

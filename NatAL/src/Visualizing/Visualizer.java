@@ -26,9 +26,23 @@ public class Visualizer extends PApplet {
         /* Visualizer settings */
         textSize(12);
         /* Scanner and parser */
-        String code =   "structure outside\n" +
-        				"test test1\n" +
-        				"end outside\n" ;
+        String code =   "structure testingStruct\n" +
+        				"number a\n" +
+        				"number b\n" +
+        				"number c\n" +
+        				"end test\n\n" +
+
+        				"structure outsideStruct\n" +
+        				"number d\n" +
+        				"testingStruct test1\n" +
+        				"end outside\n\n" +
+
+        				"void main()\n" +
+        				"outsideStruct hej\n" +
+        				"hej.d is 5\n" +
+        				"hej.test1.b is 8\n" +
+        				"hej.test1.c is hej.test1.a + hej.test1.b\n" +
+        				"end main" ;
 
         String code1 = "text func1()\n" +
                        "pin a is 2\n" +

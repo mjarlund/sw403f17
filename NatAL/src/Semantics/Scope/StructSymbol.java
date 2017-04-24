@@ -27,6 +27,7 @@ public class StructSymbol extends Symbol implements IScope
             Reporter.Error(new DuplicatedSymbolException("Name already defined in current scope " + entry.Name));
         else
             symbols.add(entry);
+        	//System.out.println(symbols);
     }
 
     @Override

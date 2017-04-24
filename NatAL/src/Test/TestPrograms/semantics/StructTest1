@@ -10,7 +10,6 @@ end outside
 
 void main()
 outside hej
-hej.test1.a is 4
 hej.test1.b is 8
 hej.test1.c is hej.test1.a + hej.test1.b
 end main
