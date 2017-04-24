@@ -15,7 +15,7 @@ ReturnStatement -> return Expression BuildReturnStmt CombineDown NewLine
 ReturnStatement -> EPSILON
 StructDeclarationStatement -> structure Identifier BuildVarDCL NewLine BuildBlock StructDeclarationBlock BuildStructDeclaration CombineDown
 StructDeclarationBlock -> DeclarationStatement NewLine StructDeclarationBlock
-StructDeclarationBlock -> Identifier Identifier BuildStructVarDcl CombineDown 
+StructDeclarationBlock -> Identifier BuildIdentifier Identifier BuildStructVarDcl CombineDown NewLine StructDeclarationBlock
 StructDeclarationBlock -> end Identifier
 ListDeclarationStatement -> list of Type Identifier BuildVarDCL is ParameterList BuildListDeclaration CombineDown
 FormalParameter -> Type Identifier
@@ -81,8 +81,8 @@ Parameter -> StringLiteral
 Parameter -> BooleanLiteral
 Parameter -> CharacterLiteral
 Parameter-> DigitalLiteral
-IdentifierAppendantOptional -> . Identifier BuildIdentifier BuildStructComponentSelectionExpression
-IdentifierAppendantOptional -> [ IntegerLiteral ] BuildListIndexExpression
+IdentifierAppendantOptional -> . Identifier BuildIdentifier BuildStructComponentSelectionExpression IdentifierAppendantOptional
+IdentifierAppendantOptional -> [ IntegerLiteral ] BuildListIndexExpression 
 IdentifierAppendantOptional -> EPSILON
 ParameterList -> ( ParameterListBody ) BuildActualParams
 ParameterListBody -> Parameter ParameterListBodyPrime

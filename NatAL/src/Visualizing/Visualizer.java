@@ -26,10 +26,10 @@ public class Visualizer extends PApplet {
         /* Visualizer settings */
         textSize(12);
         /* Scanner and parser */
-        String code =   "void main()\n" +
-                        "list of number testlist is (1)\n" +
-                        "testlist.add(2.0)\n" +
-                        "end main\n";
+        String code =   "structure outside\n" +
+        				"test test1\n" +
+        				"end outside\n" ;
+
         String code1 = "text func1()\n" +
                        "pin a is 2\n" +
                         "a is digital read from a\n" +

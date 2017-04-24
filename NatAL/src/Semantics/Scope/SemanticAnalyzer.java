@@ -73,8 +73,9 @@ public class SemanticAnalyzer implements IVisitor{
     }
 
     public Object Visit(StructVarDcl dcl){
+    	//System.out.println("her er problemet: " + currentScope.GetDepth());
         if (currentScope.FindSymbol(dcl.GetStructType().ID) == null){
-            Reporter.Error(new UndeclaredSymbolException("Struct type \" " + dcl.GetStructType().ID + " \" not declared. "));
+            Reporter.Error(new UndeclaredSymbolException("Struct type \" " + dcl.GetStructType().ID + " \" not declared on line: " + dcl.GetLineNumber()));
         } else {
             Symbol structId = new Symbol(dcl.GetIdentifier().ID, dcl.GetStructType().ID);
             structId.dclType = DclType.Struct;

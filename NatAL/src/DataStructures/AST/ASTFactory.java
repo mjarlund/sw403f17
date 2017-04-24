@@ -64,10 +64,24 @@ public class ASTFactory
     private void CreateStructCompSelectExpr(){
         IdExpr componentId = (IdExpr)astStack.pop();
         terminals.pop(); // '.'
+        
+        if (astStack.peek() instanceof StructCompSelectExpr)
+        {
+        StructCompSelectExpr comp = (StructCompSelectExpr)astStack.pop();
+        IdExpr structId = new IdExpr(comp.ComponentId);
+        StructCompSelectExpr expr = new StructCompSelectExpr(structId.ID, componentId.ID);
+        expr.SetValue("StructCompSelectExpr");
+        astStack.push(expr);
+        } 
+        
+        else 
+        { 
         IdExpr structId = (IdExpr)astStack.pop();
         StructCompSelectExpr expr = new StructCompSelectExpr(structId.ID, componentId.ID);
         expr.SetValue("StructCompSelectExpr");
         astStack.push(expr);
+        }
+        
     }
 
     private void CreateListIndexExpr(){
@@ -90,6 +104,7 @@ public class ASTFactory
 
     public void CreateAbstractTree(String action, int lineNumber)
     {
+    	System.out.println(astStack);
         Runnable method = SemanticAction.get(action);
         if (method!=null)
         {
