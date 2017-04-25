@@ -82,7 +82,7 @@ public class CodeGenerator implements IVisitor
     }
 
     public Object Visit(ElseStmt stmt) {
-        Emit("else");
+        Emit(CreateIndentation() + "else");
         VisitChildren(stmt);
         return null;
     }

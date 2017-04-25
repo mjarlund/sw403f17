@@ -14,7 +14,7 @@ INT func2(INT target){
   if(1 above 0){ 
     INT n;
     } 
-else{ 
+  else{ 
     INT m;
     } 
   return 2;
@@ -48,7 +48,7 @@ VOID main(){
   if(1 above 0){ 
     INT n;
     } 
-else{ 
+  else{ 
     INT m;
     } 
   } 

@@ -41,10 +41,6 @@ void func1 ()
      end until
 end func1
 
-
-
-
-
 void main()
     list of number a is (1, 2, 3, 4)
     a[2] is 9
