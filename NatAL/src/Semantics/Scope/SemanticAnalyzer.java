@@ -12,6 +12,8 @@ import Utilities.Reporter;
 import Utilities.TypeConverter;
 import Utilities.VisitorDriver;
 
+import java.io.*;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 
 public class SemanticAnalyzer implements IVisitor{
@@ -21,6 +23,10 @@ public class SemanticAnalyzer implements IVisitor{
     ArrayList<AST> visitedVarDcls = new ArrayList<>();
     public Symbol FindSymbol(String identifier){
         return currentScope.FindSymbol(identifier);
+    }
+
+    public SemanticAnalyzer(){
+        /* Add the standard library */
     }
 
     private VisitorDriver visitValue = new VisitorDriver(this);
@@ -450,5 +456,9 @@ public class SemanticAnalyzer implements IVisitor{
         OpenScope();
         VisitChildren(node);
         CloseScope();
+    }
+
+    public void AddSymbol(String id){
+        currentScope.AddSymbol(new Symbol(id));
     }
 }

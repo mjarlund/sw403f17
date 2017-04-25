@@ -4,6 +4,8 @@ import DataStructures.AST.AST;
 import DataStructures.AST.NodeTypes.Declarations.*;
 import DataStructures.AST.NodeTypes.Expressions.*;
 import DataStructures.AST.NodeTypes.Statements.*;
+import Semantics.Scope.SemanticAnalyzer;
+import Semantics.Scope.Symbol;
 import Syntax.Parser.Parser;
 import Syntax.Scanner.Scanner;
 import Test.InputTester;
@@ -20,9 +22,22 @@ public class CodeGenerator implements IVisitor
 {
     public ArrayList<String> instructions = new ArrayList<>();
     private VisitorDriver visitValue = new VisitorDriver(this);
-    public CodeGenerator (AST programTree)
+    private SemanticAnalyzer SM;
+    private String currentIdentifier = "_";
+    private int indentation = 0;
+
+    private String CreateIndentation(){
+        String indent = "";
+        for (int i = 0; i < indentation; i++){
+            indent += "  ";
+        }
+        return indent;
+    }
+
+    public CodeGenerator (AST programTree, SemanticAnalyzer sm)
     {
         // ¯\_(ツ)_/¯
+        SM = sm;
         VisitChildren(programTree);
     }
 
@@ -44,6 +59,7 @@ public class CodeGenerator implements IVisitor
     }
 
     public Object Visit(IOStmt stmt) {
+        Emit("pinMode("+ stmt.GetPin().ID +",OUTPUT);\n");
         Emit(stmt.GetMode().name()+ stmt.GetOperation().Value + "("+stmt.GetPin().ID+", ");
         visitValue.Visit(stmt.GetWriteVal().GetValue(), stmt.GetWriteVal());
         Emit(")");
@@ -56,7 +72,7 @@ public class CodeGenerator implements IVisitor
     }
 
     public Object Visit(IfStmt stmt) {
-        Emit("if(");
+        Emit("if (");
         visitValue.Visit(stmt.GetCondition().GetValue(), stmt.GetCondition());
         Emit( ")");
         visitValue.Visit(stmt.GetBlock().GetValue(), stmt.GetBlock());
@@ -67,13 +83,13 @@ public class CodeGenerator implements IVisitor
     }
 
     public Object Visit(ElseStmt stmt) {
-        Emit("else");
+        Emit(CreateIndentation() + "else");
         VisitChildren(stmt);
         return null;
     }
 
     public Object Visit(UntilStmt stmt) {
-        Emit("while(!(");
+        Emit("while (!(");
         visitValue.Visit(stmt.GetCondition().GetValue(), stmt.GetCondition());
         Emit("))");
         visitValue.Visit(stmt.GetBlock().GetValue(), stmt.GetBlock());
@@ -82,7 +98,8 @@ public class CodeGenerator implements IVisitor
 
 
     public Object Visit(ForEachStmt stmt) {
-        Emit("for (int i = 0; < sizeof("+stmt.GetCollectionId()+") - 1; i++)\n");
+        GenerateIdentifier();
+        Emit("for (int "+ currentIdentifier +" = 0; < sizeof("+stmt.GetCollectionId()+") - 1; " + currentIdentifier +"++)");
         visitValue.Visit(stmt.GetBlock().GetValue(), stmt.GetBlock());
         return null;
     }
@@ -113,6 +130,9 @@ public class CodeGenerator implements IVisitor
     }
 
     public Object Visit(AssignStmt stmt) {
+        if (stmt.GetRight().GetValue().equals("IOExpr")){
+            Emit("pinMode("+ ((IOExpr)stmt.GetRight()).GetPin().ID +", INPUT);\n");
+        }
         visitValue.Visit(stmt.GetLeft().GetValue(),stmt.GetLeft());
         Emit(" = ");
         visitValue.Visit(stmt.GetRight().GetValue(), stmt.GetRight());
@@ -131,7 +151,7 @@ public class CodeGenerator implements IVisitor
     }
 
     public Object Visit(VarDcl node) {
-        Emit(node.GetType().name() + " " + node.Identifier);
+        Emit(node.GetConvertedType().name() + " " + node.Identifier);
         return null;
     }
 
@@ -150,7 +170,11 @@ public class CodeGenerator implements IVisitor
     }
 
     public Object Visit(IdExpr node) {
-        Emit(node.ID);
+        if (node.isIterator){
+            Emit(node.CollectionID + "["+currentIdentifier+"]");
+        } else {
+            Emit(node.ID);
+        }
         return null;
     }
 
@@ -178,6 +202,7 @@ public class CodeGenerator implements IVisitor
     }
 
     public Object Visit(FuncDcl node) {
+        Emit("\n");
         VisitChildren(node);
         return null;
     }
@@ -196,8 +221,10 @@ public class CodeGenerator implements IVisitor
     }
 
     public Object Visit(BlockStmt block) {
+        indentation++;
         Emit("{ \n");
         for (AST child : block.children) {
+            Emit(CreateIndentation());
             String switchValue = (child.GetValue() != null) ? child.GetValue() : ((IdExpr) child).ID;
             visitValue.Visit(switchValue, child);
             switch (switchValue){
@@ -207,14 +234,14 @@ public class CodeGenerator implements IVisitor
                     break;
                 default: Emit(";\n");
             }
-
         }
-        Emit("} \n");
+        Emit(CreateIndentation() + "} \n");
+        indentation--;
         return null;
     }
 
     public Object Visit(ListIndexExpr block) {
-        Emit(block.GetId().ID + "["+ block.Index +"]");
+        Emit(block.GetId().ID + "["+ block.GetIndex() +"]");
         return null;
     }
 
@@ -246,13 +273,20 @@ public class CodeGenerator implements IVisitor
         }
     }
 
-    public static void main(String args[]) throws IOException {
+    public void GenerateIdentifier(){
+        do {
+            currentIdentifier += "i";
+        } while (SM.FindSymbol(currentIdentifier) != null);
+        SM.AddSymbol(currentIdentifier);
+    }
 
+    public static void main(String args[]) throws IOException {
         Scanner sc = new Scanner(InputTester.readFile("src/CodeGeneration/FinalProgram.txt"));
         Parser parser = new Parser(sc);
         AST programTree = parser.ParseProgram();
-        CodeGenerator c = new CodeGenerator(programTree);
+        SemanticAnalyzer sm = new SemanticAnalyzer();
+        sm.VisitChildren(programTree);
+        CodeGenerator c = new CodeGenerator(programTree, sm);
         c.ToFile();
-
     }
 }
