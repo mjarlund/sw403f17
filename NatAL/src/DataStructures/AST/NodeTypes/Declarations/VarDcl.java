@@ -19,8 +19,19 @@ public class VarDcl extends Dcl
         //else
         return Type;
     }
-    public Types GetConvertedType(){
-        if(Type.equals(Types.PIN)) return Types.INT;
-        else return Type;
+    public String GetConvertedType(){
+        switch (Type){
+            case PIN: return "int";
+            case VOID: return "void";
+            case BOOL: return "bool";
+            case ANALOG: return "analog";
+            case CHAR: return "char";
+            case DIGITAL: return "digital";
+            case FLOAT: return "float";
+            case INT: return "int";
+            case STRING: return "string";
+            case STRUCT: return "struct";
+            default: return "NON_CONVERTABLE_TYPE";
+        }
     }
 }
