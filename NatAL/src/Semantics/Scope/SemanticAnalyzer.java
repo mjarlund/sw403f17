@@ -80,7 +80,7 @@ public class SemanticAnalyzer implements IVisitor{
             Symbol structId = new Symbol(dcl.GetIdentifier().ID, dcl.GetStructType().ID);
             structId.dclType = DclType.Struct;
             currentScope.AddSymbol(structId);
-            System.out.println("StructVarDcl   " + currentScope.GetDepth() + "  " + dcl.GetIdentifier().ID);
+            //System.out.println("StructVarDcl   " + currentScope.GetDepth() + "  " + dcl.GetIdentifier().ID);
         }
         
         return null;
@@ -115,14 +115,24 @@ public class SemanticAnalyzer implements IVisitor{
     }
 
     public Object Visit(StructCompSelectExpr expr){
+    	//System.out.println("here ya go: " + expr.GetParent());
         Symbol structSymbol = currentScope.FindSymbol(expr.StructVarId);
     	if(structSymbol == null)
-    		Reporter.Error(new UndeclaredSymbolException("struct: \"" + expr.StructVarId + "\" on line " + expr.GetLineNumber() + " does not exist in current scope"));
-    	if(structSymbol.dclType.equals(DclType.Struct))
     	{
+    		StructSymbol teststruct = (StructSymbol) (currentScope).FindSymbol(expr.StructVarId);
+            if (teststruct == null)
+            	Reporter.Error(new UndeclaredSymbolException("strict: \"" + expr.StructVarId + "\" on line " + expr.GetLineNumber() + " does not exist in current scope: " + currentScope.GetDepth()));
+    	}
+    	if(structSymbol.dclType.equals(DclType.Struct))
+    	{ 
     	StructSymbol struct = (StructSymbol) currentScope.FindSymbol(expr.StructVarId);
         Symbol comp = struct.FindSymbol(expr.ComponentId);
+        if(comp == null)
+    		Reporter.Error(new UndeclaredSymbolException("struct: \"" + expr.StructVarId + "\" on line " + expr.GetLineNumber() + " does not exist in current scope: " + currentScope.GetDepth()));
+ 
+        
         return comp.Type;
+        
     	}
     	else if(structSymbol.dclType.equals(DclType.List))
     	{
@@ -147,6 +157,7 @@ public class SemanticAnalyzer implements IVisitor{
         {
     	    return null;
         }
+
     }
     
     public Object Visit(IOExpr expr)
@@ -330,7 +341,7 @@ public class SemanticAnalyzer implements IVisitor{
             if (visited == node) return null;
         }
         String varID  = node.Identifier;
-        System.out.println("varDcl  " + currentScope.GetDepth() + "   " + node.Identifier);
+        //System.out.println("varDcl  " + currentScope.GetDepth() + "   " + node.Identifier);
         Types varType = node.GetType();
         Symbol var = new Symbol(varID,varType);
         var.SetDclType(DclType.Variable);

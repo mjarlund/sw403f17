@@ -4,9 +4,11 @@ import DataStructures.AST.AST;
 import Semantics.Scope.SemanticAnalyzer;
 import Syntax.Parser.Parser;
 import Syntax.Scanner.Scanner;
+import Test.InputTester;
 import processing.core.PApplet;
 import processing.core.PVector;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -53,12 +55,17 @@ public class Visualizer extends PApplet {
                         "end func1\n" +
                         "void func2()\n" +
                          "text b is func1()\n end func2\n";
-        sc = new Scanner(code);
+        try {
+			sc = new Scanner(InputTester.readFile("src/Test/TestPrograms/semantics/4LayeredStructsTest"));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
         parser = new Parser(sc);
         AST programTree = parser.ParseProgram();
 
         SemanticAnalyzer sm = new SemanticAnalyzer();
-        sm.VisitChildren(programTree);
+        //sm.VisitChildren(programTree);
 
         BuildVisualTree(programTree);
         background(255);
@@ -74,7 +81,7 @@ public class Visualizer extends PApplet {
 
     /* Builds the visual tree from an AST */
     public void BuildVisualTree(AST tree){
-        visTree = new VisualNode(tree, new PVector(900, 50)); //Root in the top-middle of the screen
+        visTree = new VisualNode(tree, new PVector(100, 50)); //Root in the top-middle of the screen
         visTree.defaultXOffset = 600;
         ArrayList<VisualNode> visTreeList = new ArrayList<VisualNode>();
         visTree.AssignPositionsToChildren(visTreeList);

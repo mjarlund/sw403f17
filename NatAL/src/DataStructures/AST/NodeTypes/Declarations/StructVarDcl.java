@@ -7,8 +7,8 @@ public class StructVarDcl extends Dcl{
     public IdExpr Type;
     IdExpr ID;
     public StructVarDcl(IdExpr structType, IdExpr id){
-        children.add(structType);
-        children.add(id);
+    	AddChild(structType);
+    	AddChild(id);
         Type = structType;
         ID = id;
         SetValue("StructVarDcl");

@@ -6,7 +6,7 @@ public class ReturnStmt extends Stmt
 {
     public ReturnStmt(Expr returnVal)
     {
-        children.add(returnVal);
+    	AddChild(returnVal);
         SetValue("ReturnStmt");
     }
     public Expr GetReturnExpr()

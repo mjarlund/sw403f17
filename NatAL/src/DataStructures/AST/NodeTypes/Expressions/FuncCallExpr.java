@@ -7,8 +7,8 @@ public class FuncCallExpr extends Expr
 {
     public FuncCallExpr(IdExpr funcIdentifier, ArgsExpr args)
     {
-        children.add(funcIdentifier);
-        children.add(args);
+    	AddChild(funcIdentifier);
+    	AddChild(args);
         SetValue("FuncCallExpr");
     }
     public FuncCallExpr(StructCompSelectExpr funcIdentifier, ArgsExpr args)

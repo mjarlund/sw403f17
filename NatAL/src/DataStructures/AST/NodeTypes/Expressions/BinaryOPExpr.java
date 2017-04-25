@@ -8,8 +8,8 @@ public class BinaryOPExpr extends Expr
     public BinaryOPExpr(Expr expr1, Token operation, Expr expr2)
     {
         Operation = operation;
-        children.add(expr1);
-        children.add(expr2);
+        AddChild(expr1);
+        AddChild(expr2);
         SetValue("BinaryOPExpr");
     }
     public final Token Operation;

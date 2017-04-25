@@ -6,8 +6,8 @@ public class IfStmt extends Stmt
 {
     public IfStmt(Expr expr, BlockStmt statements)
     {
-        children.add(expr);
-        children.add(statements);
+    	AddChild(expr);
+    	AddChild(statements);
         SetValue("IfStmt");
     }
     public Expr GetCondition()

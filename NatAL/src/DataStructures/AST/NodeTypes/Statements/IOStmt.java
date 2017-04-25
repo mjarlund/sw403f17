@@ -23,7 +23,7 @@ public class IOStmt extends Stmt
     public IOStmt(Modes mode, Token op, Expr writeExpr, IdExpr pin)
     {
         this(mode,op,pin);
-        children.add(writeExpr);
+        AddChild(writeExpr);
     }
     private Modes mode;
     private Token operation;

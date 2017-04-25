@@ -10,11 +10,11 @@ public class ArgExpr extends Expr
     public ArgExpr(ValExpr value)
     {
         SetValue("ArgExpr");
-        children.add(value);
+        AddChild(value);
     }
     public ArgExpr(IdExpr id)
     {
-        children.add(id);
+    	AddChild(id);
     }
     public ValExpr GetArg()
     {

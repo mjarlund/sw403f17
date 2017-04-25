@@ -36,7 +36,7 @@ public class Scope implements IScope {
     public Symbol FindSymbol(String identifier){
         Symbol toReturn = null;
         for (Symbol s : symbols){
-        	System.out.println(s.Name + " looking for: " + identifier);
+        	//System.out.println(s.Name + " looking for: " + identifier);
             if (s.Name.equals(identifier)){
                 toReturn = s;
                 break;

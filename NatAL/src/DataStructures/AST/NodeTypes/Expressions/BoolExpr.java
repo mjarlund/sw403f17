@@ -10,8 +10,8 @@ public class BoolExpr extends Expr
     public BoolExpr(Expr expr1, Token operator, Expr expr2)
     {
         Operator = operator;
-        children.add(expr1);
-        children.add(expr2);
+        AddChild(expr1);
+        AddChild(expr2);
         SetValue("BoolExpr");
     }
     public final Token Operator;

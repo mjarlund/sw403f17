@@ -12,7 +12,7 @@ public class IOExpr extends Expr
     {
         this.mode = mode;
         this.operation = op;
-        children.add(pin);
+        AddChild(pin);
         SetValue("IOExpr");
     }
     private Modes mode;

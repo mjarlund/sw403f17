@@ -8,9 +8,9 @@ import java.util.ArrayList;
 public class StructDcl extends Dcl {
 
     public StructDcl(VarDcl declaration, BlockStmt contents){
-        children.add(declaration);
+    	AddChild(declaration);
         for (AST dcl : contents.children){
-            children.add(dcl);
+        	AddChild(dcl);
         }
         SetValue("StructDcl");
     }

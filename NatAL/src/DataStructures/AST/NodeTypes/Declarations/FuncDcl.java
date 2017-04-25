@@ -12,9 +12,9 @@ public class FuncDcl extends Dcl {
         block.SetParent(this);
         parameters.SetParent(this);
         dcl.SetParent(this);
-        children.add(dcl);
-        children.add(parameters);
-        children.add(block);
+        AddChild(dcl);
+        AddChild(parameters);
+        AddChild(block);
         SetValue("FuncDcl");
 
         //CodeGenerator c = new CodeGenerator();

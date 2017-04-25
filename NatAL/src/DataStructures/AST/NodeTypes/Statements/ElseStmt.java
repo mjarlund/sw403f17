@@ -6,7 +6,7 @@ public class ElseStmt extends Stmt
 {
     public ElseStmt(BlockStmt block)
     {
-        children.add(block);
+    	AddChild(block);
         SetValue("ElseStmt");
     }
 

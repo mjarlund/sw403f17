@@ -9,8 +9,8 @@ public class UntilStmt extends Stmt
 {
     public UntilStmt(Expr condition, BlockStmt statements)
     {
-        children.add(condition);
-        children.add(statements);
+    	AddChild(condition);
+    	AddChild(statements);
         SetValue("UntilStmt");
     }
     public Expr GetCondition()

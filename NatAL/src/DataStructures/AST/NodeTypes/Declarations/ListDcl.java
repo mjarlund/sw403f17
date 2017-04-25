@@ -4,8 +4,8 @@ import DataStructures.AST.NodeTypes.Expressions.ArgsExpr;
 public class ListDcl extends Dcl{
 
     public ListDcl(VarDcl declaration, ArgsExpr elements){
-        children.add(declaration);
-        children.add(elements);
+    	AddChild(declaration);
+    	AddChild(elements);
         SetValue("ListDcl");
     }
 

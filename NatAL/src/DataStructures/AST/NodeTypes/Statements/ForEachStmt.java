@@ -12,9 +12,9 @@ import DataStructures.AST.NodeTypes.Types;
 public class ForEachStmt extends Stmt{
 
     public ForEachStmt(VarDcl element, IdExpr collection, BlockStmt code){
-        children.add(element);
-        children.add(collection);
-        children.add(code);
+    	AddChild(element);
+    	AddChild(collection);
+    	AddChild(code);
         SetValue("ForEachStmt");
     }
 

@@ -12,7 +12,7 @@ public class UnaryExpr extends Expr
     public UnaryExpr(Token op, Expr valExpr)
     {
         operator = op;
-        children.add(valExpr);
+        AddChild(valExpr);
 
         SetValue("UnaryExpr");
     }

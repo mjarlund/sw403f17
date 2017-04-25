@@ -11,14 +11,14 @@ public class AssignStmt extends Stmt
 {
     public AssignStmt(VarDcl var, Expr expr)
     {
-        children.add(var);
-        children.add(expr);
+        AddChild(var);
+        AddChild(expr);
         SetValue("AssignStmt");
     }
     public AssignStmt(Expr identifier, Expr expr)
     {
-        children.add(identifier);
-        children.add(expr);
+    	AddChild(identifier);
+    	AddChild(expr);
         SetValue("AssignStmt");
     }
     public AST GetLeft()
