@@ -64,29 +64,31 @@ public class ASTFactory
     private void CreateStructCompSelectExpr(){
         IdExpr componentId = (IdExpr)astStack.pop();
         terminals.pop(); // '.'
-        
         if (astStack.peek() instanceof StructCompSelectExpr)
         {
-        StructCompSelectExpr comp = (StructCompSelectExpr) astStack.pop();
-        IdExpr structId = new IdExpr(comp.ComponentId);
-        StructCompSelectExpr expr = new StructCompSelectExpr(structId.ID, componentId.ID);
-        expr.SetValue("StructCompSelectExpr");
-        comp.AddChild(expr);
-        astStack.push(expr);
-        //System.out.println(structId.ID +"    "+ componentId.ID);
+            StructCompSelectExpr comp = (StructCompSelectExpr) astStack.pop();
+            while(comp.GetChildComp() instanceof StructCompSelectExpr){
+                comp = comp.GetChildComp();
+            }
+            IdExpr structId = new IdExpr(comp.ComponentId);
+            StructCompSelectExpr expr = new StructCompSelectExpr(structId.ID, componentId.ID);
+            expr.SetValue("StructCompSelectExpr");
+            comp.AddChild(expr);
+            astStack.push(comp);
         }         
         else 
         { 
-        IdExpr structId = (IdExpr)astStack.pop();
-        StructCompSelectExpr expr = new StructCompSelectExpr(structId.ID, componentId.ID);
-        expr.SetValue("StructCompSelectExpr");
-        astStack.push(expr);
-        //System.out.println(structId.ID +"    "+ componentId.ID);
+            IdExpr structId = (IdExpr)astStack.pop();
+            StructCompSelectExpr expr = new StructCompSelectExpr(structId.ID, componentId.ID);
+            expr.SetValue("StructCompSelectExpr");
+            astStack.push(expr);
+            //System.out.println(structId.ID +"    "+ componentId.ID);
         }
 
     }
 
-    private void CreateListIndexExpr(){
+    private void CreateListIndexExpr()
+    {
         System.out.println(terminals.pop().Value);
         int index = Integer.parseInt(terminals.pop().Value);
         System.out.println(terminals.pop().Value);
@@ -96,7 +98,8 @@ public class ASTFactory
         astStack.push(listExpr);
     }
 
-    private void CreateStructVarDcl(){
+    private void CreateStructVarDcl()
+    {
         String id = terminals.pop().Value;
         IdExpr Type = (IdExpr)astStack.pop();
         IdExpr ID = new IdExpr(id);

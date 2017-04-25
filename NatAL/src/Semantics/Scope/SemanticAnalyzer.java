@@ -12,8 +12,6 @@ import Utilities.Reporter;
 import Utilities.TypeConverter;
 import Utilities.VisitorDriver;
 
-import java.io.*;
-import java.nio.charset.Charset;
 import java.util.ArrayList;
 
 public class SemanticAnalyzer implements IVisitor{
@@ -121,22 +119,31 @@ public class SemanticAnalyzer implements IVisitor{
     }
 
     public Object Visit(StructCompSelectExpr expr){
-    	System.out.println("here ya go: " + ((StructCompSelectExpr)expr).GetParent());
-        Symbol structSymbol = currentScope.FindSymbol(expr.StructVarId);
-    	if(structSymbol == null)
-    	{
-            Reporter.Error(new UndeclaredSymbolException("struct: \"" + expr.StructVarId + "\" on line " + expr.GetLineNumber() + " does not exist in current scope: " + currentScope.GetDepth()));
+        Symbol symbol = currentScope.FindSymbol(expr.StructVarId);
+    	if(symbol == null) {
+            Reporter.Error(new UndeclaredSymbolException("struct: \"" + expr.StructVarId + "\" on line " + expr.GetLineNumber() + " " + expr.ComponentId));
     	}
-    	if(structSymbol.dclType.equals(DclType.Struct))
-    	{ 
-    	StructSymbol struct = (StructSymbol) currentScope.FindSymbol(expr.StructVarId);
-        Symbol comp = struct.FindSymbol(expr.ComponentId);
-        return comp.Type;
-        
-    	}
-    	else if(structSymbol.dclType.equals(DclType.List))
+    	if(symbol.dclType.equals(DclType.Struct))
     	{
-    	    ListSymbol list = (ListSymbol) structSymbol;
+    	    StructSymbol struct = (StructSymbol) GlobalScope.FindSymbol((String)symbol.GetType());
+    	    if(struct==null)
+                Reporter.Error(new UndeclaredSymbolException("struct: \"" + symbol.Name + "\" on line " + expr.GetLineNumber() + " trying " + symbol.GetType()));
+            Symbol comp = struct.FindSymbol(expr.ComponentId);
+            if(comp==null)
+                Reporter.Error(new UndeclaredSymbolException("struct: \"" + expr.ComponentId + "\" on line " + expr.GetLineNumber() + " trying " + expr.ComponentId));
+            if(comp.dclType.equals(DclType.Struct))
+            {
+                IScope old = currentScope;
+                currentScope = struct;
+                Object type = visitValue.Visit(expr.GetChildComp().GetValue(), expr.GetChildComp());
+                currentScope = old;
+                return type;
+            }
+            return comp.Type;
+    	}
+    	else if(symbol.dclType.equals(DclType.List))
+    	{
+    	    ListSymbol list = (ListSymbol) symbol;
     	    Symbol op = list.FindSymbol(expr.ComponentId);
     	    if(op==null)
     	        Reporter.Error(new UndeclaredSymbolException("list operation " + expr.ComponentId + " not defined"));

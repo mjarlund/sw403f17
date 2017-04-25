@@ -1,6 +1,5 @@
 package Visualizing;
 
-import CodeGeneration.CodeGenerator;
 import DataStructures.AST.AST;
 import Semantics.Scope.SemanticAnalyzer;
 import Syntax.Parser.Parser;
@@ -8,7 +7,6 @@ import Syntax.Scanner.Scanner;
 import processing.core.PApplet;
 import processing.core.PVector;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -41,9 +39,7 @@ public class Visualizer extends PApplet {
 
         				"void main()\n" +
         				"outsideStruct hej\n" +
-        				"hej.d is 5\n" +
         				"hej.test1.b is 8\n" +
-        				"hej.test1.c is hej.test1.a + hej.test1.b\n" +
         				"end main" ;
 
         String code1 = "text func1()\n" +
@@ -62,7 +58,7 @@ public class Visualizer extends PApplet {
                             "   b is a\n" +
                             "   end foreach\n" +
                             "end foo \n";
-        sc = new Scanner(code2);
+        sc = new Scanner(code);
         parser = new Parser(sc);
         AST programTree = parser.ParseProgram();
 
@@ -83,8 +79,8 @@ public class Visualizer extends PApplet {
 
     /* Builds the visual tree from an AST */
     public void BuildVisualTree(AST tree){
-        visTree = new VisualNode(tree, new PVector(900, 50)); //Root in the top-middle of the screen
-        visTree.defaultXOffset = 600;
+        visTree = new VisualNode(tree, new PVector(400, 50)); //Root in the top-middle of the screen
+        visTree.defaultXOffset = 200;
         ArrayList<VisualNode> visTreeList = new ArrayList<VisualNode>();
         visTree.AssignPositionsToChildren(visTreeList);
     }
