@@ -193,7 +193,7 @@ public class CodeGenerator implements IVisitor
     public Object Visit(ArgsExpr node) {
         String parameters="(";
         for (ArgExpr param : node.GetArgs())
-            parameters += param.GetValue() + ",";
+            parameters += param.GetArg().LiteralValue.Value + ",";
         if (parameters.endsWith(","))
             parameters = parameters.substring(0, parameters.length() - 1);
 
@@ -281,7 +281,7 @@ public class CodeGenerator implements IVisitor
     }
 
     public static void main(String args[]) throws IOException {
-        Scanner sc = new Scanner(InputTester.readFile("src/CodeGeneration/FinalProgram.txt"));
+        Scanner sc = new Scanner(InputTester.readFile("src/CodeGeneration/ArduinoTestProgram.txt"));
         Parser parser = new Parser(sc);
         AST programTree = parser.ParseProgram();
         SemanticAnalyzer sm = new SemanticAnalyzer();

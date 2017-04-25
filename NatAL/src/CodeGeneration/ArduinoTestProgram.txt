@@ -1,3 +1,25 @@
-void enfunktion()
+void delay(number d)
+    end delay
+
+pin motorLeft is 9
+pin motorRight is 3
+
+pin dirRight is 8
+pin dirLeft is 2
+
+void loop()
+    digital write high to dirRight
+    digital write high to dirLeft
+
+    analog write 255 to motorLeft
+    analog write 255 to motorRight
+
     delay(1000)
-    end enfunktion
+
+    digital write low to dirRight
+    digital write low to dirLeft
+
+    analog write 255 to motorLeft
+    analog write 255 to motorRight
+    delay(1000)
+    end loop

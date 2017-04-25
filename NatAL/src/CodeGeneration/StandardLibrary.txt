@@ -1,1 +1,3 @@
-delay
+void delay(number d)
+    end delay
+
