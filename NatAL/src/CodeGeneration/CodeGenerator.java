@@ -59,6 +59,7 @@ public class CodeGenerator implements IVisitor
     }
 
     public Object Visit(IOStmt stmt) {
+        Emit("pinMode("+ stmt.GetPin().ID +",OUTPUT);\n");
         Emit(stmt.GetMode().name()+ stmt.GetOperation().Value + "("+stmt.GetPin().ID+", ");
         visitValue.Visit(stmt.GetWriteVal().GetValue(), stmt.GetWriteVal());
         Emit(")");
@@ -129,6 +130,9 @@ public class CodeGenerator implements IVisitor
     }
 
     public Object Visit(AssignStmt stmt) {
+        if (stmt.GetRight().GetValue().equals("IOExpr")){
+            Emit("pinMode("+ ((IOExpr)stmt.GetRight()).GetPin().ID +", INPUT);\n");
+        }
         visitValue.Visit(stmt.GetLeft().GetValue(),stmt.GetLeft());
         Emit(" = ");
         visitValue.Visit(stmt.GetRight().GetValue(), stmt.GetRight());
@@ -147,7 +151,7 @@ public class CodeGenerator implements IVisitor
     }
 
     public Object Visit(VarDcl node) {
-        Emit(node.GetType().name() + " " + node.Identifier);
+        Emit(node.GetConvertedType().name() + " " + node.Identifier);
         return null;
     }
 
@@ -237,7 +241,7 @@ public class CodeGenerator implements IVisitor
     }
 
     public Object Visit(ListIndexExpr block) {
-        Emit(block.GetId().ID + "["+ block.Index +"]");
+        Emit(block.GetId().ID + "["+ block.GetIndex() +"]");
         return null;
     }
 

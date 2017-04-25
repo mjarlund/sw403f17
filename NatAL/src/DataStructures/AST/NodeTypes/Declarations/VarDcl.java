@@ -19,4 +19,8 @@ public class VarDcl extends Dcl
         //else
         return Type;
     }
+    public Types GetConvertedType(){
+        if(Type.equals(Types.PIN)) return Types.INT;
+        else return Type;
+    }
 }
