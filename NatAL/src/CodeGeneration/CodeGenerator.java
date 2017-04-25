@@ -71,7 +71,7 @@ public class CodeGenerator implements IVisitor
     }
 
     public Object Visit(IfStmt stmt) {
-        Emit("if(");
+        Emit("if (");
         visitValue.Visit(stmt.GetCondition().GetValue(), stmt.GetCondition());
         Emit( ")");
         visitValue.Visit(stmt.GetBlock().GetValue(), stmt.GetBlock());
@@ -88,7 +88,7 @@ public class CodeGenerator implements IVisitor
     }
 
     public Object Visit(UntilStmt stmt) {
-        Emit("while(!(");
+        Emit("while (!(");
         visitValue.Visit(stmt.GetCondition().GetValue(), stmt.GetCondition());
         Emit("))");
         visitValue.Visit(stmt.GetBlock().GetValue(), stmt.GetBlock());
@@ -98,7 +98,7 @@ public class CodeGenerator implements IVisitor
 
     public Object Visit(ForEachStmt stmt) {
         GenerateIdentifier();
-        Emit("for (int "+ currentIdentifier +" = 0; < sizeof("+stmt.GetCollectionId()+") - 1;" + currentIdentifier +"++)");
+        Emit("for (int "+ currentIdentifier +" = 0; < sizeof("+stmt.GetCollectionId()+") - 1; " + currentIdentifier +"++)");
         visitValue.Visit(stmt.GetBlock().GetValue(), stmt.GetBlock());
         return null;
     }

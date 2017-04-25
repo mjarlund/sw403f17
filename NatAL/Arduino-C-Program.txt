@@ -11,7 +11,7 @@ INT func2(INT target){
   testlist[1] = 8;
   test = test/2;
   INT one = 10;
-  if(1 above 0){ 
+  if (1 above 0){ 
     INT n;
     } 
   else{ 
@@ -23,11 +23,11 @@ INT func2(INT target){
 VOID foo(){ 
   INT a = 0;
   INT l[] = {2,3,4,5};
-  for (int _i = 0; < sizeof(l) - 1;_i++){ 
+  for (int _i = 0; < sizeof(l) - 1; _i++){ 
     l[_i] = a;
-    for (int _ii = 0; < sizeof(l) - 1;_ii++){ 
+    for (int _ii = 0; < sizeof(l) - 1; _ii++){ 
       l[_ii] = 2*l[_ii];
-      for (int _iii = 0; < sizeof(l) - 1;_iii++){ 
+      for (int _iii = 0; < sizeof(l) - 1; _iii++){ 
         l[_iii] = 9001/l[_iii];
         } 
       } 
@@ -36,7 +36,7 @@ VOID foo(){
 
 VOID func1(){ 
   INT target = 0;
-  while(!(target equals 10)){ 
+  while (!(target equals 10)){ 
     target = target+1;
     func2(ArgExpr);
     } 
@@ -45,7 +45,7 @@ VOID func1(){
 VOID main(){ 
   INT a[] = {1,2,3,4};
   a[2] = 9;
-  if(1 above 0){ 
+  if (1 above 0){ 
     INT n;
     } 
   else{ 
