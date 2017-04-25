@@ -7,6 +7,9 @@ pin motorRight is 3
 pin dirRight is 8
 pin dirLeft is 2
 
+void setup()
+    end setup
+
 void loop()
     digital write high to dirRight
     digital write high to dirLeft
@@ -15,6 +18,8 @@ void loop()
     analog write 255 to motorRight
 
     delay(1000)
+
+    number a is 12398
 
     digital write low to dirRight
     digital write low to dirLeft

@@ -3,6 +3,7 @@ package CodeGeneration;
 import DataStructures.AST.AST;
 import DataStructures.AST.NodeTypes.Declarations.*;
 import DataStructures.AST.NodeTypes.Expressions.*;
+import DataStructures.AST.NodeTypes.Modes;
 import DataStructures.AST.NodeTypes.Statements.*;
 import Semantics.Scope.SemanticAnalyzer;
 import Semantics.Scope.Symbol;
@@ -60,14 +61,18 @@ public class CodeGenerator implements IVisitor
 
     public Object Visit(IOStmt stmt) {
         Emit("pinMode("+ stmt.GetPin().ID +",OUTPUT);\n");
-        Emit(stmt.GetMode().name()+ stmt.GetOperation().Value + "("+stmt.GetPin().ID+", ");
+        String mode = stmt.GetMode().equals(Modes.ANALOG) ? "analog" : "digital";
+        String op = stmt.GetOperation().Value.equals("write") ? "Write" : "Read";
+        Emit(mode+op+"("+stmt.GetPin().ID+", ");
         visitValue.Visit(stmt.GetWriteVal().GetValue(), stmt.GetWriteVal());
         Emit(")");
         return null;
     }
 
     public Object Visit(IOExpr expr) {
-        Emit(expr.GetMode()+expr.GetOperation().Value+"("+expr.GetPin().ID+")");
+        String mode = expr.GetMode().equals(Modes.ANALOG) ? "analog" : "digital";
+        String op = expr.GetOperation().Value.equals("write") ? "Write" : "Read";
+        Emit(mode+op+"("+expr.GetPin().ID+")");
         return null;
     }
 
@@ -136,6 +141,7 @@ public class CodeGenerator implements IVisitor
         visitValue.Visit(stmt.GetLeft().GetValue(),stmt.GetLeft());
         Emit(" = ");
         visitValue.Visit(stmt.GetRight().GetValue(), stmt.GetRight());
+        if (indentation == 0) Emit(";\n"); /* Otherwise only added inside blocks */
         return null;
     }
 
@@ -151,7 +157,7 @@ public class CodeGenerator implements IVisitor
     }
 
     public Object Visit(VarDcl node) {
-        Emit(node.GetConvertedType().name() + " " + node.Identifier);
+        Emit(node.GetConvertedType() + " " + node.Identifier);
         return null;
     }
 
@@ -181,7 +187,7 @@ public class CodeGenerator implements IVisitor
     public Object Visit(FParamsDcl node) {
         String parameters="(";
         for (FParamDcl param : node.GetFParams())
-            parameters += param.Type + " " + param.Identifier + ",";
+            parameters += param.GetConvertedType() + " " + param.Identifier + ",";
 
         if (parameters.endsWith(","))
             parameters = parameters.substring(0, parameters.length() - 1);
@@ -281,7 +287,7 @@ public class CodeGenerator implements IVisitor
     }
 
     public static void main(String args[]) throws IOException {
-        Scanner sc = new Scanner(InputTester.readFile("src/CodeGeneration/ArduinoTestProgram.txt"));
+        Scanner sc = new Scanner(InputTester.readFile("src/CodeGeneration/FinalProgram.txt"));
         Parser parser = new Parser(sc);
         AST programTree = parser.ParseProgram();
         SemanticAnalyzer sm = new SemanticAnalyzer();

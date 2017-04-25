@@ -17,4 +17,19 @@ public class FParamDcl extends Dcl
 
     public final Types Type;
     public final String Identifier;
+    public String GetConvertedType(){
+        switch (Type){
+            case PIN: return "int";
+            case VOID: return "void";
+            case BOOL: return "bool";
+            case ANALOG: return "analog";
+            case CHAR: return "char";
+            case DIGITAL: return "digital";
+            case FLOAT: return "float";
+            case INT: return "int";
+            case STRING: return "string";
+            case STRUCT: return "struct";
+            default: return "NON_CONVERTABLE_TYPE";
+        }
+    }
 }

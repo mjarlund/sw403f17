@@ -13,9 +13,12 @@ public class Token
 
     public Token(String val, TokenType type, int lineNumber)
     {
-        this.Value = val;
-        this.Type = type;
-        this.LineNumber = lineNumber;
+        if (val.equals("low")) Value = val.toUpperCase();
+        else if (val.equals("high")) Value = val.toUpperCase();
+        else Value = val;
+
+        Type = type;
+        LineNumber = lineNumber;
     }
     public String toString() {return "<"+Type+", \'"+Value+"\'>";}
 }
