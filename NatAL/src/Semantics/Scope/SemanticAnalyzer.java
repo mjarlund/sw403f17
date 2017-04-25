@@ -125,18 +125,12 @@ public class SemanticAnalyzer implements IVisitor{
         Symbol structSymbol = currentScope.FindSymbol(expr.StructVarId);
     	if(structSymbol == null)
     	{
-    		StructSymbol teststruct = (StructSymbol) (currentScope).FindSymbol(expr.StructVarId);
-            if (teststruct == null)
-            	Reporter.Error(new UndeclaredSymbolException("strict: \"" + expr.StructVarId + "\" on line " + expr.GetLineNumber() + " does not exist in current scope: " + currentScope.GetDepth()));
+            Reporter.Error(new UndeclaredSymbolException("strict: \"" + expr.StructVarId + "\" on line " + expr.GetLineNumber() + " does not exist in current scope: " + currentScope.GetDepth()));
     	}
     	if(structSymbol.dclType.equals(DclType.Struct))
     	{ 
     	StructSymbol struct = (StructSymbol) currentScope.FindSymbol(expr.StructVarId);
         Symbol comp = struct.FindSymbol(expr.ComponentId);
-        if(comp == null)
-    		Reporter.Error(new UndeclaredSymbolException("struct: \"" + expr.StructVarId + "\" on line " + expr.GetLineNumber() + " does not exist in current scope: " + currentScope.GetDepth()));
- 
-        
         return comp.Type;
         
     	}

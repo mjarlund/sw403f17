@@ -1,0 +1,5 @@
+structure teststruct
+number a
+text b
+character c
+end teststruct

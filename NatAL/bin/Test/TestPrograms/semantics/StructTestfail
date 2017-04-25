@@ -1,0 +1,15 @@
+structure test
+number a
+number b
+number c
+end test
+
+structure outside
+test test1
+end outside
+
+void main()
+outside hej
+hej.b is 8
+hej.c is hej.test1.a + hej.test1.b
+end main

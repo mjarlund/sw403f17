@@ -1,0 +1,5 @@
+void main()
+boolean a is true
+boolean b is false
+boolean c is a + b
+end main

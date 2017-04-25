@@ -1,0 +1,8 @@
+character prog()
+character b is 'B'
+return b
+end prog
+
+void test()
+text a is prog()
+end test

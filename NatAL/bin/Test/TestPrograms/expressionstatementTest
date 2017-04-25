@@ -1,0 +1,6 @@
+text test(text firstWord, text secondWord)
+firstWord is "hello "
+secondWord is "world!"
+return firstWord + secondWord
+end test
+

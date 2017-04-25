@@ -1,0 +1,27 @@
+structure layer1
+number a 
+number b
+number c
+end layer1
+
+structure layer2
+number d 
+layer1 instanceOfLayer1
+end layer2
+
+structure layer3
+number e
+layer2 instanceOfLayer2
+end layer3
+
+structure layer4
+number f
+layer3 instanceOfLayer3
+end layer4
+
+void main()
+layer4 instanceOfLayer4
+instanceOfLayer4.instanceOfLayer3.instanceOfLayer2.instanceOfLayer1.a is 5
+instanceOfLayer4.instanceOfLayer3.instanceOfLayer2.instanceOfLayer1.b is 3
+instanceOfLayer4.instanceOfLayer3.instanceOfLayer2.instanceOfLayer1.c is instanceOfLayer4.instanceOfLayer3.instanceOfLayer2.instanceOfLayer1.a + instanceOfLayer4.instanceOfLayer3.instanceOfLayer2.instanceOfLayer1.b
+end main

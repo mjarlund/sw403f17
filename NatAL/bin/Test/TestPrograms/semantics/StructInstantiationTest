@@ -1,0 +1,10 @@
+structure teststruct
+number a
+text b
+character c
+end teststruct
+
+void structTest()
+teststruct hej
+hej.b is "john"
+end structTest
