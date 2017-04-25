@@ -19,6 +19,20 @@ number func2(number target)
     return 2
 end func2
 
+void foo ()
+    number a is 0
+    list of number l is (2, 3, 4, 5)
+    foreach ( number b in l )
+        b is a
+        foreach (number s in l)
+            b is 2*s
+            foreach (number ls in l)
+                b is 9001 / ls
+                end foreach
+            end foreach
+        end foreach
+    end foo
+
 void func1 ()
      number target is 0
      until(target equals 10)

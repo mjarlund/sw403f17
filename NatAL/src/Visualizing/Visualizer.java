@@ -1,5 +1,6 @@
 package Visualizing;
 
+import CodeGeneration.CodeGenerator;
 import DataStructures.AST.AST;
 import Semantics.Scope.SemanticAnalyzer;
 import Syntax.Parser.Parser;
@@ -7,6 +8,7 @@ import Syntax.Scanner.Scanner;
 import processing.core.PApplet;
 import processing.core.PVector;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -53,7 +55,14 @@ public class Visualizer extends PApplet {
                         "end func1\n" +
                         "void func2()\n" +
                          "text b is func1()\n end func2\n";
-        sc = new Scanner(code);
+        String code2 = "void foo()\n" +
+                            "number a is 2 \n" +
+                            "list of number l is (2, 4, 5, 6)\n" +
+                            "foreach (number b in l) \n" +
+                            "   b is a\n" +
+                            "   end foreach\n" +
+                            "end foo \n";
+        sc = new Scanner(code2);
         parser = new Parser(sc);
         AST programTree = parser.ParseProgram();
 

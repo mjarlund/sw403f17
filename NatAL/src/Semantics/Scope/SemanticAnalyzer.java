@@ -440,4 +440,8 @@ public class SemanticAnalyzer implements IVisitor{
         VisitChildren(node);
         CloseScope();
     }
+
+    public void AddSymbol(String id){
+        currentScope.AddSymbol(new Symbol(id));
+    }
 }

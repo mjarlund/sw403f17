@@ -439,8 +439,21 @@ public class ASTFactory
         IdExpr collection = new IdExpr(collectionID);
         VarDcl element = new VarDcl(elementType, elementID);
 
+        FindIteratorVariable(code, elementID, collectionID);
+
+        /* If elementID is used in the block, it should be list[elementID.Value] */
+
         ForEachStmt forStmt = new ForEachStmt(element, collection, code);
         astStack.push(forStmt);
         System.out.println("Built foreach");
+    }
+
+    private void FindIteratorVariable(AST node, String iteratorID, String collectionID){
+        if (node instanceof IdExpr && ((IdExpr) node).ID.equals(iteratorID)){
+            ((IdExpr) node).SetAsIterator();
+            ((IdExpr) node).CollectionID = collectionID;
+        } else {
+            for (AST n : node.children) FindIteratorVariable(n, iteratorID, collectionID);
+        }
     }
 }

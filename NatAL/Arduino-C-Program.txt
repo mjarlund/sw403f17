@@ -3,39 +3,57 @@ INT a;
 STRING b;
 CHAR c;
 }
+
 INT func2(INT target){ 
-INT test = target;
-test = test*2;
-INT testlist[] = {1,2,3,4,5};
-testlist[1] = 8;
-test = test/2;
-INT one = 10;
-if(1 above 0){ 
-INT n;
-} 
+  INT test = target;
+  test = test*2;
+  INT testlist[] = {1,2,3,4,5};
+  testlist[1] = 8;
+  test = test/2;
+  INT one = 10;
+  if(1 above 0){ 
+    INT n;
+    } 
 else{ 
-INT m;
-} 
-return 2;
-} 
+    INT m;
+    } 
+  return 2;
+  } 
+
+VOID foo(){ 
+  INT a = 0;
+  INT l[] = {2,3,4,5};
+  for (int _i = 0; < sizeof(l) - 1;_i++){ 
+    l[_i] = a;
+    for (int _ii = 0; < sizeof(l) - 1;_ii++){ 
+      l[_ii] = 2*l[_ii];
+      for (int _iii = 0; < sizeof(l) - 1;_iii++){ 
+        l[_iii] = 9001/l[_iii];
+        } 
+      } 
+    } 
+  } 
+
 VOID func1(){ 
-INT target = 0;
-while(!(target equals 10)){ 
-target = target+1;
-func2(ArgExpr);
-} 
-} 
+  INT target = 0;
+  while(!(target equals 10)){ 
+    target = target+1;
+    func2(ArgExpr);
+    } 
+  } 
+
 VOID main(){ 
-INT a[] = {1,2,3,4};
-a[2] = 9;
-if(1 above 0){ 
-INT n;
-} 
+  INT a[] = {1,2,3,4};
+  a[2] = 9;
+  if(1 above 0){ 
+    INT n;
+    } 
 else{ 
-INT m;
-} 
-} 
+    INT m;
+    } 
+  } 
+
 VOID func3(){ 
-teststruct test1;
-test1.a = 5;
-} 
+  teststruct test1;
+  test1.a = 5;
+  } 
