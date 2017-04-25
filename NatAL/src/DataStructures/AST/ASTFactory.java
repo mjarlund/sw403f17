@@ -64,10 +64,10 @@ public class ASTFactory
     private void CreateStructCompSelectExpr(){
         IdExpr componentId = (IdExpr)astStack.pop();
         terminals.pop(); // '.'
-        /*
+        
         if (astStack.peek() instanceof StructCompSelectExpr)
         {
-        StructCompSelectExpr comp = (StructCompSelectExpr)astStack.pop();
+        StructCompSelectExpr comp = (StructCompSelectExpr) astStack.pop();
         IdExpr structId = new IdExpr(comp.ComponentId);
         StructCompSelectExpr expr = new StructCompSelectExpr(structId.ID, componentId.ID);
         expr.SetValue("StructCompSelectExpr");
@@ -76,13 +76,13 @@ public class ASTFactory
         //System.out.println(structId.ID +"    "+ componentId.ID);
         }         
         else 
-        { */
+        { 
         IdExpr structId = (IdExpr)astStack.pop();
         StructCompSelectExpr expr = new StructCompSelectExpr(structId.ID, componentId.ID);
         expr.SetValue("StructCompSelectExpr");
         astStack.push(expr);
         //System.out.println(structId.ID +"    "+ componentId.ID);
-        //}
+        }
 
     }
 

@@ -121,11 +121,11 @@ public class SemanticAnalyzer implements IVisitor{
     }
 
     public Object Visit(StructCompSelectExpr expr){
-    	//System.out.println("here ya go: " + expr.GetParent());
+    	System.out.println("here ya go: " + ((StructCompSelectExpr)expr).GetParent());
         Symbol structSymbol = currentScope.FindSymbol(expr.StructVarId);
     	if(structSymbol == null)
     	{
-            Reporter.Error(new UndeclaredSymbolException("strict: \"" + expr.StructVarId + "\" on line " + expr.GetLineNumber() + " does not exist in current scope: " + currentScope.GetDepth()));
+            Reporter.Error(new UndeclaredSymbolException("struct: \"" + expr.StructVarId + "\" on line " + expr.GetLineNumber() + " does not exist in current scope: " + currentScope.GetDepth()));
     	}
     	if(structSymbol.dclType.equals(DclType.Struct))
     	{ 
