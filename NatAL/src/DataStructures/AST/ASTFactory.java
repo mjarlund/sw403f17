@@ -67,13 +67,14 @@ public class ASTFactory
         if (astStack.peek() instanceof StructCompSelectExpr)
         {
             StructCompSelectExpr comp = (StructCompSelectExpr) astStack.pop();
-            while(comp.GetChildComp() instanceof StructCompSelectExpr){
-                comp = comp.GetChildComp();
+            StructCompSelectExpr compLowChild = comp;
+            while(compLowChild.GetChildComp() instanceof StructCompSelectExpr){
+                compLowChild = compLowChild.GetChildComp();
             }
-            IdExpr structId = new IdExpr(comp.ComponentId);
+            IdExpr structId = new IdExpr(compLowChild.ComponentId);
             StructCompSelectExpr expr = new StructCompSelectExpr(structId.ID, componentId.ID);
             expr.SetValue("StructCompSelectExpr");
-            comp.AddChild(expr);
+            compLowChild.AddChild(expr);
             astStack.push(comp);
         }         
         else 

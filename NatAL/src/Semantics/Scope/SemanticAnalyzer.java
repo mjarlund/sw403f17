@@ -120,6 +120,7 @@ public class SemanticAnalyzer implements IVisitor{
 
     public Object Visit(StructCompSelectExpr expr){
         Symbol symbol = currentScope.FindSymbol(expr.StructVarId);
+        //System.out.println(expr.StructVarId + " " + expr.ComponentId);
     	if(symbol == null) {
             Reporter.Error(new UndeclaredSymbolException("struct: \"" + expr.StructVarId + "\" on line " + expr.GetLineNumber() + " " + expr.ComponentId));
     	}
