@@ -5,4 +5,5 @@ until (a above b)
 number c is 1
 a is a + c
 end until
+return a
 end scope1

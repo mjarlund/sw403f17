@@ -1,32 +1,10 @@
-struct layer1{
-{ 
-  int a;
-  int b;
-  int c;
-  } 
-}
-struct layer2{
-{ 
-  int d;
-  layer1 instanceOfLayer1;
-  } 
-}
-struct layer3{
-{ 
-  int e;
-  layer2 instanceOfLayer2;
-  } 
-}
-struct layer4{
-{ 
-  int f;
-  layer3 instanceOfLayer3;
-  } 
-}
 
-void main(){ 
-  layer4 instanceOfLayer4;
-  instanceOfLayer4.instanceOfLayer3.instanceOfLayer2.instanceOfLayer1.a = 5;
-  instanceOfLayer4.instanceOfLayer3.instanceOfLayer2.instanceOfLayer1.b = 3;
-  instanceOfLayer4.instanceOfLayer3.instanceOfLayer2.instanceOfLayer1.c = instanceOfLayer4.instanceOfLayer3.instanceOfLayer2.instanceOfLayer1.a+instanceOfLayer4.instanceOfLayer3.instanceOfLayer2.instanceOfLayer1.b;
+int scope1(){ 
+  int a = 1;
+  int b = 2;
+  while (!(a > b)){ 
+    int c = 1;
+    a = a+c;
+    } 
+  return a;
   } 
