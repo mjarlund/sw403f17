@@ -7,7 +7,10 @@ import java.util.ArrayList;
 
 public class StructDcl extends Dcl {
 
+    public BlockStmt block;
+
     public StructDcl(VarDcl declaration, BlockStmt contents){
+        block = contents;
     	AddChild(declaration);
         for (AST dcl : contents.children){
         	AddChild(dcl);
@@ -18,6 +21,8 @@ public class StructDcl extends Dcl {
     public VarDcl GetVarDcl(){
         return (VarDcl) children.get(0);
     }
+
+    public BlockStmt GetBlock(){return block;}
 
     public ArrayList<VarDcl> GetContents(){
         ArrayList<VarDcl> contents = new ArrayList<>();

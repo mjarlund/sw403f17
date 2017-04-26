@@ -14,6 +14,7 @@ public class VisitorDriver
     }
     public Object Visit(String astName, AST child)
     {
+        System.out.println("--->  " + astName);
         Object returnValue = null;
         switch (astName){
             case "VarDcl": /* Add it to this scope (works for FuncDcls too) */
