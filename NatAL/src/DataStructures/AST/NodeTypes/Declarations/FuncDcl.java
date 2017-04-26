@@ -1,7 +1,9 @@
 package DataStructures.AST.NodeTypes.Declarations;
 
-import CodeGeneration.CodeGenerator;
+import DataStructures.AST.AST;
+import DataStructures.AST.NodeTypes.Expressions.Expr;
 import DataStructures.AST.NodeTypes.Statements.BlockStmt;
+import DataStructures.AST.NodeTypes.Statements.ReturnStmt;
 
 /**
  * Created by Anders Brams on 3/21/2017.
@@ -40,5 +42,17 @@ public class FuncDcl extends Dcl {
     public BlockStmt GetFuncBlockStmt()
     {
         return (BlockStmt) children.get(2);
+    }
+    public Expr GetReturnExpr(){
+        BlockStmt block = GetFuncBlockStmt();
+        if(block!=null){
+            for(AST a : block.children){
+                if(a instanceof ReturnStmt){
+                    ReturnStmt returnStmt = (ReturnStmt) a;
+                    return returnStmt.GetReturnExpr();
+                }
+            }
+        }
+        return null;
     }
 }

@@ -55,12 +55,7 @@ public class Visualizer extends PApplet {
         String code1 = "text func1()\n" +
                        "pin a is 2\n" +
                         "a is digital read from a\n" +
-                         "analog write 2 to a\n" +
-                        "boolean b is true and false\n" +
-                        "return \"a\"\n" +
-                        "end func1\n" +
-                        "void func2()\n" +
-                         "text b is func1()\n end func2\n";
+                        "end func1\n";
         String code2 = "void foo()\n" +
                             "number a is 2 \n" +
                             "list of number l is (2, 4, 5, 6)\n" +
@@ -68,7 +63,7 @@ public class Visualizer extends PApplet {
                             "   b is a\n" +
                             "   end foreach\n" +
                             "end foo \n";
-        sc = new Scanner(code);
+        sc = new Scanner(code1);
         parser = new Parser(sc);
         AST programTree = parser.ParseProgram();
 
