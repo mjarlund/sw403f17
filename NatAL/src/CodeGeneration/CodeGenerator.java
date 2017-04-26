@@ -5,6 +5,7 @@ import DataStructures.AST.NodeTypes.Declarations.*;
 import DataStructures.AST.NodeTypes.Expressions.*;
 import DataStructures.AST.NodeTypes.Modes;
 import DataStructures.AST.NodeTypes.Statements.*;
+import DataStructures.AST.NodeTypes.Types;
 import Semantics.Scope.SemanticAnalyzer;
 import Semantics.Scope.Symbol;
 import Syntax.Parser.Parser;
@@ -129,7 +130,7 @@ public class CodeGenerator implements IVisitor
 
     public Object Visit(BoolExpr expr) {
         visitValue.Visit(expr.GetLeftExpr().GetValue(), expr.GetLeftExpr());
-        Emit(" " + expr.Operator.Value+ " ");
+        Emit(" " + expr.GetConvertedType() + " ");
         visitValue.Visit(expr.GetRightExpr().GetValue(),expr.GetRightExpr());
         return null;
     }
@@ -220,7 +221,14 @@ public class CodeGenerator implements IVisitor
         // Emits all content of the struct
         // NOTE: variables do not need to be initialized in Arduino C
         for (VarDcl dcl : node.GetContents())
-            Emit(dcl.GetType() + " " + dcl.Identifier + ";\n");
+        {
+            // Strings are different than all others types in Arduino C
+            if (dcl.GetType() == Types.STRING)
+                Emit("char " + dcl.Identifier + "[100]; /*This does not work yet :(*/");
+            else
+                Emit(dcl.GetType().toString().toLowerCase() + " " + dcl.Identifier + ";\n");
+        }
+
 
         Emit("}\n");
         return null;

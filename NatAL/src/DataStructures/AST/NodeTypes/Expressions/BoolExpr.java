@@ -23,4 +23,21 @@ public class BoolExpr extends Expr
     {
         return (Expr) children.get(1);
     }
+
+    public String GetConvertedType ()
+    {
+        switch (Operator.Value)
+        {
+            case "or": return "||";
+            case "equals": return "==";
+            case "not": return "!";
+            case "below": return "<";
+            case "and": return "&&";
+            case "is": return "=";
+            case "above": return ">";
+
+            default:
+                throw new Error("Whoops - ¯\\_(ツ)_/¯");
+        }
+    }
 }
