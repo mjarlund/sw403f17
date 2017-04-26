@@ -249,6 +249,7 @@ public class SemanticAnalyzer implements IVisitor{
             if (!identifier.dclType.equals(DclType.Function))
                 Reporter.Error(new InvalidIdentifierException("Not used as a function call"));
 
+
             // Checks that args are used declared before usage
             visitValue.Visit(expr.GetFuncArgs().GetValue(), expr.GetFuncArgs());
             ArrayList<ArgExpr> args = expr.GetFuncArgs().GetArgs();
@@ -429,6 +430,11 @@ public class SemanticAnalyzer implements IVisitor{
         funcDcl.SetTypeSignature(typeSignature);
         funcDcl.SetDclType(DclType.Function);
 
+        if(!funcDcl.GetType().equals(Types.VOID)){
+            Expr returnStmt = node.GetReturnExpr();
+            if(returnStmt==null)
+                Reporter.Error(new IncompatibleValueException("no return statement for function " + funcDcl.Name));
+        }
         // Enter scope and visit func declaration children
         EnterScope(node);
         if(!node.GetVarDcl().Identifier.equals(node.GetEndIdentifier()))
