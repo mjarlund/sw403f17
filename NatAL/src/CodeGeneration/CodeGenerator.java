@@ -6,6 +6,7 @@ import DataStructures.AST.NodeTypes.Expressions.*;
 import DataStructures.AST.NodeTypes.Modes;
 import DataStructures.AST.NodeTypes.Statements.*;
 import DataStructures.AST.NodeTypes.Types;
+import Exceptions.ClassCastExceptionError;
 import Semantics.Scope.SemanticAnalyzer;
 import Semantics.Scope.Symbol;
 import Syntax.Parser.Parser;
@@ -44,14 +45,17 @@ public class CodeGenerator implements IVisitor
     }
 
     public void VisitChildren(AST root) {
+        AST currentNode = null;
+
         try {
             for (AST child : root.children) {
+                currentNode = child;
                 String switchValue = (child.GetValue() != null) ? child.GetValue() : ((IdExpr) child).ID;
                 visitValue.Visit(switchValue, child);
             }
         }
         catch (ClassCastException e){
-            throw new ClassCastException();
+            Reporter.Error(new ClassCastExceptionError(currentNode.GetValue() + " could not be cast on line: " + currentNode.GetLineNumber()));
         }
     }
 
@@ -218,16 +222,18 @@ public class CodeGenerator implements IVisitor
         Emit("struct " + node.GetVarDcl().Identifier);
         Emit("{\n");
 
+        visitValue.Visit(node.GetBlock().GetValue(), node.GetBlock());
+
         // Emits all content of the struct
         // NOTE: variables do not need to be initialized in Arduino C
-        for (VarDcl dcl : node.GetContents())
+        /*for (VarDcl dcl : node.GetContents())
         {
             // Strings are different than all others types in Arduino C
             if (dcl.GetType() == Types.STRING)
-                Emit("char " + dcl.Identifier + "[100]; /*This does not work yet :(*/");
+                Emit("char " + dcl.Identifier + "[100]; /*This does not work yet :(*//*");
             else
                 Emit(dcl.GetType().toString().toLowerCase() + " " + dcl.Identifier + ";\n");
-        }
+        }*/
 
 
         Emit("}\n");
@@ -260,7 +266,11 @@ public class CodeGenerator implements IVisitor
     }
 
     public Object Visit(StructCompSelectExpr node) {
-        Emit(node.StructVarId + "." + node.ComponentId);
+        if (node.GetChildComp() != null){
+        Emit(node.StructVarId + "." );
+        visitValue.Visit(node.GetChildComp().GetValue(), node.GetChildComp());}
+        else
+            Emit(node.StructVarId + "." + node.ComponentId);
         return null;
     }
 
@@ -293,9 +303,8 @@ public class CodeGenerator implements IVisitor
         } while (SM.FindSymbol(currentIdentifier) != null);
         SM.AddSymbol(currentIdentifier);
     }
-
     public static void main(String args[]) throws IOException {
-        Scanner sc = new Scanner(InputTester.readFile("src/CodeGeneration/FinalProgram.txt"));
+        Scanner sc = new Scanner(InputTester.readFile("src/Test/TestPrograms/semantics/4LayeredStructsTest"));
         Parser parser = new Parser(sc);
         AST programTree = parser.ParseProgram();
         SemanticAnalyzer sm = new SemanticAnalyzer();
