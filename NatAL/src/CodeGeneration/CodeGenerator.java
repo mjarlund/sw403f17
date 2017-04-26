@@ -50,7 +50,7 @@ public class CodeGenerator implements IVisitor
             }
         }
         catch (ClassCastException e){
-            System.out.println(e);
+            throw new ClassCastException();
         }
     }
 

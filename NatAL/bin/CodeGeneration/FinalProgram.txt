@@ -1,3 +1,6 @@
+void delay(number d)
+    end delay
+
 structure teststruct
 number a
 text b

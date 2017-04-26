@@ -1,8 +1,0 @@
-void main()
-structure test
-number a is 1
-number b is 2
-end test
-test test1
-test1.a is 5
-end main

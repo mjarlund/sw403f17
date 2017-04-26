@@ -1,6 +1,0 @@
-void func1()
-    number target is 10
-    if(target equals 10)
-        target is target - 1
-    end if 
-end func1

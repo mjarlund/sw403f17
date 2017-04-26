@@ -46,7 +46,7 @@ public class ParserTest {
 			Collection<Object[]> data = new ArrayList<Object[]>();
 			
 			try{
-				File folder = new File("src/Test/TestPrograms/");
+				File folder = new File("src/Test/TestPrograms/parserAndScanner/");
 				File[] listOfFiles = folder.listFiles();
     		
     			for (File file : listOfFiles) {
@@ -154,7 +154,7 @@ public class ParserTest {
 			Collection<Object[]> data = new ArrayList<Object[]>();
 			
 			try{
-				File folder = new File("src/Test/TestPrograms/");
+				File folder = new File("src/Test/TestPrograms/parserAndScanner");
 				File[] listOfFiles = folder.listFiles();
     		
     			for (File file : listOfFiles) {

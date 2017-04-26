@@ -242,7 +242,7 @@ public class ScannerTest {
 				
 			try 
 			{
-				Scanner testScanner = new Scanner(InputTester.readFile("src/Test/TestPrograms/Testfail.txt"));
+				Scanner testScanner = new Scanner(InputTester.readFile("src/Test/TestPrograms/parserAndScanner/Testfail.txt"));
 			} 
 			catch (StringIndexOutOfBoundsException e){
 				thrown = true;

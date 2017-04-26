@@ -367,7 +367,7 @@ public class SemanticAnalyzer implements IVisitor{
 
         if(identifier.dclType.equals(DclType.Function))
             Reporter.Error(new InvalidIdentifierException("Not a variable " + identifier.Name));
-
+        /*
         if(identifier.dclType.equals(DclType.Struct)){
             if(node.children.size() == 0) {
                 return identifier.GetType();
@@ -383,6 +383,7 @@ public class SemanticAnalyzer implements IVisitor{
                 return identifier.GetType();
             }
         }
+        */
         return identifier.Type;
     }
 
