@@ -15,7 +15,7 @@ public final class Reporter
     public static void Error (Error error)
     {
         throw error;
-    }
+    }    
 
     public static void Warning (String message)
     {
