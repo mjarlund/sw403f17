@@ -16,7 +16,6 @@ public:
     size = SIZE_BUFFER;
     num_items = 0;
     arr = new T[SIZE_BUFFER];
-    std::cout << "created" << '\n';
   }
   int add(T arg){
     if(num_items == size){

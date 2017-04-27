@@ -167,15 +167,18 @@ public class CodeGenerator implements IVisitor
 
     public Object Visit(ListDcl node) {
         String elements = "";
-        visitValue.Visit(node.GetDeclaration().GetValue(), node.GetDeclaration());
-        Emit("[] = {");
-        for (ArgExpr element: node.GetElements().GetArgs())
-            elements += element.GetArg().LiteralValue.Value + ",";
+        Emit("list <"+ node.GetDeclaration().GetConvertedType() + "> " + node.GetDeclaration().Identifier+ ";\n");
+        //visitValue.Visit(node.GetDeclaration().GetValue(), node.GetDeclaration());
+       // Emit("[] = {");
+        for (ArgExpr element: node.GetElements().GetArgs()){
+            Emit(node.GetDeclaration().Identifier+".add("+element.GetArg().LiteralValue.Value+");\n");
+            //elements += element.GetArg().LiteralValue.Value + ",";
+        }
 
-        if (elements.endsWith(","))
+        /*if (elements.endsWith(","))
             elements = elements.substring(0, elements.length() - 1);
-
-        Emit(elements + "}");
+*/
+        //Emit(elements + "}");
         return null;
     }
 
@@ -238,6 +241,7 @@ public class CodeGenerator implements IVisitor
                 case "UntilStmt":
                 case "ForEachStmt":
                 case "IfStmt":
+                case"ListDcl":
                     break;
                 default: Emit(";\n");
             }
@@ -291,7 +295,7 @@ public class CodeGenerator implements IVisitor
         SM.AddSymbol(currentIdentifier);
     }
     public static void main(String args[]) throws IOException {
-        Scanner sc = new Scanner(InputTester.readFile("src/Test/TestPrograms/semantics/4LayeredStructsTest"));
+        Scanner sc = new Scanner(InputTester.readFile("src/Test/TestPrograms/semantics/ListArgumentsCheck"));
         Parser parser = new Parser(sc);
         AST programTree = parser.ParseProgram();
         SemanticAnalyzer sm = new SemanticAnalyzer();
