@@ -29,9 +29,9 @@ public class VarDcl extends Dcl
             case DIGITAL: return "digital";
             case FLOAT: return "float";
             case INT: return "int";
-            case STRING: return "string";
+            case STRING: return "String";
             case STRUCT: return "struct";
-            default: return "NON_CONVERTABLE_TYPE";
+            default: throw new Error("Whoops. Non-convertible type encountered");
         }
     }
 }

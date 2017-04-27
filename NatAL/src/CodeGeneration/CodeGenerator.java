@@ -39,7 +39,6 @@ public class CodeGenerator implements IVisitor
 
     public CodeGenerator (AST programTree, SemanticAnalyzer sm)
     {
-        // ¯\_(ツ)_/¯
         SM = sm;
         VisitChildren(programTree);
     }
@@ -220,23 +219,11 @@ public class CodeGenerator implements IVisitor
 
     public Object Visit(StructDcl node) {
         Emit("struct " + node.GetVarDcl().Identifier);
-        Emit("{\n");
 
         visitValue.Visit(node.GetBlock().GetValue(), node.GetBlock());
 
-        // Emits all content of the struct
-        // NOTE: variables do not need to be initialized in Arduino C
-        /*for (VarDcl dcl : node.GetContents())
-        {
-            // Strings are different than all others types in Arduino C
-            if (dcl.GetType() == Types.STRING)
-                Emit("char " + dcl.Identifier + "[100]; /*This does not work yet :(*//*");
-            else
-                Emit(dcl.GetType().toString().toLowerCase() + " " + dcl.Identifier + ";\n");
-        }*/
+        Emit(";\n");
 
-
-        Emit("}\n");
         return null;
     }
 
