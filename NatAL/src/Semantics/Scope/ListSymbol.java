@@ -8,7 +8,7 @@ import java.util.Arrays;
 
 public class ListSymbol extends Symbol implements IScope {
 
-    private static ArrayList<Symbol> symbols = new ArrayList<>();
+    private ArrayList<Symbol> symbols = new ArrayList<>();
 
     public ListSymbol(Types listtype, String name) {
         super(name,listtype);

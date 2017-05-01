@@ -1,5 +1,7 @@
 package Visualizing;
 
+import CodeGeneration.CodeGenerator;
+import CodeGeneration.TargetCodeGen;
 import DataStructures.AST.AST;
 import Semantics.Scope.SemanticAnalyzer;
 import Syntax.Parser.Parser;
@@ -70,6 +72,11 @@ public class Visualizer extends PApplet {
 
         SemanticAnalyzer sm = new SemanticAnalyzer();
         sm.VisitChildren(programTree);
+        CodeGenerator gc = new CodeGenerator(programTree,sm);
+        gc.ToFile();
+
+        TargetCodeGen tgc = new TargetCodeGen(programTree,sm);
+        tgc.ToFile("target_code.txt");
 
         BuildVisualTree(programTree);
         background(255);
