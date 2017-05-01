@@ -15,6 +15,8 @@ import Test.InputTester;
 import Utilities.IVisitor;
 import Utilities.Reporter;
 import Utilities.VisitorDriver;
+import jdk.internal.util.xml.impl.Input;
+
 import java.util.ArrayList;
 import java.io.*;
 
@@ -276,8 +278,10 @@ public class CodeGenerator implements IVisitor
     /* Writes all Arduino C instructions to a file */
     public void ToFile ()
     {
+
         try{
             PrintWriter writer = new PrintWriter("Arduino-C-Program.txt", "UTF-8");
+            writer.print(InputTester.readFile("src/CodeGeneration/StandardLibrary.txt"));
             for(String s : instructions)
             {
                 writer.print(s);
