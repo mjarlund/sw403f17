@@ -89,6 +89,9 @@ public class VisitorDriver
             case "StructCompSelectExpr":
                 returnValue = visit.Visit((StructCompSelectExpr) child);
                 break;
+            case "RepeatStmt":
+                returnValue = visit.Visit((RepeatStatement) child);
+                break;
         }
 
         return returnValue;

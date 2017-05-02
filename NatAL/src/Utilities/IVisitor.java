@@ -56,4 +56,5 @@ public interface IVisitor {
 
     Object Visit(StructCompSelectExpr node);
 
+    Object Visit(RepeatStatement node);
 }

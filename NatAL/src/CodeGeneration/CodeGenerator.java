@@ -5,10 +5,8 @@ import DataStructures.AST.NodeTypes.Declarations.*;
 import DataStructures.AST.NodeTypes.Expressions.*;
 import DataStructures.AST.NodeTypes.Modes;
 import DataStructures.AST.NodeTypes.Statements.*;
-import DataStructures.AST.NodeTypes.Types;
 import Exceptions.ClassCastExceptionError;
 import Semantics.Scope.SemanticAnalyzer;
-import Semantics.Scope.Symbol;
 import Syntax.Parser.Parser;
 import Syntax.Scanner.Scanner;
 import Test.InputTester;
@@ -61,6 +59,19 @@ public class CodeGenerator implements IVisitor
 
     public Object Visit(StructVarDcl dcl) {
         Emit(dcl.GetStructType().ID+ " " + dcl.GetIdentifier().ID);
+        return null;
+    }
+
+    public Object Visit(RepeatStatement node){
+        GenerateIdentifier();
+        if (node.GetIterationExpression() instanceof IdExpr){
+            String i = ((IdExpr)node.GetIterationExpression()).ID;
+            Emit("for (int "+ currentIdentifier +" = 0; <" + i + "; " + currentIdentifier +"++)");
+        } else {
+            String i = ((ValExpr)node.GetIterationExpression()).LiteralValue.Value;
+            Emit("for (int "+ currentIdentifier +" = 0; <" + i + "; " + currentIdentifier +"++)");
+        }
+        visitValue.Visit(node.GetBlock().GetValue(), node.GetBlock());
         return null;
     }
 

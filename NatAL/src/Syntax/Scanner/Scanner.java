@@ -52,6 +52,7 @@ public class Scanner
         words.put("input",TokenType.KEYWORD); words.put("output",TokenType.KEYWORD);
         words.put("from",TokenType.KEYWORD); words.put("to",TokenType.KEYWORD);
         words.put("foreach", TokenType.KEYWORD); words.put("in", TokenType.KEYWORD);
+        words.put("repeat", TokenType.KEYWORD);
 
         // Other
         words.put("false", TokenType.BOOLEAN_LITERAL); words.put("true", TokenType.BOOLEAN_LITERAL);

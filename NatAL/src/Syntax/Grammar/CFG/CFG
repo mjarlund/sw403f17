@@ -97,6 +97,7 @@ SelectionStatementPrime -> else BuildBlock NewLine Statements BuildElseStmt Comb
 SelectionStatementPrime -> end if
 IterationStatement -> until Condition BuildBlock NewLine Statements BuildUntilStmt end until CombineDown
 IterationStatement -> foreach ( FormalParameter in Parameter ) BuildBlock NewLine Statements BuildForeachStatement end foreach CombineDown
+IterationStatement -> repeat ( Expression ) BuildBlock NewLine Statements BuildRepeatStatement end repeat CombineDown
 Condition -> ( Expression )
 Type -> text
 Type -> number

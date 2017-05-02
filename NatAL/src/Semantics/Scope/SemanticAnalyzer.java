@@ -301,6 +301,15 @@ public class SemanticAnalyzer implements IVisitor{
             Reporter.Error(new IncompatibleValueException(lType,rType,expr.GetLineNumber()));
         return lType;
     }
+
+    public Object Visit(RepeatStatement stmt){
+        Expr iterations = stmt.GetIterationExpression();
+        Object type = visitValue.Visit(iterations.GetValue(), iterations );
+        if (!type.equals(Types.INT)){
+            Reporter.Error(new Error("Iterations for repeat must be of type 'number'. (Line: " + stmt.GetLineNumber() + ")"));
+        }
+        return null;
+    }
     public Object Visit(AssignStmt stmt)
     {
         AST left = stmt.GetLeft();

@@ -42,8 +42,12 @@ void foo(){
 void func1(){ 
   int target = 0;
   while (!(target <= 10)){ 
-    target = target+1;
-    func2(10);
+    int asdLOL = 5;
+    for (int _iiii = 0; <asdLOL; _iiii++){ 
+      target = target+1;
+      func2(10);
+      } 
+;
     } 
   } 
 

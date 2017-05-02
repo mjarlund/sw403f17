@@ -59,6 +59,17 @@ public class ASTFactory
         SemanticAction.put("BuildStructVarDcl", ASTFactory.this::CreateStructVarDcl);
         SemanticAction.put("BuildListIndexExpression", ASTFactory.this::CreateListIndexExpr);
         SemanticAction.put("BuildStructComponentSelectionExpression", ASTFactory.this::CreateStructCompSelectExpr);
+        SemanticAction.put("BuildRepeatStatement", ASTFactory.this::CreateRepeatStatement);
+
+    }
+
+    private void CreateRepeatStatement(){
+        while (!terminals.peek().Value.equals("repeat")) {
+            terminals.pop();
+        } terminals.pop(); // )
+        BlockStmt code = (BlockStmt) astStack.pop();
+        Expr iterations = (Expr) astStack.pop();
+        astStack.push(new RepeatStatement(iterations, code));
     }
 
     private void CreateStructCompSelectExpr(){
