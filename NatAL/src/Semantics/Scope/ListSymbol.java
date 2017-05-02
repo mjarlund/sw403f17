@@ -6,12 +6,9 @@ import Utilities.Reporter;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-/**
- * Created by mysjkin on 4/21/17.
- */
 public class ListSymbol extends Symbol implements IScope {
 
-    private static ArrayList<Symbol> symbols = new ArrayList<>();
+    private ArrayList<Symbol> symbols = new ArrayList<>();
 
     public ListSymbol(Types listtype, String name) {
         super(name,listtype);
@@ -22,7 +19,7 @@ public class ListSymbol extends Symbol implements IScope {
         Symbol remove = new Symbol("remove");
         add.SetDclType(DclType.Function);
         ArrayList<Types> removeSignatur = new ArrayList<>(Arrays.asList(Types.INT));
-        add.SetTypeSignature(removeSignatur);
+        remove.SetTypeSignature(removeSignatur);
 
         symbols.add(add);
         symbols.add(remove);

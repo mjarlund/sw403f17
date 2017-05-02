@@ -64,14 +64,14 @@ public class SemanticAnalyzer implements IVisitor{
 
     public Object Visit(ListDcl dcl) {
         String dclId = dcl.GetDeclaration().Identifier;
-        Types dclType = dcl.GetDeclaration().Type;
+        Types type = dcl.GetDeclaration().Type;
         ArrayList<ArgExpr> elements = dcl.GetElements().GetArgs();
 
         for(ArgExpr arg : elements) {
-            if(!arg.GetArg().Type.equals(dclType))
-                Reporter.Error(new InvalidTypeException("\"" + arg.GetArg().LiteralValue + "\" is not a " + dclType + " on line " + dcl.GetLineNumber()));
+            if(!arg.GetArg().Type.equals(type))
+                Reporter.Error(new InvalidTypeException("\"" + arg.GetArg().LiteralValue + "\" is not a " + type + " on line " + dcl.GetLineNumber()));
         }
-        Symbol listId = new ListSymbol(dclType,dclId);
+        Symbol listId = new ListSymbol(type,dclId);
         listId.dclType = DclType.List;
         currentScope.AddSymbol(listId);
         return null;
@@ -157,7 +157,7 @@ public class SemanticAnalyzer implements IVisitor{
             for(int i=0;i<args.size();++i)
             {
                 if(!args.get(i).GetArg().Type.equals(funcSignature.get(i)))
-                    Reporter.Error(new ArgumentsException("Argument not matching type signature in " + expr.ComponentId + " on line TODO"));
+                    Reporter.Error(new ArgumentsException("Argument not matching type signature in " + expr.ComponentId + " on line"));
             }
     	    return null;
         }
@@ -182,8 +182,8 @@ public class SemanticAnalyzer implements IVisitor{
     {
         Expr condition = stmt.GetCondition();
 
-        if(!(condition instanceof BoolExpr))
-            Reporter.Error(new IncompatibleValueException("Expected boolean expression in " + stmt + " on line " + stmt.GetLineNumber()));
+        if(!(condition instanceof BoolExpr) && !(condition instanceof UnaryExpr))
+            Reporter.Error(new IncompatibleValueException("Expected boolean expression or unary expression in " + stmt + " on line " + stmt.GetLineNumber() + ". Got: " + condition.getClass()));
 
         VisitChildren(stmt);
         
