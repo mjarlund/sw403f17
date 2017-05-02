@@ -38,7 +38,7 @@ void foo ()
 
 void func1 ()
      number target is 0
-     until(target equals 10)
+     until(target below or equals 10)
         target is target + 1
         func2(10)
      end until

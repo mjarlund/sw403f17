@@ -35,7 +35,8 @@ public class BoolExpr extends Expr
             case "and": return "&&";
             case "is": return "=";
             case "above": return ">";
-
+            case "above or equals": return ">=";
+            case "below or equals": return "<=";
             default:
                 throw new Error("Whoops - ¯\\_(ツ)_/¯");
         }

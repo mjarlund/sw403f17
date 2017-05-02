@@ -273,6 +273,11 @@ public class ASTFactory
             terminals.pop();
         // get operand
         Token op = terminals.pop();
+        if (op.Value.equals("equals") && terminals.peek().Value.equals("or")){
+            //This is an "(above / below) or equals" expression
+            terminals.pop(); // remove 'or'
+            op = new Token(terminals.pop().Value + " or equals", TokenType.OPERATOR);
+        }
         if(terminals.peek().equals(")")) // remove '('
             terminals.pop();
         BoolExpr expr = new BoolExpr(left, op, right);

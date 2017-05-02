@@ -41,8 +41,10 @@ AndExpressionPrime -> EqualityExpressionPrime EqualityExpression
 EqualityExpression -> equals EqualityExpressionPrime BuildBoolExpr EqualityExpression
 EqualityExpression -> EPSILON
 EqualityExpressionPrime -> RelationalExpressionPrime RelationalExpression
-RelationalExpression -> below RelationalExpressionPrime BuildBoolExpr RelationalExpression
-RelationalExpression -> above RelationalExpressionPrime BuildBoolExpr RelationalExpression
+RelationalExpression -> below RelationalExpressionAppendant RelationalExpressionPrime BuildBoolExpr RelationalExpression
+RelationalExpression -> above RelationalExpressionAppendant RelationalExpressionPrime BuildBoolExpr RelationalExpression
+RelationalExpressionAppendant -> or equals
+RelationalExpressionAppendant -> EPSILON
 RelationalExpression -> EPSILON
 RelationalExpressionPrime -> AdditiveExpressionPrime AdditiveExpression
 AdditiveExpression -> + AdditiveExpressionPrime BuildBinaryExpr AdditiveExpression
