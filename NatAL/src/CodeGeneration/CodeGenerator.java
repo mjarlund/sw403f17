@@ -152,7 +152,7 @@ public class CodeGenerator implements IVisitor
     }
 
     public Object Visit(UnaryExpr expr) {
-        Emit(expr.GetOperator().Value);
+        Emit(expr.GetConvertedType());
         VisitChildren(expr);
         return null;
     }

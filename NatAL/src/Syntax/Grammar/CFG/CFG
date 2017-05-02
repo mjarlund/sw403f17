@@ -56,6 +56,7 @@ MultiplicativeExpressionPrime -> UnaryExpression
 IOExpression -> Mode read from Identifier BuildIdentifier BuildIOExpr
 IOExpression -> EPSILON
 UnaryExpression -> - PrimaryExpression BuildUnaryExpr
+UnaryExpression -> not PrimaryExpression BuildUnaryExpr
 UnaryExpression -> PrimaryExpression
 PrimaryExpression -> Identifier BuildIdentifier IdentifierAppendantOptional ProcedureCall
 PrimaryExpression -> IntegerLiteral BuildValExpr

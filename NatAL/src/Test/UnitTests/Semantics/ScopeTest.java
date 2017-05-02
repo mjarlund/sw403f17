@@ -158,6 +158,10 @@ public class ScopeTest {
 			{
 				thrown = true;
 			}
+			catch (UnexpectedTokenException ex)
+			{
+				thrown = true;
+			}
 			assertEquals(true, thrown);			
 		}		
 	}

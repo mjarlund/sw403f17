@@ -182,8 +182,8 @@ public class SemanticAnalyzer implements IVisitor{
     {
         Expr condition = stmt.GetCondition();
 
-        if(!(condition instanceof BoolExpr))
-            Reporter.Error(new IncompatibleValueException("Expected boolean expression in " + stmt + " on line " + stmt.GetLineNumber()));
+        if(!(condition instanceof BoolExpr) && !(condition instanceof UnaryExpr))
+            Reporter.Error(new IncompatibleValueException("Expected boolean expression or unary expression in " + stmt + " on line " + stmt.GetLineNumber() + ". Got: " + condition.getClass()));
 
         VisitChildren(stmt);
         

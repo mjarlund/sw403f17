@@ -1,7 +1,7 @@
 void main()
 number a is -2
 boolean b is true
-if(not b equals true)
+if(Not b equals true)
 text t is "dab"
 else
 number n is 10
