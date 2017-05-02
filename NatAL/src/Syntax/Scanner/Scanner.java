@@ -175,6 +175,10 @@ public class Scanner
         {
             sb.append(currentChar);
 
+            if (currentChar == 'f'){
+                Advance();
+                return MakeToken(sb.toString(), TokenType.FLOAT_LITERAL);
+            }
             if(IsLetter())
                 Reporter.Error(new InvalidIdentifierException(sb + " is not a valid number"));
 
