@@ -63,6 +63,7 @@ public class CodeGenerator implements IVisitor
     }
 
     public Object Visit(RepeatStatement node){
+        //TODO: Can only take ID's or simple numbers as iterators - maybe extend this?
         GenerateIdentifier();
         if (node.GetIterationExpression() instanceof IdExpr){
             String i = ((IdExpr)node.GetIterationExpression()).ID;
