@@ -68,8 +68,8 @@ public class SemanticAnalyzer implements IVisitor{
         ArrayList<ArgExpr> elements = dcl.GetElements().GetArgs();
 
         for(ArgExpr arg : elements) {
-            if(!arg.GetArg().Type.equals(type))
-                Reporter.Error(new InvalidTypeException("\"" + arg.GetArg().LiteralValue + "\" is not a " + type + " on line " + dcl.GetLineNumber()));
+            if(!arg.GetType().equals(type))
+                Reporter.Error(new InvalidTypeException("\"" + arg.GetArg() + "\" is not a " + type + " on line " + dcl.GetLineNumber()));
         }
         Symbol listId = new ListSymbol(type,dclId);
         listId.dclType = DclType.List;
@@ -147,17 +147,17 @@ public class SemanticAnalyzer implements IVisitor{
     	    ListSymbol list = (ListSymbol) symbol;
     	    Symbol op = list.FindSymbol(expr.ComponentId);
     	    if(op==null)
-    	        Reporter.Error(new UndeclaredSymbolException("list operation " + expr.ComponentId + " not defined"));
+    	        Reporter.Error(new UndeclaredSymbolException("list operation " + expr.ComponentId + " not defined on line " + expr.GetLineNumber()));
     	    ArrayList<ArgExpr> args = ((FuncCallExpr)expr.GetParent()).GetFuncArgs().GetArgs();
             ArrayList<Types> funcSignature = op.GetTypeSignature();
             if(args.size() > funcSignature.size())
-                Reporter.Error(new ArgumentsException("too many arguments in " + expr.ComponentId + " on line TODO"));
+                Reporter.Error(new ArgumentsException("too many arguments in " + expr.ComponentId + " on line " + expr.GetLineNumber()));
             if(args.size() < funcSignature.size())
-                Reporter.Error(new ArgumentsException("too few arguments in " + expr.ComponentId + " on line TODO"));
+                Reporter.Error(new ArgumentsException("too few arguments in " + expr.ComponentId + " on line " + expr.GetLineNumber()));
             for(int i=0;i<args.size();++i)
             {
-                if(!args.get(i).GetArg().Type.equals(funcSignature.get(i)))
-                    Reporter.Error(new ArgumentsException("Argument not matching type signature in " + expr.ComponentId + " on line"));
+                if(!args.get(i).GetType().equals(funcSignature.get(i)))
+                    Reporter.Error(new ArgumentsException("Argument not matching type signature in " + expr.ComponentId + " on line " + expr.GetLineNumber()));
             }
     	    return null;
         }
@@ -213,7 +213,7 @@ public class SemanticAnalyzer implements IVisitor{
             Reporter.Error(new InvalidIdentifierException("Identifier " + stmt.GetCollectionId() + " on line " + stmt.GetLineNumber() + "is not a list."));
 
         if(!stmt.GetElementType().equals(smb.Type))
-            Reporter.Error(new InvalidTypeException("Type of " + stmt.GetElementId() + " is not equal to the type of " + stmt.GetCollectionId()));
+            Reporter.Error(new InvalidTypeException("Type of " + stmt.GetElementId() + " is not equal to the type of " + stmt.GetCollectionId() + " on line " + stmt.GetLineNumber()));
 
         return null;
     }
@@ -249,21 +249,20 @@ public class SemanticAnalyzer implements IVisitor{
             if (!identifier.dclType.equals(DclType.Function))
                 Reporter.Error(new InvalidIdentifierException("Not used as a function call"));
 
-
             // Checks that args are used declared before usage
             visitValue.Visit(expr.GetFuncArgs().GetValue(), expr.GetFuncArgs());
             ArrayList<ArgExpr> args = expr.GetFuncArgs().GetArgs();
             if (identifier.TypeSignature.size() > 0 || args.size() > 0) {
                 int iterations = identifier.TypeSignature.size();
                 if (iterations > args.size())
-                    Reporter.Error(new ArgumentsException("Too few Arguments in " + identifier.Name));
+                    Reporter.Error(new ArgumentsException("Too few Arguments in " + identifier.Name + " on line " + expr.GetLineNumber()));
                 else if (iterations < args.size())
-                    Reporter.Error(new ArgumentsException("Too many Arguments in " + identifier.Name));
+                    Reporter.Error(new ArgumentsException("Too many Arguments in " + identifier.Name + " on line " + expr.GetLineNumber()));
                 // Checks that every argument type fits the function type signature
                 for (int i = 0; i < iterations; i++) {
                     ArgExpr argument = args.get(i);
 
-                    Types argType = argument.GetArg().Type;
+                    Object argType = visitValue.Visit(argument.GetArg().GetValue(),argument.GetArg());
 
                     if (!argType.equals(identifier.TypeSignature.get(i)))
                         Reporter.Error(new IncompatibleValueException("Incompatible argument types in " + identifier.Name + " on line " + expr.GetLineNumber()));
@@ -287,7 +286,6 @@ public class SemanticAnalyzer implements IVisitor{
         // checks that the type is a valid type for binary expressions
         if(!lType.equals(Types.INT) && !lType.equals(Types.FLOAT))
             Reporter.Error(new InvalidTypeException(lType, expr.GetLineNumber()));
-
         return lType;
     }
     public Object Visit(BoolExpr expr)
@@ -376,7 +374,7 @@ public class SemanticAnalyzer implements IVisitor{
             Reporter.Error(new UndeclaredSymbolException(id + " not declared.", node.GetLineNumber()));
 
         if(identifier.dclType.equals(DclType.Function))
-            Reporter.Error(new InvalidIdentifierException("Not a variable " + identifier.Name));
+            Reporter.Error(new InvalidIdentifierException("Not a variable " + identifier.Name + " on line " + node.GetLineNumber()));
         /*
         if(identifier.dclType.equals(DclType.Struct)){
             if(node.children.size() == 0) {
@@ -442,7 +440,7 @@ public class SemanticAnalyzer implements IVisitor{
         if(!funcDcl.GetType().equals(Types.VOID)){
             Expr returnStmt = node.GetReturnExpr();
             if(returnStmt==null)
-                Reporter.Error(new IncompatibleValueException("no return statement for function " + funcDcl.Name));
+                Reporter.Error(new IncompatibleValueException("no return statement for function " + funcDcl.Name + " on line " + node.GetLineNumber()));
         }
         // Enter scope and visit func declaration children
         EnterScope(node);
@@ -456,7 +454,7 @@ public class SemanticAnalyzer implements IVisitor{
         if (currentScope.GetDepth() > 0){
 
             Reporter.Error(new InvalidScopeException(
-                    node.GetVarDcl().Identifier + ": Structs can only be declared in global scope."));
+                    node.GetVarDcl().Identifier + ": Structs can only be declared in global scope." + " on line " + node.GetLineNumber()));
         }
         String varID  = node.GetVarDcl().Identifier;
         Types varType = node.GetVarDcl().GetType();

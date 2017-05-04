@@ -1,6 +1,7 @@
 package DataStructures.AST.NodeTypes.Expressions;
 
 import DataStructures.AST.AST;
+import DataStructures.AST.NodeTypes.Types;
 
 /**
  * Created by Anders Brams on 3/21/2017.
@@ -15,9 +16,23 @@ public class ArgExpr extends Expr
     public ArgExpr(IdExpr id)
     {
     	AddChild(id);
+    	SetValue("ArgExpr");
     }
-    public ValExpr GetArg()
+    public ArgExpr(Expr value)
     {
-        return (ValExpr) children.get(0);
+        SetValue("ArgExpr");
+        AddChild(value);
+    }
+    public Expr GetArg()
+    {
+        return (Expr) children.get(0);
+    }
+    public Types GetType()
+    {
+        AST arg = children.get(0);
+        if(arg instanceof ValExpr){
+            return ((ValExpr)arg).Type;
+        }
+        else return null;
     }
 }

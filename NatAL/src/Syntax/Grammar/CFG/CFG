@@ -77,13 +77,7 @@ IOStatement ->  write Expression to Identifier BuildIdentifier
 IOStatement ->  read from Identifier BuildIdentifier
 ProcedureCall -> ParameterList BuildFuncCall
 ProcedureCall -> EPSILON
-Parameter -> Identifier
-Parameter -> IntegerLiteral
-Parameter -> FloatingPointLiteral
-Parameter -> StringLiteral
-Parameter -> BooleanLiteral
-Parameter -> CharacterLiteral
-Parameter-> DigitalLiteral
+Parameter -> Expression BuildArg
 IdentifierAppendantOptional -> . Identifier BuildIdentifier BuildStructComponentSelectionExpression IdentifierAppendantOptional
 IdentifierAppendantOptional -> [ IntegerLiteral ] BuildListIndexExpression 
 IdentifierAppendantOptional -> EPSILON
@@ -96,7 +90,7 @@ SelectionStatement -> if Condition BuildBlock NewLine Statements BuildIfStmt Sel
 SelectionStatementPrime -> else BuildBlock NewLine Statements BuildElseStmt CombineDown end else if
 SelectionStatementPrime -> end if
 IterationStatement -> until Condition BuildBlock NewLine Statements BuildUntilStmt end until CombineDown
-IterationStatement -> foreach ( FormalParameter in Parameter ) BuildBlock NewLine Statements BuildForeachStatement end foreach CombineDown
+IterationStatement -> foreach ( FormalParameter in Identifier BuildIdentifier ) BuildBlock NewLine Statements BuildForeachStatement end foreach CombineDown
 IterationStatement -> repeat ( Expression ) BuildBlock NewLine Statements BuildRepeatStatement end repeat CombineDown
 Condition -> ( Expression )
 Type -> text

@@ -182,8 +182,10 @@ public class CodeGenerator implements IVisitor
         String elements = "";
         visitValue.Visit(node.GetDeclaration().GetValue(), node.GetDeclaration());
         Emit("[] = {");
-        for (ArgExpr element: node.GetElements().GetArgs())
-            elements += element.GetArg().LiteralValue.Value + ",";
+        for (ArgExpr element: node.GetElements().GetArgs()) {
+            ValExpr expr = (ValExpr) element.GetArg();
+            elements += expr.LiteralValue.Value + ",";
+        }
 
         if (elements.endsWith(","))
             elements = elements.substring(0, elements.length() - 1);
@@ -216,7 +218,10 @@ public class CodeGenerator implements IVisitor
     public Object Visit(ArgsExpr node) {
         String parameters="(";
         for (ArgExpr param : node.GetArgs())
-            parameters += param.GetArg().LiteralValue.Value + ",";
+        {
+            ValExpr expr = (ValExpr) param.GetArg();
+            parameters += expr.LiteralValue.Value + ",";
+        }
         if (parameters.endsWith(","))
             parameters = parameters.substring(0, parameters.length() - 1);
 
