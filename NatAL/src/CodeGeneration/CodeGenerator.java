@@ -5,10 +5,8 @@ import DataStructures.AST.NodeTypes.Declarations.*;
 import DataStructures.AST.NodeTypes.Expressions.*;
 import DataStructures.AST.NodeTypes.Modes;
 import DataStructures.AST.NodeTypes.Statements.*;
-import DataStructures.AST.NodeTypes.Types;
 import Exceptions.ClassCastExceptionError;
 import Semantics.Scope.SemanticAnalyzer;
-import Semantics.Scope.Symbol;
 import Syntax.Parser.Parser;
 import Syntax.Scanner.Scanner;
 import Test.InputTester;
@@ -39,6 +37,7 @@ public class CodeGenerator implements IVisitor
 
     public CodeGenerator (AST programTree, SemanticAnalyzer sm)
     {
+        // ¯\_(ツ)_/¯
         SM = sm;
         VisitChildren(programTree);
     }
@@ -60,6 +59,20 @@ public class CodeGenerator implements IVisitor
 
     public Object Visit(StructVarDcl dcl) {
         Emit(dcl.GetStructType().ID+ " " + dcl.GetIdentifier().ID);
+        return null;
+    }
+
+    public Object Visit(RepeatStatement node){
+        //TODO: Can only take ID's or simple numbers as iterators - maybe extend this?
+        GenerateIdentifier();
+        if (node.GetIterationExpression() instanceof IdExpr){
+            String i = ((IdExpr)node.GetIterationExpression()).ID;
+            Emit("for (int "+ currentIdentifier +" = 0; <" + i + "; " + currentIdentifier +"++)");
+        } else {
+            String i = ((ValExpr)node.GetIterationExpression()).LiteralValue.Value;
+            Emit("for (int "+ currentIdentifier +" = 0; <" + i + "; " + currentIdentifier +"++)");
+        }
+        visitValue.Visit(node.GetBlock().GetValue(), node.GetBlock());
         return null;
     }
 
@@ -167,18 +180,17 @@ public class CodeGenerator implements IVisitor
 
     public Object Visit(ListDcl node) {
         String elements = "";
-        Emit("list <"+ node.GetDeclaration().GetConvertedType() + "> " + node.GetDeclaration().Identifier+ ";\n");
-        //visitValue.Visit(node.GetDeclaration().GetValue(), node.GetDeclaration());
-       // Emit("[] = {");
-        for (ArgExpr element: node.GetElements().GetArgs()){
-            Emit(node.GetDeclaration().Identifier+".add("+element.GetArg().LiteralValue.Value+");\n");
-            //elements += element.GetArg().LiteralValue.Value + ",";
+        visitValue.Visit(node.GetDeclaration().GetValue(), node.GetDeclaration());
+        Emit("[] = {");
+        for (ArgExpr element: node.GetElements().GetArgs()) {
+            ValExpr expr = (ValExpr) element.GetArg();
+            elements += expr.LiteralValue.Value + ",";
         }
 
-        /*if (elements.endsWith(","))
+        if (elements.endsWith(","))
             elements = elements.substring(0, elements.length() - 1);
-*/
-        //Emit(elements + "}");
+
+        Emit(elements + "}");
         return null;
     }
 
@@ -206,7 +218,10 @@ public class CodeGenerator implements IVisitor
     public Object Visit(ArgsExpr node) {
         String parameters="(";
         for (ArgExpr param : node.GetArgs())
-            parameters += param.GetArg().LiteralValue.Value + ",";
+        {
+            ValExpr expr = (ValExpr) param.GetArg();
+            parameters += expr.LiteralValue.Value + ",";
+        }
         if (parameters.endsWith(","))
             parameters = parameters.substring(0, parameters.length() - 1);
 
@@ -222,11 +237,23 @@ public class CodeGenerator implements IVisitor
 
     public Object Visit(StructDcl node) {
         Emit("struct " + node.GetVarDcl().Identifier);
+        Emit("{\n");
 
         visitValue.Visit(node.GetBlock().GetValue(), node.GetBlock());
 
-        Emit(";\n");
+        // Emits all content of the struct
+        // NOTE: variables do not need to be initialized in Arduino C
+        /*for (VarDcl dcl : node.GetContents())
+        {
+            // Strings are different than all others types in Arduino C
+            if (dcl.GetType() == Types.STRING)
+                Emit("char " + dcl.Identifier + "[100]; /*This does not work yet :(*//*");
+            else
+                Emit(dcl.GetType().toString().toLowerCase() + " " + dcl.Identifier + ";\n");
+        }*/
 
+
+        Emit("}\n");
         return null;
     }
 
@@ -241,7 +268,6 @@ public class CodeGenerator implements IVisitor
                 case "UntilStmt":
                 case "ForEachStmt":
                 case "IfStmt":
-                case"ListDcl":
                     break;
                 default: Emit(";\n");
             }
@@ -295,7 +321,7 @@ public class CodeGenerator implements IVisitor
         SM.AddSymbol(currentIdentifier);
     }
     public static void main(String args[]) throws IOException {
-        Scanner sc = new Scanner(InputTester.readFile("src/CodeGeneration/ArduinoTestProgram.txt"));
+        Scanner sc = new Scanner(InputTester.readFile("src/CodeGeneration/FinalProgram.txt"));
         Parser parser = new Parser(sc);
         AST programTree = parser.ParseProgram();
         SemanticAnalyzer sm = new SemanticAnalyzer();

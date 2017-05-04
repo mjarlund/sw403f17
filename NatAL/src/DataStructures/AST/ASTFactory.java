@@ -35,6 +35,7 @@ public class ASTFactory
     public void InitFactory()
     {
         SemanticAction.put("BuildVarDCL", ASTFactory.this::CreateDclTree);
+        SemanticAction.put("BuildArg", ASTFactory.this::CreateArgTree);
         SemanticAction.put("CombineDown", ASTFactory.this::CombineDown);
         SemanticAction.put("BuildAssign", ASTFactory.this::CreateAssignTree);
         SemanticAction.put("BuildValExpr", ASTFactory.this::CreateValExprTree);
@@ -59,6 +60,36 @@ public class ASTFactory
         SemanticAction.put("BuildStructVarDcl", ASTFactory.this::CreateStructVarDcl);
         SemanticAction.put("BuildListIndexExpression", ASTFactory.this::CreateListIndexExpr);
         SemanticAction.put("BuildStructComponentSelectionExpression", ASTFactory.this::CreateStructCompSelectExpr);
+        SemanticAction.put("BuildRepeatStatement", ASTFactory.this::CreateRepeatStatement);
+
+    }
+
+    private void CreateArgTree()
+    {
+        Expr arg = (Expr) astStack.pop();
+        if(arg instanceof IdExpr)
+        {
+            IdExpr id = (IdExpr) arg;
+            ArgExpr argument = new ArgExpr(id);
+            astStack.push(argument);
+        }else if(arg instanceof ValExpr)
+        {
+            ValExpr val = (ValExpr) arg;
+            ArgExpr argument = new ArgExpr(val);
+            astStack.push(argument);
+        }else{
+            ArgExpr argument = new ArgExpr(arg);
+            astStack.push(argument);
+        }
+    }
+
+    private void CreateRepeatStatement(){
+        while (!terminals.peek().Value.equals("repeat")) {
+            terminals.pop();
+        } terminals.pop(); // )
+        BlockStmt code = (BlockStmt) astStack.pop();
+        Expr iterations = (Expr) astStack.pop();
+        astStack.push(new RepeatStatement(iterations, code));
     }
 
     private void CreateStructCompSelectExpr(){
@@ -83,16 +114,14 @@ public class ASTFactory
             StructCompSelectExpr expr = new StructCompSelectExpr(structId.ID, componentId.ID);
             expr.SetValue("StructCompSelectExpr");
             astStack.push(expr);
-            //System.out.println(structId.ID +"    "+ componentId.ID);
         }
 
     }
 
     private void CreateListIndexExpr()
     {
-        System.out.println(terminals.pop().Value);
+        terminals.pop();
         int index = Integer.parseInt(terminals.pop().Value);
-        System.out.println(terminals.pop().Value);
         IdExpr listId = (IdExpr) astStack.pop();
         ListIndexExpr listExpr = new ListIndexExpr(listId, index);
         listExpr.SetValue("ListIndexExpr");
@@ -110,7 +139,6 @@ public class ASTFactory
 
     public void CreateAbstractTree(String action, int lineNumber)
     {
-    	//System.out.println(astStack);
         Runnable method = SemanticAction.get(action);
         if (method!=null)
         {
@@ -198,9 +226,12 @@ public class ASTFactory
             id = (IdExpr)func;
             funcCall = new FuncCallExpr(id,args);
         }
-        else{
+        else if(func instanceof StructCompSelectExpr){
             structMember = (StructCompSelectExpr)func;
             funcCall = new FuncCallExpr(structMember,args);
+        }
+        else{
+
         }
 
         funcCall.SetLineNumber(currentLineNumber);
@@ -208,7 +239,7 @@ public class ASTFactory
     }
     private void CreateActualParameters()
     {
-        Token endPara = terminals.pop();
+        /*Token endPara = terminals.pop();
         ArrayList<ArgExpr> parameters = new ArrayList<>();
         while (! endPara.Value.equals("("))
         {
@@ -231,10 +262,16 @@ public class ASTFactory
             }
             endPara = terminals.pop();
         }
-        ArgsExpr astParameters = new ArgsExpr();
+
         for (ArgExpr parameter : parameters)
         {
             astParameters.children.add(parameter);
+        }
+        astStack.push(astParameters);*/
+        ArgsExpr astParameters = new ArgsExpr();
+        while (astStack.peek() instanceof ArgExpr)
+        {
+            astParameters.AddChild(astStack.pop());
         }
         astStack.push(astParameters);
     }
@@ -273,6 +310,11 @@ public class ASTFactory
             terminals.pop();
         // get operand
         Token op = terminals.pop();
+        if (op.Value.equals("equals") && terminals.peek().Value.equals("or")){
+            //This is an "(above / below) or equals" expression
+            terminals.pop(); // remove 'or'
+            op = new Token(terminals.pop().Value + " or equals", TokenType.OPERATOR);
+        }
         if(terminals.peek().equals(")")) // remove '('
             terminals.pop();
         BoolExpr expr = new BoolExpr(left, op, right);
@@ -370,7 +412,6 @@ public class ASTFactory
     private void CreateListDcl(){
         AST listContents;
         ListDcl listDcl;
-
         /* BuildActualParameters put the contents on the astStack */
         listContents = astStack.pop();
 
@@ -430,28 +471,24 @@ public class ASTFactory
     }
 
     private void CreateForeachStmt(){
-        System.out.println("Building Foreach: ");
         String terminal = terminals.pop().Value;
         while (! terminal.equals(")")){
             terminal = terminals.pop().Value;
         }
-
-        String collectionID = terminals.pop().Value;
+        BlockStmt code = (BlockStmt) astStack.pop();
+        IdExpr listID = (IdExpr) astStack.pop();
         terminals.pop(); // in
         String elementID = terminals.pop().Value;
         Types elementType = GetType(terminals.pop());
 
-        BlockStmt code = (BlockStmt) astStack.pop();
-        IdExpr collection = new IdExpr(collectionID);
         VarDcl element = new VarDcl(elementType, elementID);
 
-        FindIteratorVariable(code, elementID, collectionID);
+        FindIteratorVariable(code, elementID, listID.ID);
 
         /* If elementID is used in the block, it should be list[elementID.Value] */
 
-        ForEachStmt forStmt = new ForEachStmt(element, collection, code);
+        ForEachStmt forStmt = new ForEachStmt(element, listID, code);
         astStack.push(forStmt);
-        System.out.println("Built foreach");
     }
 
     private void FindIteratorVariable(AST node, String iteratorID, String collectionID){

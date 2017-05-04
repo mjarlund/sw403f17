@@ -55,6 +55,12 @@ public class Visualizer extends PApplet {
         String code1 = "text func1()\n" +
                        "pin a is 2\n" +
                         "a is digital read from a\n" +
+                        "fraction whatIsThis is 2f/0f\n" +
+                        "number asd is 5\n" +
+                        "repeat (asd) \n" +
+                        "  fraction n is 2\n" +
+                        " end repeat\n" +
+                        "return \"LEL\" \n" +
                         "end func1\n";
         String code2 = "void foo()\n" +
                             "number a is 2 \n" +
