@@ -7,6 +7,13 @@ pin motorRight is 3
 pin dirRight is 8
 pin dirLeft is 2
 
+number asd()
+    return 2
+end asd
+
+void qwe(number a)
+end qwe
+
 void setup()
     end setup
 
@@ -27,4 +34,7 @@ void loop()
     analog write 255 to motorLeft
     analog write 255 to motorRight
     delay(1000)
+
+    qwe(asd())
+
     end loop

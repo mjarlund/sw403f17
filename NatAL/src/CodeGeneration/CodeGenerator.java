@@ -216,16 +216,19 @@ public class CodeGenerator implements IVisitor
     }
 
     public Object Visit(ArgsExpr node) {
-        String parameters="(";
+        String parameters=null;
+        Emit("(");
+        int size = node.GetArgs().size();
         for (ArgExpr param : node.GetArgs())
         {
-            ValExpr expr = (ValExpr) param.GetArg();
-            parameters += expr.LiteralValue.Value + ",";
+            visitValue.Visit(param.GetArg().GetValue(),param.GetArg());
+            size--;
+            if(size>0) {
+                Emit(",");
+            }
         }
-        if (parameters.endsWith(","))
-            parameters = parameters.substring(0, parameters.length() - 1);
 
-        Emit(parameters + ")");
+        Emit(")");
         return null;
     }
 
@@ -321,7 +324,7 @@ public class CodeGenerator implements IVisitor
         SM.AddSymbol(currentIdentifier);
     }
     public static void main(String args[]) throws IOException {
-        Scanner sc = new Scanner(InputTester.readFile("src/CodeGeneration/FinalProgram.txt"));
+        Scanner sc = new Scanner(InputTester.readFile("src/CodeGeneration/ArduinoTestProgram.txt"));
         Parser parser = new Parser(sc);
         AST programTree = parser.ParseProgram();
         SemanticAnalyzer sm = new SemanticAnalyzer();
