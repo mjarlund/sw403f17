@@ -1,4 +1,4 @@
-package Test;
+/*package Test;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
@@ -10,9 +10,9 @@ import java.util.Enumeration;
 
 
 public class CodeConversionV2 implements SerialPortEventListener {
-	SerialPort serialPort;
+	SerialPort serialPort;*/
         /** The port we're normally going to use. */
-	private static final String PORT_NAMES[] = { 
+	/*private static final String PORT_NAMES[] = {
 			"/dev/tty.usbserial-A9007UX1", // Mac OS X
                         "/dev/ttyACM0", // Raspberry Pi
 			"/dev/ttyUSB0", // Linux
@@ -23,13 +23,13 @@ public class CodeConversionV2 implements SerialPortEventListener {
 	* converting the bytes into characters 
 	* making the displayed results codepage independent
 	*/
-	private BufferedReader input;
+	/*private BufferedReader input;
 	/** The output stream to the port */
-	private OutputStream output;
+	/*private OutputStream output;
 	/** Milliseconds to block while waiting for port open */
-	private static final int TIME_OUT = 2000;
+	/*private static final int TIME_OUT = 2000;
 	/** Default bits per second for COM port. */
-	private static final int DATA_RATE = 9600;
+	/*private static final int DATA_RATE = 9600;
 
 	public void initialize() {
 
@@ -79,7 +79,7 @@ public class CodeConversionV2 implements SerialPortEventListener {
 	 * This should be called when you stop using the port.
 	 * This will prevent port locking on platforms like Linux.
 	 */
-	public synchronized void close() {
+	/*public synchronized void close() {
 		if (serialPort != null) {
 			serialPort.removeEventListener();
 			serialPort.close();
@@ -89,7 +89,7 @@ public class CodeConversionV2 implements SerialPortEventListener {
 	/**
 	 * Handle an event on the serial port. Read the data and print it.
 	 */
-	public synchronized void serialEvent(SerialPortEvent oEvent) {
+	/*public synchronized void serialEvent(SerialPortEvent oEvent) {
 		if (oEvent.getEventType() == SerialPortEvent.DATA_AVAILABLE) {
 			try {
 				String inputLine=input.readLine();
@@ -114,4 +114,4 @@ public class CodeConversionV2 implements SerialPortEventListener {
 		t.start();
 		System.out.println("Started");
 	}
-}
+}*/
