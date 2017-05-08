@@ -29,8 +29,10 @@ AssignmentExpression -> is AssignmentExpressionPrime BuildAssign AssignmentExpre
 AssignmentExpression -> EPSILON
 AssignmentExpressionPrime -> NotExpressionPrime NotExpression
 AssignmentExpressionPrime -> IOExpression
-NotExpression -> not NotExpressionPrime BuildBoolExpr NotExpression
+NotExpression -> not NotExpressionAppendant NotExpressionPrime BuildBoolExpr NotExpression
 NotExpression -> EPSILON
+NotExpressionAppendant -> equals
+NotExpressionAppendant -> EPSILON
 NotExpressionPrime -> OrExpressionPrime OrExpression
 OrExpression -> or OrExpressionPrime BuildBoolExpr OrExpression
 OrExpression -> EPSILON

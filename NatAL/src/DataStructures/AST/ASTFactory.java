@@ -315,6 +315,10 @@ public class ASTFactory
             terminals.pop(); // remove 'or'
             op = new Token(terminals.pop().Value + " or equals", TokenType.OPERATOR);
         }
+        else if (op.Value.equals("equals") && terminals.peek().Value.equals("not")){
+        	//This is a not equals expression
+            op = new Token(terminals.pop().Value + " equals", TokenType.OPERATOR);
+        }
         if(terminals.peek().equals(")")) // remove '('
             terminals.pop();
         BoolExpr expr = new BoolExpr(left, op, right);
