@@ -1,0 +1,6 @@
+void main()
+char a is 'h'
+repeat(10)
+a is a + 1
+end repeat
+end main

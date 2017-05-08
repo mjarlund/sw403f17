@@ -1,0 +1,6 @@
+void main()
+char a is 1
+repeat("mor")
+a is a + 1
+end repeat
+end main
