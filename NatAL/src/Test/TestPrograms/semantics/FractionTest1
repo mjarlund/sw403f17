@@ -1,0 +1,4 @@
+void main()
+fraction a is 5f
+fraction b is 5.0f
+end main
