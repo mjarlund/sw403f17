@@ -52,9 +52,6 @@ public class TypeConverter
                 return Types.STRING;
             case CHAR_LITERAL:
             	return Types.CHAR;
-            case KEYWORD:
-                if(token.Value.equals("void"))
-                    return Types.VOID;
             case DIGITAL_LITERAL:
                 return Types.DIGITAL;
             default:

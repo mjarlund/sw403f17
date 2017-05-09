@@ -1,0 +1,6 @@
+void main()
+number a is 5
+until (a not equals 5)
+a is a + 1
+end until
+end main

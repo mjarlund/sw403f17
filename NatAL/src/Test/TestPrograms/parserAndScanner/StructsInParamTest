@@ -1,0 +1,12 @@
+structure testStruct
+number a is 5
+end testStruct
+
+void test(number b, structure testStruct hej)
+b is 5
+end test
+
+void main()
+testStruct actualStruct
+test(5, actualStruct)
+end main
