@@ -202,6 +202,72 @@ public class ParserTest {
 	}
 	
 	
+	@RunWith(Parameterized.class)
+	public static class ReservedKeywordsParserTest
+	{
+		private String inputString;
+		private boolean ExpectedResultForException;
+
+		public ReservedKeywordsParserTest(String input, boolean expected)
+		{
+			this.inputString = input;
+			this.ExpectedResultForException = expected;
+		}
+
+		@Parameters(name = "{index}: Scan({0})={1}")
+		public static Collection<Object[]> generateData()
+		{
+			return Arrays.asList(new Object[][]{
+				//Tests For Success
+				{"number Text is 5", false},
+				{"character Boolean is 'j'", false},
+				{"text Digital is \"hi mom\"", false},
+				{"pin PIN is 8", false},
+				{"boolean Repeat is true", false},
+				//Test for failure
+				{"pin is is 5", true},
+				{"number boolean is 6", true},
+				{"character digital is 'h'", true},
+				{"boolean end is false", true},
+				{"list of number void is (5,5,5)", true},
+				{"fraction equals is 5f", true},
+				{"number in is 5", true},
+				{"number a equals 5", true},
+				{"list of character above or equals is ('h', 'y')", true},
+				{"number repeat(10) is 8", true},
+			});
+		}
+		@Test
+		public void ReservedKeywordsInContextTest() throws Exception
+		{				
+			boolean thrown = false;
+			String input = "void main()" + System.lineSeparator() + 
+					inputString + 
+					System.lineSeparator() + "end main";
+			try 
+			{
+				Scanner testScanner = new Scanner(input);
+				Parser parser = new Parser(testScanner);
+				parser.ParseProgram();
+			} 
+			catch (UnexpectedTokenException ex)
+			{					
+				thrown = true;
+			}			
+			catch (MissingProductionsException ex)
+			{
+				thrown = true;
+			}
+			catch (StringIndexOutOfBoundsException e){
+				thrown = true;
+			}
+			catch (InvalidIdentifierException e)
+			{
+				thrown = true;
+			}
+			assertEquals(ExpectedResultForException, thrown);		
+		}	
+	}
 	
 	
 }

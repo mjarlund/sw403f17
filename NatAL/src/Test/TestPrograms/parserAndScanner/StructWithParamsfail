@@ -1,0 +1,7 @@
+structure testStruct(number a)
+a is 5
+end testStruct
+
+void main
+testStruct test
+end main
