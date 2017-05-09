@@ -1,0 +1,4 @@
+void test()
+number a is 5
+return 5
+end test
