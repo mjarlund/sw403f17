@@ -263,7 +263,6 @@ public class SemanticAnalyzer implements IVisitor{
                     ArgExpr argument = args.get(i);
 
                     Object argType = visitValue.Visit(argument.GetArg().GetValue(),argument.GetArg());
-
                     if (!argType.equals(identifier.TypeSignature.get(i)))
                         Reporter.Error(new IncompatibleValueException("Incompatible argument types in " + identifier.Name + " on line " + expr.GetLineNumber()));
                 }
@@ -429,8 +428,7 @@ public class SemanticAnalyzer implements IVisitor{
         // setup function type signature, must be before scope else no recursion
         ArrayList<FParamDcl> parameters = node.GetFormalParamsDcl().GetFParams();
         ArrayList<Types> typeSignature = new ArrayList<>();
-        for(FParamDcl param : parameters)
-        {
+        for(FParamDcl param : parameters) {
             typeSignature.add(param.Type);
         }
         Symbol funcDcl = FindSymbol(node.GetVarDcl().Identifier);

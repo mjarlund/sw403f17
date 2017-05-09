@@ -10,13 +10,16 @@ public class VarDcl extends Dcl
         Identifier = identifier;
         SetValue("VarDcl");
     }
-
+    // should be private fields
     public final Types Type;
     public final String Identifier;
+
+    public String GetId()
+    {
+        return Identifier;
+    }
     public Types GetType()
     {
-        //if(Type.equals(Types.PIN)) return Types.INT;
-        //else
         return Type;
     }
     public String GetConvertedType(){

@@ -42,9 +42,7 @@ public class Parser
 
         while (parseStack.size() > 0)
         {
-            //System.out.println(parseStack);
             String parseTop = parseStack.pop();
-
             /* If the next RHS symbol is a terminal
              * try to match the symbol with the current token */
             if (table.IsTerminal(parseTop))

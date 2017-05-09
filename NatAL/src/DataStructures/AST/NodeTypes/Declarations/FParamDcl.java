@@ -1,6 +1,5 @@
 package DataStructures.AST.NodeTypes.Declarations;
 
-import DataStructures.AST.AST;
 import DataStructures.AST.NodeTypes.Types;
 
 /**
@@ -14,9 +13,19 @@ public class FParamDcl extends Dcl
         Identifier = identifier;
         SetValue("FParamDcl");
     }
+    public FParamDcl(Types type, String structType, String identifier)
+    {
+        Type = type;
+        Identifier = identifier;
+        this.structType = structType;
+        SetValue("FParamDcl");
+    }
 
     public final Types Type;
     public final String Identifier;
+    private String structType;
+    public String GetStructType(){return structType;}
+
     public String GetConvertedType(){
         switch (Type){
             case PIN: return "int";

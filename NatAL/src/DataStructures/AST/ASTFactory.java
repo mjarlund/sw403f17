@@ -10,7 +10,6 @@ import Syntax.Tokens.Token;
 import Syntax.Tokens.TokenType;
 import Utilities.TypeConverter;
 
-import java.util.ArrayList;
 import java.util.Stack;
 
 /**
@@ -36,6 +35,7 @@ public class ASTFactory
     {
         SemanticAction.put("BuildVarDCL", ASTFactory.this::CreateDclTree);
         SemanticAction.put("BuildArg", ASTFactory.this::CreateArgTree);
+        SemanticAction.put("BuildFParam", ASTFactory.this::CreateFParamTree);
         SemanticAction.put("CombineDown", ASTFactory.this::CombineDown);
         SemanticAction.put("BuildAssign", ASTFactory.this::CreateAssignTree);
         SemanticAction.put("BuildValExpr", ASTFactory.this::CreateValExprTree);
@@ -62,6 +62,21 @@ public class ASTFactory
         SemanticAction.put("BuildStructComponentSelectionExpression", ASTFactory.this::CreateStructCompSelectExpr);
         SemanticAction.put("BuildRepeatStatement", ASTFactory.this::CreateRepeatStatement);
 
+    }
+
+    private void CreateFParamTree()
+    {
+        FParamDcl parameter = null;
+        if(astStack.peek() instanceof VarDcl){
+            VarDcl variableParam = (VarDcl)astStack.pop();
+            parameter = new FParamDcl(variableParam.GetType(),variableParam.GetId());
+        }
+        else{
+            IdExpr paramid = (IdExpr) astStack.pop();
+            VarDcl structtype = (VarDcl) astStack.pop();
+            parameter = new FParamDcl(structtype.GetType(),structtype.GetId(),paramid.ID);
+        }
+        astStack.push(parameter);
     }
 
     private void CreateArgTree()
@@ -233,41 +248,11 @@ public class ASTFactory
         else{
 
         }
-
         funcCall.SetLineNumber(currentLineNumber);
         astStack.push(funcCall);
     }
     private void CreateActualParameters()
     {
-        /*Token endPara = terminals.pop();
-        ArrayList<ArgExpr> parameters = new ArrayList<>();
-        while (! endPara.Value.equals("("))
-        {
-            if (! terminals.peek().Type.equals(TokenType.SEPARATOR))
-            {
-                Token id = terminals.pop();
-                ArgExpr arg;
-                if (id.Type.equals(TokenType.IDENTIFIER)){
-                    IdExpr expr = new IdExpr(id.Value);
-                    expr.SetLineNumber(currentLineNumber);
-                    arg = new ArgExpr(expr);
-                    arg.SetValue(id.Value);
-                } else {
-                    ValExpr expr = new ValExpr(TypeConverter.TypetoTypes(id),id);
-                    expr.SetLineNumber(currentLineNumber);
-                    arg = new ArgExpr(expr);
-                }
-
-                parameters.add(arg);
-            }
-            endPara = terminals.pop();
-        }
-
-        for (ArgExpr parameter : parameters)
-        {
-            astParameters.children.add(parameter);
-        }
-        astStack.push(astParameters);*/
         ArgsExpr astParameters = new ArgsExpr();
         while (astStack.peek() instanceof ArgExpr)
         {
@@ -328,27 +313,11 @@ public class ASTFactory
     // expect terminalStack to start with ')' and end with '(' in between are the parameters
     private void CreateFormalParametersTree()
     {
-        Token endPara = terminals.pop();
-        ArrayList<FParamDcl> parameters = new ArrayList<>();
-        while (! endPara.Value.equals("("))
-        {
-            if (!terminals.peek().Type.equals(TokenType.SEPARATOR))
-            {
-                Token id = terminals.pop();
-                Token type = terminals.pop();
-                FParamDcl paramDcl = new FParamDcl(GetType(type), id.Value);
-                paramDcl.SetLineNumber(currentLineNumber);
-                parameters.add(paramDcl);
-            }
-            endPara = terminals.pop();
-        }
         FParamsDcl astParameters = new FParamsDcl();
-        for (FParamDcl parameter : parameters)
-        {
-            /* TODO: We should only use one of these. */
-            astParameters.AdoptChildren(parameter);
-            astParameters.children.add(parameter);
+        while (astStack.peek() instanceof FParamDcl){
+            astParameters.AddChild(astStack.pop());
         }
+
         astStack.push(astParameters);
     }
     private void CreateBlockTree()
@@ -447,6 +416,8 @@ public class ASTFactory
                 return Types.BOOL;
             case "fraction":
                 return Types.FLOAT;
+            case "structure":
+                return Types.STRUCT;
             case "void":
                 return Types.VOID;
             case "character":
@@ -482,11 +453,12 @@ public class ASTFactory
         BlockStmt code = (BlockStmt) astStack.pop();
         IdExpr listID = (IdExpr) astStack.pop();
         terminals.pop(); // in
-        String elementID = terminals.pop().Value;
-        Types elementType = GetType(terminals.pop());
-
+        FParamDcl loopcounter = (FParamDcl) astStack.pop();
+        String elementID = loopcounter.GetStructType()==null ? loopcounter.Identifier : loopcounter.GetStructType();
+        // should be different type if struct but not yet implemented
+        // TODO: implement foreach for lists of structs
+        Types elementType = loopcounter.Type;
         VarDcl element = new VarDcl(elementType, elementID);
-
         FindIteratorVariable(code, elementID, listID.ID);
 
         /* If elementID is used in the block, it should be list[elementID.Value] */

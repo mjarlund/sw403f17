@@ -62,14 +62,19 @@ public class Visualizer extends PApplet {
                         " end repeat\n" +
                         "return \"LEL\" \n" +
                         "end func1\n";
-        String code2 = "void foo()\n" +
-                            "number a is 2 \n" +
-                            "list of number l is (2, 4, 5, 6)\n" +
-                            "foreach (number b in l) \n" +
-                            "   b is a\n" +
-                            "   end foreach\n" +
-                            "end foo \n";
-        sc = new Scanner(code1);
+        String code2 = "structure testStruct\n" +
+                "number a\n" +
+                "end testStruct\n" +
+                "\n" +
+                "void test(number b, structure testStruct a)\n" +
+                "b is 5\n" +
+                "end test\n" +
+                "\n" +
+                "void main()\n" +
+                "testStruct actualStruct\n" +
+                "test(5, actualStruct)\n" +
+                "end main\n";
+        sc = new Scanner(code2);
         parser = new Parser(sc);
         AST programTree = parser.ParseProgram();
 
