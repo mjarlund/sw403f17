@@ -146,7 +146,6 @@ public class SemanticAnalyzer implements IVisitor{
 
     public Object Visit(StructCompSelectExpr expr){
         Symbol symbol = currentScope.FindSymbol(expr.StructVarId);
-        //System.out.println(expr.StructVarId + " " + expr.ComponentId);
     	if(symbol == null) {
             Reporter.Error(new UndeclaredSymbolException("struct: \"" + expr.StructVarId + "\" on line " + expr.GetLineNumber() + " " + expr.ComponentId));
     	}
@@ -419,9 +418,10 @@ public class SemanticAnalyzer implements IVisitor{
     public boolean IsAssignable(AST lhs)
     {
         // left hand side must be a variable
-        if(lhs instanceof IdExpr || lhs instanceof VarDcl || lhs instanceof ListIndexExpr || lhs instanceof StructCompSelectExpr)
-            return true;
-        return false;
+        return (lhs instanceof IdExpr ||
+                lhs instanceof VarDcl ||
+                lhs instanceof ListIndexExpr ||
+                lhs instanceof StructCompSelectExpr);
     }
     
     public Object Visit(UnaryExpr expr)
