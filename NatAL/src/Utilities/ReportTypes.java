@@ -28,6 +28,10 @@ public enum ReportTypes
     NonCollectionSubjectInForeachError,
     IncompatibleElementTypeInForeachError,
     NonIntegerIteratorInRepeatError,
-    FuncIdUsedAsVarIdError
+    FuncIdUsedAsVarIdError,
+    MissingEssentialMethodError,
+    EssentialMethodNotVoidError,
+    EssentialMethodHasParamsError, 
+    MisuseOfLoopOrSetupError
 }
 

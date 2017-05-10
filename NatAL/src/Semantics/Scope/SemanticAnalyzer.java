@@ -25,6 +25,8 @@ public class SemanticAnalyzer implements IVisitor{
 
     }
 
+    
+    
     private VisitorDriver visitValue = new VisitorDriver(this);
     // Made changes on 27/03
     /* Creates a new scope as a child of the current */
@@ -39,12 +41,40 @@ public class SemanticAnalyzer implements IVisitor{
     public void CloseScope(){
         currentScope = currentScope.GetParent();
     }
-
+    public void CheckForSetupAndLoopFunc()
+    {
+    	String[] funcs = new String[]{"setup", "loop"};
+    	
+    	for (String Func : funcs) {
+    		Symbol sym = GlobalScope.FindSymbol(Func);
+        	if (sym == null)
+        	{
+        		Reporter.Error(ReportTypes.MissingEssentialMethodError, Func);
+        	}
+        	if (sym.dclType != DclType.Function)
+        	{
+        		Reporter.Error(ReportTypes.MisuseOfLoopOrSetupError, Func);
+        	}
+        	if (sym.Type != Types.VOID)
+        	{
+        		Reporter.Error(ReportTypes.EssentialMethodNotVoidError, Func);
+        	}
+        	if (sym.TypeSignature.size() != 0)
+        	{
+        		Reporter.Error(ReportTypes.EssentialMethodHasParamsError, Func);
+        	}
+    	} 		
+    }
+    public void BeginSemanticAnalysis(AST root){
+    	VisitChildren(root);
+    	CheckForSetupAndLoopFunc(); 	
+    }
+    
     /* Open a new scope in every block. No FuncDcls allowed past global,
      * so only need to worry about VarDcls. Called recursively for all
      * nodes, opening and closing scopes every time a code-block or a
      * function declaration is entered or exited, respectively. */
-    public void VisitChildren(AST root){
+    private void VisitChildren(AST root){
         for (AST child : root.children) {
             try {
                 String switchValue;
@@ -269,6 +299,12 @@ public class SemanticAnalyzer implements IVisitor{
                             Reporter.Error(ReportTypes.IncompatibleTypeArgumentError, expr);
                         }
                     }
+                    else if(signatureType.equals(Types.LIST)){
+                        Symbol list = currentScope.FindSymbol(argType.toString());
+                        if(!list.GetType().equals(identifier.TypeSignature.get(i).GetListofType())){
+                            Reporter.Error(ReportTypes.IncompatibleTypeArgumentError, expr);
+                        }
+                    }
                     else if (!argType.equals(signatureType)) {
                         Reporter.Error(ReportTypes.IncompatibleTypeArgumentError, expr);
                     }
@@ -444,7 +480,7 @@ public class SemanticAnalyzer implements IVisitor{
 
         if(identifier.dclType.equals(DclType.Function))
             Reporter.Error(ReportTypes.FuncIdUsedAsVarIdError, node);
-        if(identifier.dclType.equals(DclType.Struct))
+        if(identifier.dclType.equals(DclType.Struct) || identifier.dclType.equals(DclType.List))
             return identifier.Name;
 
         else
@@ -487,8 +523,10 @@ public class SemanticAnalyzer implements IVisitor{
         ArrayList<FParamDiscriptor> typeSignature = new ArrayList<>();
         for(FParamDcl param : parameters) {
             if(param.Type.equals(Types.STRUCT)){
-
                 typeSignature.add(new FParamDiscriptor(param.Type,param.GetStructType()));
+            }
+            else if(param.Type.equals(Types.LIST)){
+                typeSignature.add(new FParamDiscriptor(param.Type,param.GetListType()));
             }
             else
                 typeSignature.add(new FParamDiscriptor(param.Type));

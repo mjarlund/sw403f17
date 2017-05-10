@@ -9,6 +9,7 @@ public class FParamDiscriptor
 {
     private Types type;
     private String structType;
+    private Types listofType;
 
     public FParamDiscriptor(Types type){
         this.type = type;
@@ -16,6 +17,10 @@ public class FParamDiscriptor
     public FParamDiscriptor(Types type, String structType){
         this.type = type;
         this.structType = structType;
+    }
+    public FParamDiscriptor(Types type, Types listofType){
+        this.type = type;
+        this.listofType = listofType;
     }
 
     public void SetType(Types type){
@@ -30,4 +35,5 @@ public class FParamDiscriptor
     public String GetStructType(){
         return structType;
     }
+    public Types GetListofType(){return listofType;}
 }

@@ -69,7 +69,7 @@ public class ScopeTest {
 				Parser parser = new Parser(testScanner);
 				AST programTree = parser.ParseProgram();
 			    SemanticAnalyzer sm = new SemanticAnalyzer();
-			    sm.VisitChildren(programTree);
+			    sm.BeginSemanticAnalysis(programTree);
 			} 
 			catch (Throwable ex)
 			{					
@@ -132,7 +132,7 @@ public class ScopeTest {
 				Parser parser = new Parser(testScanner);
 				AST programTree = parser.ParseProgram();
 			    SemanticAnalyzer sm = new SemanticAnalyzer();
-			    sm.VisitChildren(programTree);
+			    sm.BeginSemanticAnalysis(programTree);
 			} 
 			catch (UndeclaredSymbolException ex)
 			{					
