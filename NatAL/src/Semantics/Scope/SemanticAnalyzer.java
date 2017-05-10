@@ -82,7 +82,6 @@ public class SemanticAnalyzer implements IVisitor{
             Symbol structId = new Symbol(dcl.GetIdentifier().ID, dcl.GetStructType().ID);
             structId.dclType = DclType.Struct;
             currentScope.AddSymbol(structId);
-            //System.out.println("StructVarDcl   " + currentScope.GetDepth() + "  " + dcl.GetIdentifier().ID);
         }
         
         return null;
@@ -93,23 +92,22 @@ public class SemanticAnalyzer implements IVisitor{
         Types type = (Types) Visit(stmt.GetPin());
 
         if(!type.equals(Types.PIN))
-            Reporter.Error(new IncompatibleValueException("Must be a pin type on line " + stmt.GetLineNumber()));
+            Reporter.Error(ReportTypes.NonPinTypeInIOStatementError, stmt);
 
         if(stmt.GetWriteVal() != null)
         {
             Object expr = visitValue.Visit(stmt.GetWriteVal().GetValue(), stmt.GetWriteVal());
-            if(expr==null)
-                Reporter.Error(new ArgumentsException("Missing expression on line " + stmt.GetLineNumber()));
-
+            if(expr == null)
+                Reporter.Error(ReportTypes.MissingExpressionInIOStmtError, stmt);
             else
             {
                 Types exprType = (Types)expr;
 
                 if(stmt.GetMode().equals(Modes.DIGITAL) && !exprType.equals(Types.DIGITAL))
-                    Reporter.Error(new IncompatibleValueException("Incompatible digital mode or expression on line " + stmt.GetLineNumber()));
+                    Reporter.Error(ReportTypes.NonDigitalValueInDigitalIOStmtError, stmt);
 
                 if(stmt.GetMode().equals(Modes.ANALOG) && !exprType.equals(Types.INT))
-                    Reporter.Error(new IncompatibleValueException("Incompatible analog mode or expression on line " + stmt.GetLineNumber()));
+                    Reporter.Error(ReportTypes.NonIntValueInAnalogIOStmtError, stmt);
             }
         }
         
@@ -171,7 +169,7 @@ public class SemanticAnalyzer implements IVisitor{
         Types type = (Types) Visit(expr.GetPin());
 
         if(!type.equals(Types.PIN))
-            Reporter.Error(new IncompatibleValueException("Must be a pin type on line " + expr.GetLineNumber()));
+            Reporter.Error(ReportTypes.NonPinTypeInIOStatementError, expr);
 
         return type;
     }
@@ -181,7 +179,7 @@ public class SemanticAnalyzer implements IVisitor{
         Expr condition = stmt.GetCondition();
 
         if(!(condition instanceof BoolExpr) && !(condition instanceof UnaryExpr))
-            Reporter.Error(new IncompatibleValueException("Expected boolean expression or unary expression in " + stmt + " on line " + stmt.GetLineNumber() + ". Got: " + condition.getClass()));
+            Reporter.Error(ReportTypes.NonBooleanConditionError, stmt);
 
         VisitChildren(stmt);
         
@@ -197,7 +195,7 @@ public class SemanticAnalyzer implements IVisitor{
         Expr condition = stmt.GetCondition();
 
         if(!(condition instanceof BoolExpr))
-            Reporter.Error(new IncompatibleValueException("Expected boolean expression in " + stmt + " on line " + stmt.GetLineNumber()));
+            Reporter.Error(ReportTypes.NonBooleanConditionError, stmt);
 
         VisitChildren(stmt);
         
@@ -208,10 +206,10 @@ public class SemanticAnalyzer implements IVisitor{
         VisitChildren(stmt);
         Symbol smb = currentScope.FindSymbol(stmt.GetCollectionId());
         if(!smb.dclType.equals(DclType.List))
-            Reporter.Error(new InvalidIdentifierException("Identifier " + stmt.GetCollectionId() + " on line " + stmt.GetLineNumber() + "is not a list."));
+            Reporter.Error(ReportTypes.NonCollectionSubjectInForeachError, stmt);
 
         if(!stmt.GetElementType().equals(smb.Type))
-            Reporter.Error(new InvalidTypeException("Type of " + stmt.GetElementId() + " is not equal to the type of " + stmt.GetCollectionId() + " on line " + stmt.GetLineNumber()));
+            Reporter.Error(ReportTypes.IncompatibleElementTypeInForeachError, stmt);
 
         return null;
     }
@@ -242,22 +240,26 @@ public class SemanticAnalyzer implements IVisitor{
             Symbol identifier = FindSymbol(funcId.ID);
             // Check if function is declared before usage
             if (identifier == null)
-                Reporter.Error(new UndeclaredSymbolException(funcId.ID + " not declared.", expr.GetLineNumber()));
+                Reporter.Error(ReportTypes.IdentifierNotDeclaredError, expr);
 
             if (!identifier.dclType.equals(DclType.Function))
-                Reporter.Error(new InvalidIdentifierException("Not used as a function call"));
+                Reporter.Error(ReportTypes.FuncCallAsFuncDclError, expr);
 
             // Checks that args are used declared before usage
             visitValue.Visit(expr.GetFuncArgs().GetValue(), expr.GetFuncArgs());
             ArrayList<ArgExpr> args = expr.GetFuncArgs().GetArgs();
+
             if (identifier.TypeSignature.size() > 0 || args.size() > 0) {
-                int iterations = identifier.TypeSignature.size();
-                if (iterations > args.size())
-                    Reporter.Error(new ArgumentsException("Too few Arguments in " + identifier.Name + " on line " + expr.GetLineNumber()));
-                else if (iterations < args.size())
-                    Reporter.Error(new ArgumentsException("Too many Arguments in " + identifier.Name + " on line " + expr.GetLineNumber()));
-                // Checks that every argument type fits the function type signature
-                for (int i = 0; i < iterations; i++) {
+
+                /* Verify number of arguments match the function signature */
+                int numFormalParameters = identifier.TypeSignature.size();
+                if (numFormalParameters > args.size())
+                    Reporter.Error(ReportTypes.TooFewArgumentsError, expr);
+                else if (numFormalParameters < args.size())
+                    Reporter.Error(ReportTypes.TooManyArgumentsError, expr);
+
+                /* Verify the type of all arguments match the function signature */
+                for (int i = 0; i < numFormalParameters; i++) {
                     ArgExpr argument = args.get(i);
 
                     Object argType = visitValue.Visit(argument.GetArg().GetValue(),argument.GetArg());
@@ -265,16 +267,14 @@ public class SemanticAnalyzer implements IVisitor{
                     if(signatureType.equals(Types.STRUCT)){
                         Symbol structType = currentScope.FindSymbol(argType.toString());
                         if(!structType.GetType().equals(identifier.TypeSignature.get(i).GetStructType())){
-                            Reporter.Error(new IncompatibleValueException("Incompatible argument types in " + identifier.Name + " on line " + expr.GetLineNumber()));
+                            Reporter.Error(ReportTypes.IncompatibleTypeArgumentError, expr);
                         }
                     }
-                    else if (!argType.equals(signatureType))
-                    {
-                        Reporter.Error(new IncompatibleValueException("Incompatible argument types in " + identifier.Name + " on line " + expr.GetLineNumber()));
+                    else if (!argType.equals(signatureType)) {
+                        Reporter.Error(ReportTypes.IncompatibleTypeArgumentError, expr);
                     }
                 }
             }
-            // returns function return type
             return identifier.Type;
         }
     }
@@ -296,7 +296,7 @@ public class SemanticAnalyzer implements IVisitor{
                     if (lType.equals(rType)){
                         returnValue = lType;
                     } else {
-                        Reporter.Error(ReportTypes.IncompatibleTypesStringConcatError, expr);
+                        Reporter.Error(ReportTypes.NonStringTypeInStringConcatError, expr);
                     } break;
                 }
             case "-":
@@ -306,7 +306,7 @@ public class SemanticAnalyzer implements IVisitor{
                     (rType.equals(Types.INT) || rType.equals(Types.FLOAT))){
                     returnValue = lType;
                 } else {
-                    Reporter.Error(ReportTypes.IncompatibleTypesArithmeticOperatorError, expr);
+                    Reporter.Error(ReportTypes.NonNumericTypesInBinaryOPExprError, expr);
                 }
         }
         return returnValue;
@@ -356,7 +356,7 @@ public class SemanticAnalyzer implements IVisitor{
         Expr iterations = stmt.GetIterationExpression();
         Object type = visitValue.Visit(iterations.GetValue(), iterations );
         if (!type.equals(Types.INT)){
-            Reporter.Error(new Error("Iterations for repeat must be of type 'number'. (Line: " + stmt.GetLineNumber() + ")"));
+            Reporter.Error(ReportTypes.NonIntegerIteratorInRepeatError, stmt);
         }
         return null;
     }
@@ -366,16 +366,17 @@ public class SemanticAnalyzer implements IVisitor{
         AST right = stmt.GetRight();
         Object lType = visitValue.Visit(left.GetValue(),left);
         Object rType = visitValue.Visit(right.GetValue(),right);
-        // left value must be assignable i.e. a variable
+        /* LHS must be a variable */
         if(!IsAssignable(left))
-            throw new Error("LHS not assignable " + left);
-        // Pin types are integers
+            Reporter.Error(ReportTypes.NotAssignableError, stmt);
+        /* During assignments, pin types should be read as ints */
         if(lType.equals(Types.PIN))
             lType = Types.INT;
         if(rType.equals(Types.PIN))
             rType = Types.INT;
-        // left hand side is the same type as the right hand side type
-        if(!lType.equals(rType))
+        /* Types should be identical except for implicit conversion between
+         * floats and ints */
+        if(!lType.equals(rType) && !(lType.equals(Types.FLOAT) && rType.equals(Types.INT)))
             Reporter.Error(new IncompatibleValueException(lType,rType,stmt.GetLineNumber()));
         return null;
     }
@@ -404,13 +405,13 @@ public class SemanticAnalyzer implements IVisitor{
                 if (argType.equals(Types.INT) || argType.equals(Types.FLOAT)){
                     returnValue = argType;
                 } else {
-                    Reporter.Error(ReportTypes.IncompatibleTypeInNumericNegationError, expr);
+                    Reporter.Error(ReportTypes.NonNumericTypeInNumericNegationError, expr);
                 } break;
             case "not":
                 if (argType.equals(Types.BOOL)){
                     returnValue = argType;
                 } else {
-                    Reporter.Error(ReportTypes.IncompatibleTypeInBooleanNegationError, expr);
+                    Reporter.Error(ReportTypes.NonBoolTypeInBooleanNegationError, expr);
                 } break;
         }
         return returnValue;
@@ -439,10 +440,10 @@ public class SemanticAnalyzer implements IVisitor{
         String id = node.ID;
         Symbol identifier = FindSymbol(id);
         if (identifier == null)
-            Reporter.Error(new UndeclaredSymbolException(id + " not declared.", node.GetLineNumber()));
+            Reporter.Error(ReportTypes.IdentifierNotDeclaredError, node);
 
         if(identifier.dclType.equals(DclType.Function))
-            Reporter.Error(new InvalidIdentifierException("Not a variable " + identifier.Name + " on line " + node.GetLineNumber()));
+            Reporter.Error(ReportTypes.FuncIdUsedAsVarIdError, node);
         if(identifier.dclType.equals(DclType.Struct))
             return identifier.Name;
 
