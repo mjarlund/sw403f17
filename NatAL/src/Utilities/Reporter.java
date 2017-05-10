@@ -46,10 +46,10 @@ public final class Reporter
                 message += "Only numeric values can be negated by a \"-\" operator. ";
                 throw new IncompatibleValueException(message);
             case NonStringTypeInStringConcatError:
-                message += "Strings can only be concatenated with other strings. ";
+                message += "You can only concatenate text values onto a text value. ";
                 throw new IncompatibleValueException(message);
             case NonNumericTypesInBinaryOPExprError:
-                message += "Arguments on both sides of the \"" + ((BinaryOPExpr)node).Operation.Value + "\" operator must be numeric values. ";
+                message += "Arguments on both sides of the \"" + ((BinaryOPExpr)node).Operation.Value + "\" operator must be numeric values";
                 throw new IncompatibleValueException(message);
             case NonPinTypeInIOStatementError:
                 message += "Read and Write commands are only possible with \"pin\" types. ";
