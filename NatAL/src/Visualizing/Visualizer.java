@@ -66,13 +66,13 @@ public class Visualizer extends PApplet {
                 "number a\n" +
                 "end testStruct\n" +
                 "\n" +
-                "void test(number b, structure testStruct a)\n" +
+                "void test(number b, list of number a)\n" +
                 "b is 5\n" +
                 "end test\n" +
                 "\n" +
                 "void main()\n" +
-                "testStruct actualStruct\n" +
-                "test(5, 5)\n" +
+                "list of number l is (1,2,3)\n" +
+                "test(5, l)\n" +
                 "end main\n";
         sc = new Scanner(code2);
         parser = new Parser(sc);
