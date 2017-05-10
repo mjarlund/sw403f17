@@ -1,0 +1,8 @@
+number setup()
+number b is 6
+return b
+end setup
+
+void loop()
+
+end loop

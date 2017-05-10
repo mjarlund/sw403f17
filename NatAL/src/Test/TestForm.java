@@ -80,7 +80,7 @@ public class TestForm {
             Parser parser = new Parser(sc);
             AST programTree = parser.ParseProgram();
             SemanticAnalyzer sm = new SemanticAnalyzer();
-            sm.VisitChildren(programTree);
+            sm.BeginSemanticAnalysis(programTree);
             CodeGenerator c = new CodeGenerator(programTree, sm);
             c.ToFile();
 

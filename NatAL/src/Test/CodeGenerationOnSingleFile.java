@@ -11,7 +11,7 @@ import Syntax.Scanner.Scanner;
 public class CodeGenerationOnSingleFile {
 
 	public static void main(String[] args) throws IOException {
-        Scanner sc = new Scanner(InputTester.readFile("src/Test/TestPrograms/semantics/UnaryTest"));
+        Scanner sc = new Scanner(InputTester.readFile("src/Test/TestPrograms/semantics/SetupNotVoidfail"));
         Parser parser = new Parser(sc);
         AST programTree = parser.ParseProgram();
         SemanticAnalyzer sm = new SemanticAnalyzer();

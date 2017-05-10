@@ -25,6 +25,8 @@ public class SemanticAnalyzer implements IVisitor{
 
     }
 
+    
+    
     private VisitorDriver visitValue = new VisitorDriver(this);
     // Made changes on 27/03
     /* Creates a new scope as a child of the current */
@@ -39,12 +41,40 @@ public class SemanticAnalyzer implements IVisitor{
     public void CloseScope(){
         currentScope = currentScope.GetParent();
     }
-
+    public void CheckForSetupAndLoopFunc()
+    {
+    	String[] funcs = new String[]{"setup", "loop"};
+    	
+    	for (String Func : funcs) {
+    		Symbol sym = GlobalScope.FindSymbol(Func);
+        	if (sym == null)
+        	{
+        		System.out.println("hej null");
+        	}
+        	if (sym.dclType != DclType.Function)
+        	{
+        		System.out.println("hej dclType");
+        	}
+        	if (sym.Type != Types.VOID)
+        	{
+        		Reporter.Error(ReportTypes.EssentialMethodNotVoidError, sym.Name);
+        	}
+        	if (sym.TypeSignature.size() != 0)
+        	{
+        		System.out.println("hej typesignature");
+        	}
+    	} 		
+    }
+    public void BeginSemanticAnalysis(AST root){
+    	VisitChildren(root);
+    	CheckForSetupAndLoopFunc(); 	
+    }
+    
     /* Open a new scope in every block. No FuncDcls allowed past global,
      * so only need to worry about VarDcls. Called recursively for all
      * nodes, opening and closing scopes every time a code-block or a
      * function declaration is entered or exited, respectively. */
-    public void VisitChildren(AST root){
+    private void VisitChildren(AST root){
         for (AST child : root.children) {
             try {
                 String switchValue;

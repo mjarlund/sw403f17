@@ -71,7 +71,7 @@ public class CodeGeneratorTest {
 				Parser parser = new Parser(testScanner);
 				AST programTree = parser.ParseProgram();
 			    SemanticAnalyzer sm = new SemanticAnalyzer();
-			    sm.VisitChildren(programTree);
+			    sm.BeginSemanticAnalysis(programTree);
 			    CodeGenerator c = new CodeGenerator(programTree, sm);
 			} 
 			catch (Throwable ex)
