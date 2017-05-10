@@ -14,11 +14,11 @@ public class ListSymbol extends Symbol implements IScope {
         super(name,listtype);
         Symbol add = new Symbol("add");
         add.SetDclType(DclType.Function);
-        ArrayList<Types> addSignatur = new ArrayList<>(Arrays.asList(listtype));
+        ArrayList<FParamDiscriptor> addSignatur = new ArrayList<>(Arrays.asList(new FParamDiscriptor(listtype)));
         add.SetTypeSignature(addSignatur);
         Symbol remove = new Symbol("remove");
         add.SetDclType(DclType.Function);
-        ArrayList<Types> removeSignatur = new ArrayList<>(Arrays.asList(Types.INT));
+        ArrayList<FParamDiscriptor> removeSignatur = new ArrayList<>(Arrays.asList(new FParamDiscriptor(Types.INT)));
         remove.SetTypeSignature(removeSignatur);
 
         symbols.add(add);
