@@ -1,17 +1,12 @@
 package Utilities;
 
 import DataStructures.AST.AST;
-import DataStructures.AST.NodeTypes.Declarations.FuncDcl;
-import DataStructures.AST.NodeTypes.Declarations.VarDcl;
 import DataStructures.AST.NodeTypes.Expressions.BinaryOPExpr;
 import DataStructures.AST.NodeTypes.Expressions.BoolExpr;
 import DataStructures.AST.NodeTypes.Expressions.FuncCallExpr;
 import DataStructures.AST.NodeTypes.Expressions.IdExpr;
-import DataStructures.AST.NodeTypes.Expressions.*;
 import DataStructures.AST.NodeTypes.Statements.ForEachStmt;
 import Exceptions.*;
-import Semantics.Scope.Symbol;
-import jdk.nashorn.internal.runtime.regexp.joni.constants.Arguments;
 
 /**
  * Created by Mathias on 22-03-2017.
@@ -42,6 +37,12 @@ public final class Reporter
             case EssentialMethodNotVoidError:
             	message = EssentialPart + " Has to be of type void and can not have a return value"; 
             	throw new InvalidTypeException(message);
+            case EssentialMethodHasParamsError:
+            	message = "The " + EssentialPart + " can not have any parameters";
+                throw new ArgumentsException(message);
+            case MisuseOfLoopOrSetupError:
+            	message = EssentialPart + " is an essential method and has to be declared as such";
+                throw new InvalidTypeException(message);
     	}
     }
     

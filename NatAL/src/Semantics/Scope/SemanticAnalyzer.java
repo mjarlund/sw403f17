@@ -49,19 +49,19 @@ public class SemanticAnalyzer implements IVisitor{
     		Symbol sym = GlobalScope.FindSymbol(Func);
         	if (sym == null)
         	{
-        		System.out.println("hej null");
+        		Reporter.Error(ReportTypes.MissingEssentialMethodError, Func);
         	}
         	if (sym.dclType != DclType.Function)
         	{
-        		System.out.println("hej dclType");
+        		Reporter.Error(ReportTypes.MisuseOfLoopOrSetupError, Func);
         	}
         	if (sym.Type != Types.VOID)
         	{
-        		Reporter.Error(ReportTypes.EssentialMethodNotVoidError, sym.Name);
+        		Reporter.Error(ReportTypes.EssentialMethodNotVoidError, Func);
         	}
         	if (sym.TypeSignature.size() != 0)
         	{
-        		System.out.println("hej typesignature");
+        		Reporter.Error(ReportTypes.EssentialMethodHasParamsError, Func);
         	}
     	} 		
     }
