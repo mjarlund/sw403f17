@@ -1,6 +1,12 @@
 package Utilities;
 
 import DataStructures.AST.AST;
+import DataStructures.AST.NodeTypes.Declarations.FuncDcl;
+import DataStructures.AST.NodeTypes.Declarations.VarDcl;
+import DataStructures.AST.NodeTypes.Expressions.BinaryOPExpr;
+import DataStructures.AST.NodeTypes.Expressions.BoolExpr;
+import DataStructures.AST.NodeTypes.Expressions.FuncCallExpr;
+import DataStructures.AST.NodeTypes.Expressions.IdExpr;
 import DataStructures.AST.NodeTypes.Expressions.*;
 import DataStructures.AST.NodeTypes.Statements.ForEachStmt;
 import Exceptions.*;
@@ -23,6 +29,22 @@ public final class Reporter
     {
         throw error;
     }
+
+    
+    public static void Error (ReportTypes type, String EssentialPart){
+    	
+    	String message;
+    	
+    	switch (type){
+    		case MissingEssentialMethodError:
+    			message = "Missing: " + EssentialPart + "() method" ;
+    			throw new UndeclaredSymbolException(message);
+            case EssentialMethodNotVoidError:
+            	message = EssentialPart + " Has to be of type void and can not have a return value"; 
+            	throw new InvalidTypeException(message);
+    	}
+    }
+    
     public static void Error (ReportTypes type, AST node){
 
         String message = "On line " + node.GetLineNumber() + ":\n";
