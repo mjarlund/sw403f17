@@ -11,7 +11,7 @@ public class Symbol {
     public String Name;
     public Types Type;
     public String CustomType;
-    public ArrayList<Types> TypeSignature;
+    public ArrayList<FParamDiscriptor> TypeSignature;
     public DclType dclType = DclType.Variable;
 
     public Symbol(String name){
@@ -26,16 +26,16 @@ public class Symbol {
         Type = type;
     }
 
-    public Symbol(String name, ArrayList<Types> typeSignature){
+    public Symbol(String name, ArrayList<FParamDiscriptor> typeSignature){
         Name = name;
         Type = null;
         TypeSignature = typeSignature;
     }
-    public void SetTypeSignature(ArrayList<Types> typeSignature)
+    public void SetTypeSignature(ArrayList<FParamDiscriptor> typeSignature)
     {
         TypeSignature = typeSignature;
     }
-    public ArrayList<Types> GetTypeSignature(){return TypeSignature;}
+    public ArrayList<FParamDiscriptor> GetTypeSignature(){return TypeSignature;}
     public void SetDclType(DclType type)
     {
         dclType = type;

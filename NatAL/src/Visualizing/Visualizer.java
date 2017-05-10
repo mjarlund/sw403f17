@@ -72,7 +72,7 @@ public class Visualizer extends PApplet {
                 "\n" +
                 "void main()\n" +
                 "testStruct actualStruct\n" +
-                "test(5, actualStruct)\n" +
+                "test(5, 5)\n" +
                 "end main\n";
         sc = new Scanner(code2);
         parser = new Parser(sc);

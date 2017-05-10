@@ -149,14 +149,14 @@ public class SemanticAnalyzer implements IVisitor{
     	    if(op==null)
     	        Reporter.Error(new UndeclaredSymbolException("list operation " + expr.ComponentId + " not defined on line " + expr.GetLineNumber()));
     	    ArrayList<ArgExpr> args = ((FuncCallExpr)expr.GetParent()).GetFuncArgs().GetArgs();
-            ArrayList<Types> funcSignature = op.GetTypeSignature();
+            ArrayList<FParamDiscriptor> funcSignature = op.GetTypeSignature();
             if(args.size() > funcSignature.size())
                 Reporter.Error(new ArgumentsException("too many arguments in " + expr.ComponentId + " on line " + expr.GetLineNumber()));
             if(args.size() < funcSignature.size())
                 Reporter.Error(new ArgumentsException("too few arguments in " + expr.ComponentId + " on line " + expr.GetLineNumber()));
             for(int i=0;i<args.size();++i)
             {
-                if(!args.get(i).GetType().equals(funcSignature.get(i)))
+                if(!args.get(i).GetType().equals(funcSignature.get(i).GetType()))
                     Reporter.Error(new ArgumentsException("Argument not matching type signature in " + expr.ComponentId + " on line " + expr.GetLineNumber()));
             }
     	    return null;
@@ -263,8 +263,17 @@ public class SemanticAnalyzer implements IVisitor{
                     ArgExpr argument = args.get(i);
 
                     Object argType = visitValue.Visit(argument.GetArg().GetValue(),argument.GetArg());
-                    if (!argType.equals(identifier.TypeSignature.get(i)))
+                    Types signatureType = identifier.TypeSignature.get(i).GetType();
+                    if(signatureType.equals(Types.STRUCT)){
+                        Symbol structType = currentScope.FindSymbol(argType.toString());
+                        if(!structType.GetType().equals(identifier.TypeSignature.get(i).GetStructType())){
+                            Reporter.Error(new IncompatibleValueException("Incompatible argument types in " + identifier.Name + " on line " + expr.GetLineNumber()));
+                        }
+                    }
+                    else if (!argType.equals(signatureType))
+                    {
                         Reporter.Error(new IncompatibleValueException("Incompatible argument types in " + identifier.Name + " on line " + expr.GetLineNumber()));
+                    }
                 }
             }
             // returns function return type
@@ -294,7 +303,7 @@ public class SemanticAnalyzer implements IVisitor{
         Object lType = visitValue.Visit(left.GetValue(),left);
         Object rType = visitValue.Visit(right.GetValue(),right);
         // checks that the left hand side type is the same as the right hand side type
-        if(!lType.equals(rType))
+        if(!lType.equals(rType) && lType.equals(Types.BOOL))
             Reporter.Error(new IncompatibleValueException(lType,rType,expr.GetLineNumber()));
         return lType;
     }
@@ -356,7 +365,6 @@ public class SemanticAnalyzer implements IVisitor{
             if (visited == node) return null;
         }
         String varID  = node.Identifier;
-        //System.out.println("varDcl  " + currentScope.GetDepth() + "   " + node.Identifier);
         Types varType = node.GetType();
         Symbol var = new Symbol(varID,varType);
         var.SetDclType(DclType.Variable);
@@ -374,24 +382,11 @@ public class SemanticAnalyzer implements IVisitor{
 
         if(identifier.dclType.equals(DclType.Function))
             Reporter.Error(new InvalidIdentifierException("Not a variable " + identifier.Name + " on line " + node.GetLineNumber()));
-        /*
-        if(identifier.dclType.equals(DclType.Struct)){
-            if(node.children.size() == 0) {
-                return identifier.GetType();
-            }
-            else
-            {
-                StructSymbol structSymbol = (StructSymbol) currentScope.FindSymbol(identifier.CustomType);
-                IdExpr expr = (IdExpr) node.children.get(0);
-                identifier = structSymbol.FindSymbol(expr.ID);
-                if(identifier == null)
-                    Reporter.Error(new UndeclaredSymbolException(id + " not declared.", node.GetLineNumber()));
+        if(identifier.dclType.equals(DclType.Struct))
+            return identifier.Name;
 
-                return identifier.GetType();
-            }
-        }
-        */
-        return identifier.Type;
+        else
+            return identifier.Type;
     }
 
     public Object Visit(FParamsDcl node){
@@ -427,9 +422,14 @@ public class SemanticAnalyzer implements IVisitor{
 
         // setup function type signature, must be before scope else no recursion
         ArrayList<FParamDcl> parameters = node.GetFormalParamsDcl().GetFParams();
-        ArrayList<Types> typeSignature = new ArrayList<>();
+        ArrayList<FParamDiscriptor> typeSignature = new ArrayList<>();
         for(FParamDcl param : parameters) {
-            typeSignature.add(param.Type);
+            if(param.Type.equals(Types.STRUCT)){
+
+                typeSignature.add(new FParamDiscriptor(param.Type,param.GetStructType()));
+            }
+            else
+                typeSignature.add(new FParamDiscriptor(param.Type));
         }
         Symbol funcDcl = FindSymbol(node.GetVarDcl().Identifier);
         funcDcl.SetTypeSignature(typeSignature);
