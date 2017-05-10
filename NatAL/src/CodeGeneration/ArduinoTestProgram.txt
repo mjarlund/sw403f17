@@ -18,7 +18,7 @@ void setup()
     end setup
 
 void loop()
-    if (true and "true")
+    if (true)
         number a is 2
         end if
 

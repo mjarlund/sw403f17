@@ -9,5 +9,7 @@ public enum ReportTypes
     IncompatibleTypesError,
     NonBoolArgsInBoolExprError,
     NonNumericArgsInBoolExprError,
-    IncompatibleTypesInEqualityExprError
+    IncompatibleTypesInEqualityExprError,
+    IncompatibleTypeInNumericNegationError,
+    IncompatibleTypeInBooleanNegationError
 }

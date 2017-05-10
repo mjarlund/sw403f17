@@ -32,6 +32,12 @@ public final class Reporter
             case IncompatibleTypesInEqualityExprError:
                 message += "Different types can never be equal one another. ";
                 throw new IncompatibleValueException(message);
+            case IncompatibleTypeInBooleanNegationError:
+                message += "Only boolean types can be negated by the \"not\" operator. ";
+                throw new IncompatibleValueException(message);
+            case IncompatibleTypeInNumericNegationError:
+                message += "Only numeric values can be negated by a \"-\" operator. ";
+                throw new IncompatibleValueException(message);
         }
     }
 

@@ -17,7 +17,7 @@ void setup(){
   } 
 
 void loop(){ 
-  if (true && true){ 
+  if (3 == -3){ 
     int a = 2;
     } 
   pinMode(dirRight,OUTPUT);

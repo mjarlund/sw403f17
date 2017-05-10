@@ -378,8 +378,25 @@ public class SemanticAnalyzer implements IVisitor{
     
     public Object Visit(UnaryExpr expr)
     {
-        Object res = visitValue.Visit(expr.GetValExpr().GetValue(),expr.GetValExpr());
-        return res;
+        Token operator = expr.GetOperator();
+        Object argType = visitValue.Visit(expr.GetValExpr().GetValue(), expr.GetValExpr());
+        Object returnValue = null;
+
+        switch (operator.Value){
+            case "-":
+                if (argType.equals(Types.INT) || argType.equals(Types.FLOAT)){
+                    returnValue = argType;
+                } else {
+                    Reporter.Error(ReportTypes.IncompatibleTypeInNumericNegationError, expr);
+                } break;
+            case "not":
+                if (argType.equals(Types.BOOL)){
+                    returnValue = argType;
+                } else {
+                    Reporter.Error(ReportTypes.IncompatibleTypeInBooleanNegationError, expr);
+                } break;
+        }
+        return returnValue;
     }
     
     public Object Visit(ValExpr lit)
