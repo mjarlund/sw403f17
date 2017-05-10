@@ -10,8 +10,23 @@ public enum ReportTypes
     NonBoolArgsInBoolExprError,
     NonNumericArgsInBoolExprError,
     IncompatibleTypesInEqualityExprError,
-    IncompatibleTypeInNumericNegationError,
-    IncompatibleTypeInBooleanNegationError,
-    IncompatibleTypesStringConcatError,
-    IncompatibleTypesArithmeticOperatorError
+    NonNumericTypeInNumericNegationError,
+    NonBoolTypeInBooleanNegationError,
+    NonStringTypeInStringConcatError,
+    NonNumericTypesInBinaryOPExprError,
+    NonPinTypeInIOStatementError,
+    NotAssignableError,
+    NonBooleanConditionError,
+    MissingExpressionInIOStmtError,
+    NonDigitalValueInDigitalIOStmtError,
+    NonIntValueInAnalogIOStmtError,
+    IdentifierNotDeclaredError,
+    FuncCallAsFuncDclError,
+    TooFewArgumentsError,
+    TooManyArgumentsError,
+    IncompatibleTypeArgumentError,
+    NonCollectionSubjectInForeachError,
+    IncompatibleElementTypeInForeachError,
+    NonIntegerIteratorInRepeatError
 }
+
