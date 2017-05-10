@@ -71,6 +71,11 @@ public class ASTFactory
             VarDcl variableParam = (VarDcl)astStack.pop();
             parameter = new FParamDcl(variableParam.GetType(),variableParam.GetId());
         }
+        else if(astStack.peek() instanceof ListDcl){
+            ListDcl listdcl = (ListDcl)astStack.pop();
+            VarDcl variableParam = listdcl.GetDeclaration();
+            parameter = new FParamDcl(Types.LIST,variableParam.GetType(),variableParam.GetId());
+        }
         else{
             IdExpr paramid = (IdExpr) astStack.pop();
             VarDcl structtype = (VarDcl) astStack.pop();
@@ -383,10 +388,11 @@ public class ASTFactory
     }
 
     private void CreateListDcl(){
-        AST listContents;
+        AST listContents = new ArgsExpr();
         ListDcl listDcl;
         /* BuildActualParameters put the contents on the astStack */
-        listContents = astStack.pop();
+        if(astStack.peek() instanceof ArgsExpr)
+            listContents = astStack.pop();
 
         terminals.pop(); /* is */
 

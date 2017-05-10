@@ -15,16 +15,21 @@ public class FParamDcl extends Dcl
     }
     public FParamDcl(Types type, String structType, String identifier)
     {
-        Type = type;
-        Identifier = identifier;
+        this(type,identifier);
         this.structType = structType;
-        SetValue("FParamDcl");
+    }
+    public FParamDcl(Types list, Types listType, String identifier)
+    {
+        this(list,identifier);
+        this.listType = listType;
     }
 
     public final Types Type;
     public final String Identifier;
+    private Types listType;
     private String structType;
     public String GetStructType(){return structType;}
+    public Types GetListType(){return listType;}
 
     public String GetConvertedType(){
         switch (Type){
