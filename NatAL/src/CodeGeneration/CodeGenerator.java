@@ -26,7 +26,7 @@ public class CodeGenerator implements IVisitor
     private SemanticAnalyzer SM;
     private String currentIdentifier = "_";
     private int indentation = 0;
-
+    private boolean ListUsed = false;
     private String CreateIndentation(){
         String indent = "";
         for (int i = 0; i < indentation; i++){
@@ -179,18 +179,14 @@ public class CodeGenerator implements IVisitor
     }
 
     public Object Visit(ListDcl node) {
-        String elements = "";
-        visitValue.Visit(node.GetDeclaration().GetValue(), node.GetDeclaration());
-        Emit("[] = {");
+        Emit("list"+"<"+node.GetDeclaration().GetConvertedType()+"> " + node.GetDeclaration().Identifier +";\n");
         for (ArgExpr element: node.GetElements().GetArgs()) {
+
+            Emit(node.GetDeclaration().Identifier+".Add(");
             ValExpr expr = (ValExpr) element.GetArg();
-            elements += expr.LiteralValue.Value + ",";
+            Emit( expr.LiteralValue.Value + ");\n");
         }
-
-        if (elements.endsWith(","))
-            elements = elements.substring(0, elements.length() - 1);
-
-        Emit(elements + "}");
+        ListUsed = true;
         return null;
     }
 
@@ -307,6 +303,9 @@ public class CodeGenerator implements IVisitor
     {
         try{
             PrintWriter writer = new PrintWriter("Arduino-C-Program.txt", "UTF-8");
+            if (ListUsed)
+            writer.print(InputTester.readFile("src/CodeGeneration/StandardLibrary.txt"));
+
             for(String s : instructions)
             {
                 writer.print(s);

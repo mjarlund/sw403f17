@@ -15,21 +15,21 @@ public:
   list(){
     size = SIZE_BUFFER;
     num_items = 0;
-    arr = new T[SIZE_BUFFER];
+    arr = malloc(size * sizeof(T)));
   }
-  int add(T arg){
-    if(num_items == size){
-      T* temp_arr = new T[size];
-      copy_items(arr,temp_arr);
-      arr = new T[size+SIZE_BUFFER];
-      size += SIZE_BUFFER;
-      copy_items(temp_arr, arr);
-      delete temp_arr;
+  
+  int add(T arg) {
+    if(num_items == size) {
+        T *temp;
+        size += SIZE_BUFFER;
+        temp = realloc(arr, sizeof(T) * size);
+        arr = temp;
     }
     arr[num_items] = arg;
     num_items++;
     return 1;
-  }
+}
+
   int remove(int index){
     if(index > num_items-1 || index < 0){
       /*not possible*/
