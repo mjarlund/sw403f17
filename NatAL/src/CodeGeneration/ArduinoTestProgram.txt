@@ -20,7 +20,7 @@ void setup()
 void loop()
     if (true and false)
         number a is 2
-        number b is 9
+        number b is qwe
         number c is a / true
         end if
 

@@ -105,6 +105,10 @@ public final class Reporter
             case NonIntegerIteratorInRepeatError:
                 message += "The iterator of a repeat statement must be of type \"number\"";
                 throw new ArgumentsException(message);
+            case FuncIdUsedAsVarIdError:
+                id = ((IdExpr)node).ID;
+                message += id + " is used as a variable but is a function. ";
+                throw new InvalidTypeException(message);
         }
     }
 

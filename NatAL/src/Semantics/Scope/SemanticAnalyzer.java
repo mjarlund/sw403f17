@@ -440,10 +440,10 @@ public class SemanticAnalyzer implements IVisitor{
         String id = node.ID;
         Symbol identifier = FindSymbol(id);
         if (identifier == null)
-            Reporter.Error(new UndeclaredSymbolException(id + " not declared.", node.GetLineNumber()));
+            Reporter.Error(ReportTypes.IdentifierNotDeclaredError, node);
 
         if(identifier.dclType.equals(DclType.Function))
-            Reporter.Error(new InvalidIdentifierException("Not a variable " + identifier.Name + " on line " + node.GetLineNumber()));
+            Reporter.Error(ReportTypes.FuncIdUsedAsVarIdError, node);
         if(identifier.dclType.equals(DclType.Struct))
             return identifier.Name;
 

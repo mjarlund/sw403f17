@@ -27,6 +27,7 @@ public enum ReportTypes
     IncompatibleTypeArgumentError,
     NonCollectionSubjectInForeachError,
     IncompatibleElementTypeInForeachError,
-    NonIntegerIteratorInRepeatError
+    NonIntegerIteratorInRepeatError,
+    FuncIdUsedAsVarIdError
 }
 
