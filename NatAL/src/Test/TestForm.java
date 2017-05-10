@@ -9,6 +9,8 @@ import Syntax.Scanner.Scanner;
 import javax.swing.*;
 import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ContainerAdapter;
@@ -28,7 +30,6 @@ public class TestForm {
     private JList list1;
     private JTextField textField1;
     private JTextField textField2;
-    private JSpinner spinner1;
     private JTextField textField3;
     int index = 0;
     int max = 0;
@@ -36,7 +37,6 @@ public class TestForm {
     public TestForm() {
 
         DefaultListModel d = new DefaultListModel();
-
         try{
             File folder = new File("src/Test/TestPrograms/semantics/");
             File[] listOfFiles = folder.listFiles();
@@ -53,7 +53,7 @@ public class TestForm {
             System.out.println("Error when reading files: " + e.getMessage());
         }
         max = data.size();
-            Update();
+        Update();
 
 
         button1.addActionListener(new ActionListener() {
@@ -64,29 +64,22 @@ public class TestForm {
 
         button2.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                d.addElement(data.get(index));
-                list1.setModel(d);
+                if (index < data.size()) {
+                    d.addElement(data.get(index));
+                    list1.setModel(d);
+                }
                 Update();
             }
         });
-        textField3.addCaretListener(new CaretListener() {
-            public void caretUpdate(CaretEvent e) {
-                if (Integer.parseInt(textField3.getText())> max){
-                    Update();
-                }
-            }
-        });
     }
-    
+
     private void Update(){
         if (index < data.size()) {
             try {
                 String file = data.get(index).toString();
                 textField1.setText(file);
                 textArea1.setText(InputTester.readFile(file));
-               // textField3.setText(index + 1 + "");
-                spinner1.setValue(1);
-                textField2.setText("/" + max);
+                textField2.setText(index+1 +" / " + max);
                 Scanner sc = new Scanner(InputTester.readFile(file));
                 Parser parser = new Parser(sc);
                 AST programTree = parser.ParseProgram();
@@ -100,6 +93,7 @@ public class TestForm {
             } catch (IOException e1) {
                 e1.printStackTrace();
             }
+            index++;
         }
             else {
             JOptionPane.showMessageDialog(null, "No more files");
