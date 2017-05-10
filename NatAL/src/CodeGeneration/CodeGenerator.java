@@ -163,7 +163,7 @@ public class CodeGenerator implements IVisitor
     }
 
     public Object Visit(UnaryExpr expr) {
-        Emit(expr.GetOperator().Value);
+        Emit(expr.GetConvertedType());
         VisitChildren(expr);
         return null;
     }
@@ -212,7 +212,6 @@ public class CodeGenerator implements IVisitor
     }
 
     public Object Visit(ArgsExpr node) {
-        String parameters=null;
         Emit("(");
         int size = node.GetArgs().size();
         for (ArgExpr param : node.GetArgs())
@@ -236,23 +235,11 @@ public class CodeGenerator implements IVisitor
 
     public Object Visit(StructDcl node) {
         Emit("struct " + node.GetVarDcl().Identifier);
-        Emit("{\n");
+        Emit("\n");
 
         visitValue.Visit(node.GetBlock().GetValue(), node.GetBlock());
 
-        // Emits all content of the struct
-        // NOTE: variables do not need to be initialized in Arduino C
-        /*for (VarDcl dcl : node.GetContents())
-        {
-            // Strings are different than all others types in Arduino C
-            if (dcl.GetType() == Types.STRING)
-                Emit("char " + dcl.Identifier + "[100]; /*This does not work yet :(*//*");
-            else
-                Emit(dcl.GetType().toString().toLowerCase() + " " + dcl.Identifier + ";\n");
-        }*/
-
-
-        Emit("}\n");
+        Emit("\n");
         return null;
     }
 
@@ -267,8 +254,10 @@ public class CodeGenerator implements IVisitor
                 case "UntilStmt":
                 case "ForEachStmt":
                 case "IfStmt":
+                case "RepeatStmt":
+                case "ListDcl":
                     break;
-                default: Emit(";\n");
+                default: Emit("; \n");
             }
         }
         Emit(CreateIndentation() + "} \n");

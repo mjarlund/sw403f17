@@ -11,5 +11,7 @@ public enum ReportTypes
     NonNumericArgsInBoolExprError,
     IncompatibleTypesInEqualityExprError,
     IncompatibleTypeInNumericNegationError,
-    IncompatibleTypeInBooleanNegationError
+    IncompatibleTypeInBooleanNegationError,
+    IncompatibleTypesStringConcatError,
+    IncompatibleTypesArithmeticOperatorError
 }

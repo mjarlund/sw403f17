@@ -28,7 +28,6 @@ public class TestForm {
 
     public TestForm() {
         ArrayList data = new ArrayList();
-        ArrayList bad = new ArrayList();
         DefaultListModel d = new DefaultListModel();
         try{
             File folder = new File("src/Test/TestPrograms/semantics/");
@@ -37,7 +36,6 @@ public class TestForm {
             for (File file : listOfFiles) {
                 if (file.isFile() && !file.getName().contains("fail"))
                 {
-                    Object[] testFile = new Object[] { file.getPath() };
                     data.add(file.getPath());
 
                 }
@@ -55,17 +53,20 @@ public class TestForm {
                 index++;
                 if (index < data.size())
                     Update(data.get(index).toString());
+                else
+                    JOptionPane.showMessageDialog(null, "No more files");
             }
         });
 
         button2.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 d.addElement(data.get(index));
-                bad.add(data.get(index));
                 list1.setModel(d);
                 index++;
                 if (index < data.size())
                     Update(data.get(index).toString());
+                else
+                    JOptionPane.showMessageDialog(null, "No more files");
             }
         });
     }

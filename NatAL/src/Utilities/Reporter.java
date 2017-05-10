@@ -1,6 +1,7 @@
 package Utilities;
 
 import DataStructures.AST.AST;
+import DataStructures.AST.NodeTypes.Expressions.BinaryOPExpr;
 import DataStructures.AST.NodeTypes.Expressions.BoolExpr;
 import Exceptions.IncompatibleValueException;
 
@@ -37,6 +38,12 @@ public final class Reporter
                 throw new IncompatibleValueException(message);
             case IncompatibleTypeInNumericNegationError:
                 message += "Only numeric values can be negated by a \"-\" operator. ";
+                throw new IncompatibleValueException(message);
+            case IncompatibleTypesStringConcatError:
+                message += "Strings can only be concatenated with other strings. ";
+                throw new IncompatibleValueException(message);
+            case IncompatibleTypesArithmeticOperatorError:
+                message += "Arguments on both sides of the \"" + ((BinaryOPExpr)node).Operation.Value + "\" operator must be numeric values. ";
                 throw new IncompatibleValueException(message);
         }
     }

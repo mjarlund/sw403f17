@@ -17,8 +17,10 @@ void setup(){
   } 
 
 void loop(){ 
-  if (3 == -3){ 
+  if (true && false){ 
     int a = 2;
+    int b = 9;
+    int c = a+b;
     } 
   pinMode(dirRight,OUTPUT);
 digitalWrite(dirRight, HIGH);

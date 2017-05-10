@@ -18,8 +18,10 @@ void setup()
     end setup
 
 void loop()
-    if (true)
+    if (true and false)
         number a is 2
+        number b is 9
+        number c is a + true
         end if
 
     digital write high to dirRight

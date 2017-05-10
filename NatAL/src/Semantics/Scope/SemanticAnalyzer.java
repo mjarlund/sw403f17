@@ -280,19 +280,36 @@ public class SemanticAnalyzer implements IVisitor{
     }
     public Object Visit(BinaryOPExpr expr)
     {
+        Token operator = expr.Operation;
+
         AST left = expr.GetLeftExpr();
         AST right = expr.GetRightExpr();
+
         Object lType = visitValue.Visit(left.GetValue(),left);
         Object rType = visitValue.Visit(right.GetValue(),right);
 
-        // checks that the left hand side is the same as the right hand side
-        if(!lType.equals(rType))
-            Reporter.Error(new IncompatibleValueException(lType,rType,expr.GetLineNumber()));
+        Object returnValue = null;
 
-        // checks that the type is a valid type for binary expressions
-        if(!lType.equals(Types.INT) && !lType.equals(Types.FLOAT))
-            Reporter.Error(new InvalidTypeException(lType, expr.GetLineNumber()));
-        return lType;
+        switch (operator.Value){
+            case "+":
+                if ((lType.equals(Types.STRING) || rType.equals(Types.STRING))) {
+                    if (lType.equals(rType)){
+                        returnValue = lType;
+                    } else {
+                        Reporter.Error(ReportTypes.IncompatibleTypesStringConcatError, expr);
+                    } break;
+                }
+            case "-":
+            case "/":
+            case "*":
+                if ((lType.equals(Types.INT) || lType.equals(Types.FLOAT)) &&
+                    (rType.equals(Types.INT) || rType.equals(Types.FLOAT))){
+                    returnValue = lType;
+                } else {
+                    Reporter.Error(ReportTypes.IncompatibleTypesArithmeticOperatorError, expr);
+                }
+        }
+        return returnValue;
     }
     public Object Visit(BoolExpr expr)
     {
