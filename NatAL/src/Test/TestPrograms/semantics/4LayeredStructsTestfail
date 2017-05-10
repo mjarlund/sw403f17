@@ -19,9 +19,13 @@ number f
 layer3 instanceOfLayer3
 end layer4
 
-void main()
+void setup()
 layer4 instanceOfLayer4
 instanceOfLayer4.instanceOfLayer3.nana.instanceOfLayer1.b is 3
 instanceOfLayer4.instanceOfLayer3.instanceOfLayer2.jalla.b is 5
 instanceOfLayer4.john.instanceOfLayer2.instanceOfLayer1.c is instanceOfLayer4.instanceOfLayer3.instanceOfLayer2.instanceOfLayer1.a + instanceOfLayer4.instanceOfLayer3.instanceOfLayer2.instanceOfLayer1.b
-end main
+end setup
+
+void loop()
+
+end loop

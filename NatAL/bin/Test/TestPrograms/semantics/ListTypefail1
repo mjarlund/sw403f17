@@ -1,3 +1,7 @@
-void main()
+void setup()
 list of character a is (1, 'b', 'c')
-end main
+end setup
+
+void loop()
+
+end loop

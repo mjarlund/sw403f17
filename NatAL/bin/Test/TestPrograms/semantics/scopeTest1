@@ -7,3 +7,11 @@ a is a + c
 end until
 return a
 end scope1
+
+void setup()
+number num is scope1()
+end setup
+
+void loop()
+
+end loop

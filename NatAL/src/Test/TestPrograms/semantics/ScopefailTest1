@@ -8,3 +8,11 @@ end scope1
 number scope2(number john)
 number d is c + 5
 end scope2
+
+void setup()
+
+end setup
+
+void loop()
+
+end loop

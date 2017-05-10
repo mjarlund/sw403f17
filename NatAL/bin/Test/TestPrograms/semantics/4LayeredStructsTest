@@ -20,7 +20,7 @@ number f
 layer3 instanceOfLayer3
 end layer4
 
-number main()
+number test()
 text testText
 
 layer4 instanceOfLayer4
@@ -32,4 +32,12 @@ testText is "This is a test"
 
 return 0
 
-end main
+end test
+
+void setup()
+number mor is test()
+end setup
+
+void loop()
+
+end loop

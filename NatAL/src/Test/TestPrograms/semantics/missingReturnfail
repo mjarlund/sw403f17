@@ -3,3 +3,11 @@ number a is 5
 number b is 6
 number c is a + b
 end main
+
+void setup()
+
+end setup
+
+void loop()
+
+end loop

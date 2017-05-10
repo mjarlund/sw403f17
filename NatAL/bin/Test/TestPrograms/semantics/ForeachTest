@@ -1,7 +1,11 @@
-void main()
+void setup()
 list of number a is (1,2,3,4,5,6,7)
 number sum
 foreach (number num in a)
 sum is sum + num
 end foreach
-end main
+end setup
+
+void loop()
+
+end loop

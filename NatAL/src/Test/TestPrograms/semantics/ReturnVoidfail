@@ -1,4 +1,8 @@
-void test()
+void setup()
 number a is 5
 return 5
-end test
+end setup
+
+void loop()
+
+end loop

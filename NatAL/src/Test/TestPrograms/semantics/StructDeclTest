@@ -3,3 +3,11 @@ number a
 text b
 character c
 end teststruct
+
+void setup()
+
+end setup
+
+void loop()
+
+end loop

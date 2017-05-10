@@ -1,6 +1,10 @@
-void main()
+void setup()
 number a is 5
 if (a not equals 6)
 a is 6
 end if
-end main
+end setup
+
+void loop()
+
+end loop

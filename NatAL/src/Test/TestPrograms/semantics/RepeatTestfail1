@@ -1,6 +1,10 @@
-void main()
+void setup()
 char a is 'h'
 repeat(10)
 a is a + 1
 end repeat
-end main
+end setup
+
+void loop()
+
+end loop

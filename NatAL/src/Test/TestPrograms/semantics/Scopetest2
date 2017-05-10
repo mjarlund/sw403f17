@@ -4,6 +4,10 @@ boolean b is true
 return "a"
 end func1
 
-void func2()
+void setup()
 text b is func1()
-end func2
+end setup
+
+void loop()
+
+end loop

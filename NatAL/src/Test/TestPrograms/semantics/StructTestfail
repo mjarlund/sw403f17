@@ -8,8 +8,12 @@ structure outside
 test test1
 end outside
 
-void main()
+void setup()
 outside hej
 hej.b is 8
 hej.c is hej.test1.a + hej.test1.b
-end main
+end setup
+
+void loop()
+
+end loop

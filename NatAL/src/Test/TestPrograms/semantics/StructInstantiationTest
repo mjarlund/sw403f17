@@ -4,7 +4,11 @@ text b
 character c
 end teststruct
 
-void structTest()
+void setup()
 teststruct hej
 hej.b is "john"
-end structTest
+end setup
+
+void loop()
+
+end loop

@@ -1,4 +1,8 @@
-void main()
+void setup()
 list of fraction a is (5.0, 5.1)
 a.add(5.2)
-end main
+end setup
+
+void loop()
+
+end loop

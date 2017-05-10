@@ -1,7 +1,11 @@
-void main()
+void setup()
 list of boolean a is (true, false, true, false)
 number sum
 foreach (number num in a)
 sum is sum + num
 end foreach
-end main
+end setup
+
+void loop()
+
+end loop

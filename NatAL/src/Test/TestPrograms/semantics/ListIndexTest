@@ -1,5 +1,9 @@
-void main()
+void setup()
 list of number a is (1,2,3,4,5,6,7)
 number b
 b is a[2] + 1
-end main
+end setup
+
+void loop()
+
+end loop

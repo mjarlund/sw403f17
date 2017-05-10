@@ -1,4 +1,8 @@
-void main()
+void setup()
 list of number testlist is (1, 2, 3, 4, 5)
 testlist.add(3.0)
-end main
+end setup
+
+void loop()
+
+end loop

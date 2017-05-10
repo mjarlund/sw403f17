@@ -10,12 +10,15 @@ text b2
 character c2
 end teststruct2
 
-void structTest()
+void setup()
 teststruct hej
 hej.b is "john"
-end structTest
+end setup
 
 void structTest2()
 teststruct2 hej2
 hej.b is john
 end structTest2
+
+void loop()
+end loop

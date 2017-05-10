@@ -13,3 +13,12 @@ john is true
 end if
 return john
 end scope2
+
+void setup()
+number num is scope1()
+boolean bool is scope2()
+end setup
+
+void loop()
+
+end loop

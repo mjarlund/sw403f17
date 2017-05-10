@@ -1,4 +1,4 @@
-void main()
+void setup()
 number a is -2
 boolean b is true
 if(not b equals true)
@@ -6,5 +6,9 @@ text t is "dab"
 else
 number n is 10
 end else if
-end main
+end setup
+
+void loop()
+
+end loop
 
