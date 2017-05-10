@@ -7,13 +7,16 @@ import Syntax.Parser.Parser;
 import Syntax.Scanner.Scanner;
 
 import javax.swing.*;
-import java.awt.*;
+import javax.swing.event.CaretEvent;
+import javax.swing.event.CaretListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ContainerAdapter;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
 
 
 public class TestForm {
@@ -24,11 +27,16 @@ public class TestForm {
     private JTextArea textArea2;
     private JList list1;
     private JTextField textField1;
+    private JTextField textField2;
+    private JSpinner spinner1;
+    private JTextField textField3;
     int index = 0;
-
+    int max = 0;
+    ArrayList data = new ArrayList();
     public TestForm() {
-        ArrayList data = new ArrayList();
+
         DefaultListModel d = new DefaultListModel();
+
         try{
             File folder = new File("src/Test/TestPrograms/semantics/");
             File[] listOfFiles = folder.listFiles();
@@ -44,17 +52,13 @@ public class TestForm {
         catch (Exception e){//Catch exception if any
             System.out.println("Error when reading files: " + e.getMessage());
         }
-        if (index < data.size())
-            Update(data.get(index).toString());
+        max = data.size();
+            Update();
 
 
         button1.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                index++;
-                if (index < data.size())
-                    Update(data.get(index).toString());
-                else
-                    JOptionPane.showMessageDialog(null, "No more files");
+                    Update();
             }
         });
 
@@ -62,32 +66,43 @@ public class TestForm {
             public void actionPerformed(ActionEvent e) {
                 d.addElement(data.get(index));
                 list1.setModel(d);
-                index++;
-                if (index < data.size())
-                    Update(data.get(index).toString());
-                else
-                    JOptionPane.showMessageDialog(null, "No more files");
+                Update();
+            }
+        });
+        textField3.addCaretListener(new CaretListener() {
+            public void caretUpdate(CaretEvent e) {
+                if (Integer.parseInt(textField3.getText())> max){
+                    Update();
+                }
             }
         });
     }
 
-    private void Update(String data){
-        try {
-            textField1.setText(data);
-            textArea1.setText(InputTester.readFile(data));
+    private void Update(){
+        if (index < data.size()) {
+            try {
+                String file = data.get(index).toString();
+                textField1.setText(file);
+                textArea1.setText(InputTester.readFile(file));
+               // textField3.setText(index + 1 + "");
+                spinner1.setValue(1);
+                textField2.setText("/" + max);
+                Scanner sc = new Scanner(InputTester.readFile(file));
+                Parser parser = new Parser(sc);
+                AST programTree = parser.ParseProgram();
+                SemanticAnalyzer sm = new SemanticAnalyzer();
+                sm.VisitChildren(programTree);
+                CodeGenerator c = new CodeGenerator(programTree, sm);
+                c.ToFile();
 
-            Scanner sc = new Scanner(InputTester.readFile(data));
-            Parser parser = new Parser(sc);
-            AST programTree = parser.ParseProgram();
-            SemanticAnalyzer sm = new SemanticAnalyzer();
-            sm.VisitChildren(programTree);
-            CodeGenerator c = new CodeGenerator(programTree, sm);
-            c.ToFile();
+                textArea2.setText(InputTester.readFile("Arduino-C-Program.txt"));
 
-            textArea2.setText(InputTester.readFile("Arduino-C-Program.txt"));
-
-        } catch (IOException e1) {
-            e1.printStackTrace();
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+        }
+            else {
+            JOptionPane.showMessageDialog(null, "No more files");
         }
     }
 
@@ -97,9 +112,5 @@ public class TestForm {
         frame.setContentPane(new TestForm().Test);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
-    }
-
-    private void createUIComponents() {
-        // TODO: place custom component creation code here
     }
 }
