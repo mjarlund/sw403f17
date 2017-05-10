@@ -18,6 +18,10 @@ void setup()
     end setup
 
 void loop()
+    if (true and "true")
+        number a is 2
+        end if
+
     digital write high to dirRight
     digital write high to dirLeft
 

@@ -17,6 +17,9 @@ void setup(){
   } 
 
 void loop(){ 
+  if (true && true){ 
+    int a = 2;
+    } 
   pinMode(dirRight,OUTPUT);
 digitalWrite(dirRight, HIGH);
   pinMode(dirLeft,OUTPUT);

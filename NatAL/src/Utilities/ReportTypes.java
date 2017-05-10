@@ -5,5 +5,9 @@ package Utilities;
  */
 public enum ReportTypes
 {
-    FuncDCLInCompValErr
+    FuncDCLInCompValErr,
+    IncompatibleTypesError,
+    NonBoolArgsInBoolExprError,
+    NonNumericArgsInBoolExprError,
+    IncompatibleTypesInEqualityExprError
 }

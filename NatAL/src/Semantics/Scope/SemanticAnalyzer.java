@@ -7,10 +7,8 @@ import DataStructures.AST.NodeTypes.Modes;
 import DataStructures.AST.NodeTypes.Statements.*;
 import DataStructures.AST.NodeTypes.Types;
 import Exceptions.*;
-import Utilities.IVisitor;
-import Utilities.Reporter;
-import Utilities.TypeConverter;
-import Utilities.VisitorDriver;
+import Syntax.Tokens.Token;
+import Utilities.*;
 
 import java.util.ArrayList;
 
@@ -298,14 +296,43 @@ public class SemanticAnalyzer implements IVisitor{
     }
     public Object Visit(BoolExpr expr)
     {
+        Token operator = expr.Operator;
+
         AST left = expr.GetLeftExpr();
         AST right = expr.GetRightExpr();
+
         Object lType = visitValue.Visit(left.GetValue(),left);
         Object rType = visitValue.Visit(right.GetValue(),right);
-        // checks that the left hand side type is the same as the right hand side type
-        if(!lType.equals(rType) && lType.equals(Types.BOOL))
-            Reporter.Error(new IncompatibleValueException(lType,rType,expr.GetLineNumber()));
-        return lType;
+
+        Object returnValue = null;
+
+        switch (operator.Value){
+            case "or" :
+            case "and":
+                if (lType.equals(Types.BOOL) && lType.equals(rType)){
+                    returnValue = lType;
+                } else {
+                    Reporter.Error(ReportTypes.NonBoolArgsInBoolExprError, expr);
+                } break;
+            case "below":
+            case "above":
+            case "below or equals":
+            case "above or equals":
+                if ((lType.equals(Types.INT) || lType.equals(Types.FLOAT)) &&
+                    (rType.equals(Types.INT) || rType.equals(Types.FLOAT)) ){
+                    returnValue = lType;
+                } else {
+                    Reporter.Error(ReportTypes.NonNumericArgsInBoolExprError, expr);
+                } break;
+            case "equals":
+            case "not equals":
+                if (lType.equals(rType)){
+                    returnValue = Types.BOOL;
+                } else {
+                    Reporter.Error(ReportTypes.IncompatibleTypesInEqualityExprError, expr);
+                } break;
+        }
+        return returnValue;
     }
 
     public Object Visit(RepeatStatement stmt){

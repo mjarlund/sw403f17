@@ -14,13 +14,18 @@ public class ReporterFactory
     }
     public void CreateError(Report report)
     {
+        String msg;
         switch (report.Type)
         {
             case FuncDCLInCompValErr:
-                String msg;
                 if(report.Message != null) msg=report.Message;
                 reporter.Error(new IncompatibleValueException("aasd"));
                 break;
+            case IncompatibleTypesError:
+                if (report.Message != null){
+                    msg = report.Message;
+                    reporter.Error(new IncompatibleValueException(msg));
+                }
             default: break;
         }
     }
