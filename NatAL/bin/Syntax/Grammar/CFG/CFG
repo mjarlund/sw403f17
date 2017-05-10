@@ -18,7 +18,8 @@ StructDeclarationBlock -> DeclarationStatement NewLine StructDeclarationBlock
 StructDeclarationBlock -> Identifier BuildIdentifier Identifier BuildStructVarDcl CombineDown NewLine StructDeclarationBlock
 StructDeclarationBlock -> end Identifier
 ListDeclarationStatement -> list of Type Identifier BuildVarDCL is ParameterList BuildListDeclaration CombineDown
-FormalParameter -> Type Identifier
+FormalParameter -> Type Identifier BuildVarDCL BuildFParam
+FormalParameter -> structure Identifier BuildVarDCL Identifier BuildIdentifier BuildFParam
 FormalParameterList -> ( FormalParameterListBody ) BuildFormalParams
 FormalParameterListBody -> FormalParameter FormalParameterListBodyPrime
 FormalParameterListBody -> EPSILON
