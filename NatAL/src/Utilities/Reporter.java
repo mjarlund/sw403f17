@@ -1,12 +1,10 @@
 package Utilities;
 
 import DataStructures.AST.AST;
-import DataStructures.AST.NodeTypes.Expressions.BinaryOPExpr;
-import DataStructures.AST.NodeTypes.Expressions.BoolExpr;
-import DataStructures.AST.NodeTypes.Expressions.FuncCallExpr;
-import DataStructures.AST.NodeTypes.Expressions.IdExpr;
+import DataStructures.AST.NodeTypes.Expressions.*;
 import DataStructures.AST.NodeTypes.Statements.ForEachStmt;
 import Exceptions.*;
+import Semantics.Scope.Symbol;
 import jdk.nashorn.internal.runtime.regexp.joni.constants.Arguments;
 
 /**
@@ -73,9 +71,8 @@ public final class Reporter
                 String id = "An identifier";
                 if (node instanceof FuncCallExpr){
                     id = ((FuncCallExpr) node).GetFuncId().GetValue();
-                } else if (node instanceof IdExpr){
+                } else if (node instanceof IdExpr)
                     id = ((IdExpr) node).ID;
-                }
                 message += id + " has not been declared in a scope that is reachable from here. ";
                 throw new UndeclaredSymbolException(message);
             case FuncCallAsFuncDclError:

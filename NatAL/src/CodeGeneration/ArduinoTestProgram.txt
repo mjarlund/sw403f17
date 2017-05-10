@@ -20,8 +20,8 @@ void setup()
 void loop()
     if (true and false)
         number a is 2
-        number b is qwe
-        number c is a / true
+        number b is 3
+        number c is a / (2 * true)
         end if
 
     digital write high to dirRight
