@@ -13,9 +13,6 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ContainerAdapter;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -30,7 +27,6 @@ public class TestForm {
     private JList list1;
     private JTextField textField1;
     private JTextField textField2;
-    private JTextField textField3;
     int index = 0;
     int max = 0;
     ArrayList data = new ArrayList();
@@ -50,7 +46,9 @@ public class TestForm {
             }
         }
         catch (Exception e){//Catch exception if any
+            JOptionPane.showMessageDialog(null, "Error when reading files: " + e.getMessage());
             System.out.println("Error when reading files: " + e.getMessage());
+
         }
         max = data.size();
         Update();
