@@ -2,7 +2,7 @@ structure testStruct
 number a is 5
 end testStruct
 
-void test(number b, structure testStruct a)
+void test(number b, testStruct a)
 b is 5
 end test
 

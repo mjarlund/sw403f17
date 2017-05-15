@@ -79,7 +79,7 @@ public class ASTFactory
         else{
             IdExpr paramid = (IdExpr) astStack.pop();
             VarDcl structtype = (VarDcl) astStack.pop();
-            parameter = new FParamDcl(structtype.GetType(),structtype.GetId(),paramid.ID);
+            parameter = new FParamDcl(Types.STRUCT,structtype.GetId(),paramid.ID);
         }
         astStack.push(parameter);
     }
