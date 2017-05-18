@@ -7,39 +7,39 @@ int dirRight = 8;
 int dirLeft = 2;
 
 int asd(){ 
-  return 2;
+  return 2; 
   } 
 
 void qwe(int a){ 
   } 
+int casdasd = ((10+(3*4))+(2*2));
 
 void setup(){ 
   } 
 
 void loop(){ 
   if (true && false){ 
-    int a = 2;
-    int b = 9;
-    int c = a+b;
+    int a = 2; 
+    int b = 3; 
     } 
   pinMode(dirRight,OUTPUT);
-digitalWrite(dirRight, HIGH);
+digitalWrite(dirRight, HIGH); 
   pinMode(dirLeft,OUTPUT);
-digitalWrite(dirLeft, HIGH);
+digitalWrite(dirLeft, HIGH); 
   pinMode(motorLeft,OUTPUT);
-analogWrite(motorLeft, 255);
+analogWrite(motorLeft, 255); 
   pinMode(motorRight,OUTPUT);
-analogWrite(motorRight, 255);
-  delay(1000);
-  int a = 12398;
+analogWrite(motorRight, 255); 
+  delay(1000); 
+  int a = 12398; 
   pinMode(dirRight,OUTPUT);
-digitalWrite(dirRight, LOW);
+digitalWrite(dirRight, LOW); 
   pinMode(dirLeft,OUTPUT);
-digitalWrite(dirLeft, LOW);
+digitalWrite(dirLeft, LOW); 
   pinMode(motorLeft,OUTPUT);
-analogWrite(motorLeft, 255);
+analogWrite(motorLeft, 255); 
   pinMode(motorRight,OUTPUT);
-analogWrite(motorRight, 255);
-  delay(1000);
-  qwe(asd());
+analogWrite(motorRight, 255); 
+  delay(1000); 
+  qwe(asd()); 
   } 
