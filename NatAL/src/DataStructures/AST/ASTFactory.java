@@ -269,7 +269,11 @@ public class ASTFactory
     {
         Expr right = (Expr) astStack.pop();
         Expr left = (Expr)astStack.pop();
+        while (terminals.peek().Type.equals(TokenType.SEPARATOR)){
+            terminals.pop();
+        }
         Token op = terminals.pop();
+        System.out.println("Operator is: " + op.Value);
         Expr expr = new BinaryOPExpr(left, op, right);
         expr.SetLineNumber(currentLineNumber);
         astStack.push(expr);
