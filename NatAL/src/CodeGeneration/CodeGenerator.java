@@ -135,9 +135,11 @@ public class CodeGenerator implements IVisitor
     }
 
     public Object Visit(BinaryOPExpr expr) {
+        Emit("(");
         visitValue.Visit(expr.GetLeftExpr().GetValue(),expr.GetLeftExpr());
         Emit(expr.Operation.Value);
         visitValue.Visit(expr.GetRightExpr().GetValue(),expr.GetRightExpr());
+        Emit(")");
         return null;
     }
 

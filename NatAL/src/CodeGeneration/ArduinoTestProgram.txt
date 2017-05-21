@@ -14,14 +14,16 @@ end asd
 void qwe(number a)
 end qwe
 
+number casdasd is 10 + 3 * 4 + 2 * 2
+
 void setup()
+
     end setup
 
 void loop()
     if (true and false)
         number a is 2
         number b is 3
-        number c is a / (2 * true)
         end if
 
     digital write high to dirRight

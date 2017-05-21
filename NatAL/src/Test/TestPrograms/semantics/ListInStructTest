@@ -1,0 +1,14 @@
+structure teststruct
+number a
+text b
+character c
+list of number a is (1, 2, 3, 4)
+end teststruct
+
+void setup()
+
+end setup
+
+void loop()
+
+end loop
