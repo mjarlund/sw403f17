@@ -16,9 +16,6 @@ import Utilities.VisitorDriver;
 import java.util.ArrayList;
 import java.io.*;
 
-// TODO: Nogle steder bruger vi ArrayList andre steder List. Det skal både rettes her og inde i AST-noderene
-// TODO: Mere sigende navne / konsistente navne når man skal gette noget fra de forskellige AST-noder. Plus ikke alle AST-node har getter-metoder
-
 public class CodeGenerator implements IVisitor
 {
     public ArrayList<String> instructions = new ArrayList<>();
@@ -67,10 +64,10 @@ public class CodeGenerator implements IVisitor
         GenerateIdentifier();
         if (node.GetIterationExpression() instanceof IdExpr){
             String i = ((IdExpr)node.GetIterationExpression()).ID;
-            Emit("for (int "+ currentIdentifier +" = 0; <" + i + "; " + currentIdentifier +"++)");
+            Emit("for (int "+ currentIdentifier +" = 0;" + currentIdentifier +"<" + i + "; " + currentIdentifier +"++)");
         } else {
             String i = ((ValExpr)node.GetIterationExpression()).LiteralValue.Value;
-            Emit("for (int "+ currentIdentifier +" = 0; <" + i + "; " + currentIdentifier +"++)");
+            Emit("for (int "+ currentIdentifier +" = 0;"+currentIdentifier+" <" + i + "; " + currentIdentifier +"++)");
         }
         visitValue.Visit(node.GetBlock().GetValue(), node.GetBlock());
         return null;
@@ -121,13 +118,13 @@ public class CodeGenerator implements IVisitor
 
     public Object Visit(ForEachStmt stmt) {
         GenerateIdentifier();
-        Emit("for (int "+ currentIdentifier +" = 0; < sizeof("+stmt.GetCollectionId()+") - 1; " + currentIdentifier +"++)");
+        Emit("for (int "+ currentIdentifier +" = 0;"+currentIdentifier+" < sizeof("+stmt.GetCollectionId()+") - 1; " + currentIdentifier +"++)");
         visitValue.Visit(stmt.GetBlock().GetValue(), stmt.GetBlock());
         return null;
     }
 
     public Object Visit(ReturnStmt stmt) {
-        Emit("return " );
+        Emit("return ");
         VisitChildren(stmt);
         return null;
     }
@@ -284,7 +281,7 @@ public class CodeGenerator implements IVisitor
     {
         instructions.add(instruction);
 
-        Reporter.Log("Emitting: " + instruction);
+        //Reporter.Log("Emitting: " + instruction);
     }
 
     /* Writes all Arduino C instructions to a file */
