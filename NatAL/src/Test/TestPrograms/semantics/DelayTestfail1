@@ -3,5 +3,5 @@ void setup()
 end setup
 
 void loop()
-delay(5)
+delay()
 end loop
