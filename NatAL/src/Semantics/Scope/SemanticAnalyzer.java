@@ -9,6 +9,7 @@ import DataStructures.AST.NodeTypes.Types;
 import Exceptions.*;
 import Syntax.Tokens.Token;
 import Utilities.*;
+import com.sun.deploy.ref.AppModel;
 
 import java.util.ArrayList;
 
@@ -335,14 +336,20 @@ public class SemanticAnalyzer implements IVisitor{
                     } break;
                 }
             case "-":
-            case "/":
             case "*":
-                if ((lType.equals(Types.INT) || lType.equals(Types.FLOAT)) &&
-                    (rType.equals(Types.INT) || rType.equals(Types.FLOAT))){
-                    returnValue = lType;
-                } else {
+                if (lType.equals(Types.FLOAT) || rType.equals(Types.FLOAT))
+                    returnValue = Types.FLOAT;
+                else if (lType.equals(Types.INT) && rType.equals(Types.INT))
+                    returnValue = Types.INT;
+                else {
                     Reporter.Error(ReportTypes.NonNumericTypesInBinaryOPExprError, expr);
-                }
+                } break;
+            case "/":
+                if (lType.equals(Types.INT) || lType.equals(Types.FLOAT) &&
+                    rType.equals(Types.INT) || rType.equals(Types.FLOAT))
+                    returnValue = Types.FLOAT;
+                else
+                    Reporter.Error(ReportTypes.NonNumericTypesInBinaryOPExprError, expr);
         }
         return returnValue;
     }
