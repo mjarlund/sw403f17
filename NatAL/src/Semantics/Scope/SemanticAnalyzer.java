@@ -67,6 +67,7 @@ public class SemanticAnalyzer implements IVisitor{
     	} 		
     }
     public void BeginSemanticAnalysis(AST root){
+    	InitArduinoSymbols();
     	VisitChildren(root);
     	CheckForSetupAndLoopFunc(); 	
     }
@@ -283,6 +284,7 @@ public class SemanticAnalyzer implements IVisitor{
 
                 /* Verify number of arguments match the function signature */
                 int numFormalParameters = identifier.TypeSignature.size();
+                System.out.println("HERE I AM BABY, SIGNED, SEALED, DELIVERED   " + numFormalParameters);
                 if (numFormalParameters > args.size())
                     Reporter.Error(ReportTypes.TooFewArgumentsError, expr);
                 else if (numFormalParameters < args.size())
@@ -582,5 +584,18 @@ public class SemanticAnalyzer implements IVisitor{
 
     public void AddSymbol(String id){
         currentScope.AddSymbol(new Symbol(id));
+    }
+    
+    private void InitArduinoSymbols(){
+        ArrayList<FParamDiscriptor> typeSignature = new ArrayList<>();
+        typeSignature.add(new FParamDiscriptor(Types.FLOAT));
+    	GlobalScope.AddSymbol(new Symbol("delay", Types.VOID, DclType.Function, typeSignature));
+    	typeSignature.clear();
+    
+    	typeSignature.add(new FParamDiscriptor(Types.FLOAT));
+    	typeSignature.add(new FParamDiscriptor(Types.FLOAT));
+    	GlobalScope.AddSymbol(new Symbol("min", Types.FLOAT, DclType.Function, typeSignature));
+    	typeSignature.clear();
+    	
     }
 }

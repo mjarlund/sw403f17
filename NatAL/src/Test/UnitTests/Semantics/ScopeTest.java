@@ -66,6 +66,7 @@ public class ScopeTest {
 			try 
 			{
 				Scanner testScanner = new Scanner(InputTester.readFile(testPath));
+				System.out.println(testPath);
 				Parser parser = new Parser(testScanner);
 				AST programTree = parser.ParseProgram();
 			    SemanticAnalyzer sm = new SemanticAnalyzer();

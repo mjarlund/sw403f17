@@ -31,6 +31,14 @@ public class Symbol {
         Type = null;
         TypeSignature = typeSignature;
     }
+    
+    public Symbol(String name, Types type, DclType dcltype, ArrayList<FParamDiscriptor> typeSignature){
+        Name = name;
+        Type = type;
+        dclType = dcltype;
+        TypeSignature = typeSignature;
+    }
+    
     public void SetTypeSignature(ArrayList<FParamDiscriptor> typeSignature)
     {
         TypeSignature = typeSignature;

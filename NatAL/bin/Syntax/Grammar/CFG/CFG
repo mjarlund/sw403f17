@@ -19,7 +19,7 @@ StructDeclarationBlock -> Identifier BuildIdentifier Identifier BuildStructVarDc
 StructDeclarationBlock -> end Identifier
 ListDeclarationStatement -> list of Type Identifier BuildVarDCL is ParameterList BuildListDeclaration CombineDown
 FormalParameter -> Type Identifier BuildVarDCL BuildFParam
-FormalParameter -> structure Identifier BuildVarDCL Identifier BuildIdentifier BuildFParam
+FormalParameter -> Identifier BuildVarDCL Identifier BuildIdentifier BuildFParam
 FormalParameter -> list of Type Identifier BuildVarDCL BuildListDeclaration BuildFParam
 FormalParameterList -> ( FormalParameterListBody ) BuildFormalParams
 FormalParameterListBody -> FormalParameter FormalParameterListBodyPrime
