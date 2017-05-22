@@ -9,7 +9,7 @@ import DataStructures.AST.NodeTypes.Types;
 import Exceptions.*;
 import Syntax.Tokens.Token;
 import Utilities.*;
-import com.sun.deploy.ref.AppModel;
+
 
 import java.util.ArrayList;
 
@@ -305,6 +305,10 @@ public class SemanticAnalyzer implements IVisitor{
                         if(!list.GetType().equals(identifier.TypeSignature.get(i).GetListofType())){
                             Reporter.Error(ReportTypes.IncompatibleTypeArgumentError, expr);
                         }
+                    }
+                    else if(signatureType.equals(Types.FLOAT) && argType.equals(Types.INT))
+                    {
+                    	argType = Types.FLOAT;
                     }
                     else if (!argType.equals(signatureType)) {
                         Reporter.Error(ReportTypes.IncompatibleTypeArgumentError, expr);
