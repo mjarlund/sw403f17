@@ -50,10 +50,3 @@ public:
     delete arr;
   }
 };
-
-
-
-
-void delay(number d)
-    end delay
-
