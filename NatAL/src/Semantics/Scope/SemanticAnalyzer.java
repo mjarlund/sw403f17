@@ -590,12 +590,12 @@ public class SemanticAnalyzer implements IVisitor{
         ArrayList<FParamDiscriptor> typeSignature = new ArrayList<>();
         typeSignature.add(new FParamDiscriptor(Types.FLOAT));
     	GlobalScope.AddSymbol(new Symbol("delay", Types.VOID, DclType.Function, typeSignature));
-    	typeSignature.clear();
+    	typeSignature = new ArrayList<>();
     
     	typeSignature.add(new FParamDiscriptor(Types.FLOAT));
     	typeSignature.add(new FParamDiscriptor(Types.FLOAT));
     	GlobalScope.AddSymbol(new Symbol("min", Types.FLOAT, DclType.Function, typeSignature));
-    	typeSignature.clear();
+    	//typeSignature = new ArrayList<>();
     	
     }
 }
