@@ -1,6 +1,8 @@
 void delay(number d)
     end delay
 
+#This is a comment#
+
 structure teststruct
 number a
 text b

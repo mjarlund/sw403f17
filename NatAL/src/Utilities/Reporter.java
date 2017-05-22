@@ -24,7 +24,6 @@ public final class Reporter
     {
         throw error;
     }
-
     
     public static void Error (ReportTypes type, String EssentialPart){
     	

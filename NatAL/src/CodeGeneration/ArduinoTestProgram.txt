@@ -1,6 +1,8 @@
 void delay(number d)
     end delay
 
+#This is a comment#
+
 pin motorLeft is 9
 pin motorRight is 3
 

@@ -104,6 +104,9 @@ public class Scanner
                 	Token ac = MakeToken(Character.toString(currentChar), TokenType.ACCESSOR);
                 	Advance();
                 	return ac;
+                case '#':
+                    SkipComment();
+                    return NextToken();
                 default:
                     if(IsLetter())
                         return ScanLetters();
@@ -124,6 +127,12 @@ public class Scanner
         return (currentChar == ' ' || currentChar == '\t' || currentChar == '\r');
     }
 
+    private void SkipComment(){
+        Advance(); /* Currently '#' */
+        while (currentChar != '#'){
+            Advance();
+        } Advance(); /* Get rid of the last '#' */
+    }
     private boolean IsLetter()
     {
         return (currentChar >= 'a' && currentChar <= 'z') ||

@@ -329,11 +329,8 @@ public class SemanticAnalyzer implements IVisitor{
         switch (operator.Value){
             case "+":
                 if ((lType.equals(Types.STRING) || rType.equals(Types.STRING))) {
-                    if (lType.equals(rType)){
-                        returnValue = lType;
-                    } else {
-                        Reporter.Error(ReportTypes.NonStringTypeInStringConcatError, expr);
-                    } break;
+                    returnValue = Types.STRING;
+                    break;
                 }
             case "-":
             case "*":
