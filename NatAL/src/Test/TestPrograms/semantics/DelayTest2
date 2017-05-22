@@ -1,0 +1,7 @@
+void setup()
+
+end setup
+
+void loop()
+delay(5 + 8 + 4 + 5.5)
+end loop
