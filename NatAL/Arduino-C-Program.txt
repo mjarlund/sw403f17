@@ -1,6 +1,3 @@
-
-void delay(int d){ 
-  } 
 int motorLeft = 9;
 int motorRight = 3;
 int dirRight = 8;
@@ -15,6 +12,7 @@ void qwe(int a){
 int casdasd = ((10+(3*4))+(2*2));
 
 void setup(){ 
+Serial.begin(9600); 
   } 
 
 void loop(){ 

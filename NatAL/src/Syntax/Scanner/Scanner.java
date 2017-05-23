@@ -58,10 +58,15 @@ public class Scanner
         words.put("false", TokenType.BOOLEAN_LITERAL); words.put("true", TokenType.BOOLEAN_LITERAL);
         words.put("high", TokenType.DIGITAL_LITERAL); words.put("low", TokenType.DIGITAL_LITERAL);
         
-        while (IsWS() || currentChar == '\n')
+        while (IsWS() || currentChar == '\n' || currentChar == '#')
     	{
-    	    if(currentChar == '\n')
+    	    if(currentChar == '\n'){
     	        IncreaseLineNumber(1);
+    	    }
+    	    if(currentChar == '#'){
+    	    	SkipComment();
+    	    }
+    	    	
     		Advance();
     	}
     }

@@ -284,7 +284,6 @@ public class SemanticAnalyzer implements IVisitor{
 
                 /* Verify number of arguments match the function signature */
                 int numFormalParameters = identifier.TypeSignature.size();
-                System.out.println("HERE I AM BABY, SIGNED, SEALED, DELIVERED   " + numFormalParameters);
                 if (numFormalParameters > args.size())
                     Reporter.Error(ReportTypes.TooFewArgumentsError, expr);
                 else if (numFormalParameters < args.size())
@@ -614,6 +613,75 @@ public class SemanticAnalyzer implements IVisitor{
     	typeSignature.add(new FParamDiscriptor(Types.CHAR));
     	GlobalScope.AddSymbol(new Symbol("isControl", Types.BOOL, DclType.Function, typeSignature));
     	typeSignature = new ArrayList<>();
-    	    	
+    	
+    	typeSignature.add(new FParamDiscriptor(Types.CHAR));
+    	GlobalScope.AddSymbol(new Symbol("isGraph", Types.BOOL, DclType.Function, typeSignature));
+    	typeSignature = new ArrayList<>();
+    	
+    	typeSignature.add(new FParamDiscriptor(Types.CHAR));
+    	GlobalScope.AddSymbol(new Symbol("isLowerCase", Types.BOOL, DclType.Function, typeSignature));
+    	typeSignature = new ArrayList<>();
+    	
+    	typeSignature.add(new FParamDiscriptor(Types.CHAR));
+    	GlobalScope.AddSymbol(new Symbol("isPunct", Types.BOOL, DclType.Function, typeSignature));
+    	typeSignature = new ArrayList<>();
+    	
+    	typeSignature.add(new FParamDiscriptor(Types.CHAR));
+    	GlobalScope.AddSymbol(new Symbol("isSpace", Types.BOOL, DclType.Function, typeSignature));
+    	typeSignature = new ArrayList<>();
+    	
+    	typeSignature.add(new FParamDiscriptor(Types.CHAR));
+    	GlobalScope.AddSymbol(new Symbol("isHexaDecimalDigit", Types.BOOL, DclType.Function, typeSignature));
+    	typeSignature = new ArrayList<>();
+    	
+    	typeSignature.add(new FParamDiscriptor(Types.INT));
+    	GlobalScope.AddSymbol(new Symbol("randomSeed", Types.VOID, DclType.Function, typeSignature));
+    	typeSignature = new ArrayList<>();
+    	
+    	typeSignature.add(new FParamDiscriptor(Types.FLOAT));
+    	typeSignature.add(new FParamDiscriptor(Types.FLOAT));
+    	GlobalScope.AddSymbol(new Symbol("max", Types.FLOAT, DclType.Function, typeSignature));
+    	typeSignature = new ArrayList<>();
+    	
+    	typeSignature.add(new FParamDiscriptor(Types.INT));
+    	typeSignature.add(new FParamDiscriptor(Types.INT));
+    	typeSignature.add(new FParamDiscriptor(Types.INT));
+    	typeSignature.add(new FParamDiscriptor(Types.INT));
+    	typeSignature.add(new FParamDiscriptor(Types.INT));
+    	GlobalScope.AddSymbol(new Symbol("map", Types.INT, DclType.Function, typeSignature));
+    	typeSignature = new ArrayList<>();
+    	
+    	typeSignature.add(new FParamDiscriptor(Types.CHAR));
+    	GlobalScope.AddSymbol(new Symbol("isAlphaNumeric", Types.BOOL, DclType.Function, typeSignature));
+    	typeSignature = new ArrayList<>();
+    	
+    	typeSignature.add(new FParamDiscriptor(Types.CHAR));
+    	GlobalScope.AddSymbol(new Symbol("isWhitespace", Types.BOOL, DclType.Function, typeSignature));
+    	typeSignature = new ArrayList<>();
+    	
+    	typeSignature.add(new FParamDiscriptor(Types.CHAR));
+    	GlobalScope.AddSymbol(new Symbol("isDigit", Types.BOOL, DclType.Function, typeSignature));
+    	typeSignature = new ArrayList<>();
+    	
+    	typeSignature.add(new FParamDiscriptor(Types.CHAR));
+    	GlobalScope.AddSymbol(new Symbol("isPrintable", Types.BOOL, DclType.Function, typeSignature));
+    	typeSignature = new ArrayList<>();
+    	
+    	typeSignature.add(new FParamDiscriptor(Types.CHAR));
+    	GlobalScope.AddSymbol(new Symbol("isUpperCase", Types.BOOL, DclType.Function, typeSignature));
+    	typeSignature = new ArrayList<>();
+    	
+    	typeSignature.add(new FParamDiscriptor(Types.INT));
+    	GlobalScope.AddSymbol(new Symbol("random", Types.INT, DclType.Function, typeSignature));
+    	typeSignature = new ArrayList<>();
+    	
+    	typeSignature.add(new FParamDiscriptor(Types.INT));
+    	GlobalScope.AddSymbol(new Symbol("abs", Types.INT, DclType.Function, typeSignature));
+    	typeSignature = new ArrayList<>();
+    	
+    	typeSignature.add(new FParamDiscriptor(Types.STRING));
+    	GlobalScope.AddSymbol(new Symbol("print", Types.VOID, DclType.Function, typeSignature));
+    	typeSignature = new ArrayList<>();
+    	 	
     }
 }

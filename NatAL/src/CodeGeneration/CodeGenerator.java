@@ -192,7 +192,12 @@ public class CodeGenerator implements IVisitor
     public Object Visit(IdExpr node) {
         if (node.isIterator){
             Emit(node.CollectionID + "["+currentIdentifier+"]");
-        } else {
+        } 
+        else if(node.ID.contentEquals("print"))
+        {
+        	Emit("Serial.println");
+        }
+        else {
             Emit(node.ID);
         }
         return null;
@@ -211,7 +216,7 @@ public class CodeGenerator implements IVisitor
     }
 
     public Object Visit(ArgsExpr node) {
-        Emit("(");
+    	Emit("(");
         int size = node.GetArgs().size();
         for (ArgExpr param : node.GetArgs())
         {
@@ -245,6 +250,12 @@ public class CodeGenerator implements IVisitor
     public Object Visit(BlockStmt block) {
         indentation++;
         Emit("{ \n");
+        if(block.GetParent() != null && block.GetParent().GetValue().matches("FuncDcl"))
+        {
+        	if(((FuncDcl)block.GetParent()).GetEndIdentifier().matches("setup")){
+        		Emit("Serial.begin(9600); \n");
+        	}
+        }
         for (AST child : block.children) {
             Emit(CreateIndentation());
             String switchValue = (child.GetValue() != null) ? child.GetValue() : ((IdExpr) child).ID;

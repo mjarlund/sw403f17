@@ -1,13 +1,13 @@
-void delay(number d)
-    end delay
-
-#This is a comment#
-
 pin motorLeft is 9
 pin motorRight is 3
 
+
+#This is a comment#
+
 pin dirRight is 8
 pin dirLeft is 2
+
+
 
 number asd()
     return 2

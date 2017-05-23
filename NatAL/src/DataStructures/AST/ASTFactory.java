@@ -273,7 +273,6 @@ public class ASTFactory
             terminals.pop();
         }
         Token op = terminals.pop();
-        System.out.println("Operator is: " + op.Value);
         Expr expr = new BinaryOPExpr(left, op, right);
         expr.SetLineNumber(currentLineNumber);
         astStack.push(expr);
