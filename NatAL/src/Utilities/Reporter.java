@@ -42,6 +42,7 @@ public final class Reporter
             case MisuseOfLoopOrSetupError:
             	message = EssentialPart + " is an essential method and has to be declared as such";
                 throw new InvalidTypeException(message);
+
     	}
     }
     

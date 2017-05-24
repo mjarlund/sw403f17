@@ -163,6 +163,9 @@ public class ScopeTest {
 			{
 				thrown = true;
 			}
+			catch (MissingCommentHashtagException e){
+				thrown = true;
+			}
 			assertEquals(true, thrown);			
 		}		
 	}

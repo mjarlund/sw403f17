@@ -32,6 +32,7 @@ public enum ReportTypes
     MissingEssentialMethodError,
     EssentialMethodNotVoidError,
     EssentialMethodHasParamsError, 
-    MisuseOfLoopOrSetupError
+    MisuseOfLoopOrSetupError, 
+    MissingCommentHashtagException,
 }
 

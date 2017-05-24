@@ -64,7 +64,12 @@ public class Scanner
     	        IncreaseLineNumber(1);
     	    }
     	    if(currentChar == '#'){
+    	    	try{
     	    	SkipComment();
+    	    	}
+    	    	catch(StringIndexOutOfBoundsException ex){
+    	    		throw new MissingCommentHashtagException(GetLineNumber());
+    	    	}
     	    }
     	    	
     		Advance();
@@ -110,7 +115,12 @@ public class Scanner
                 	Advance();
                 	return ac;
                 case '#':
-                    SkipComment();
+        	    	try{
+            	    	SkipComment();
+            	    	}
+            	    	catch(StringIndexOutOfBoundsException ex){
+            	    		throw new MissingCommentHashtagException(GetLineNumber());
+            	    	}
                     return NextToken();
                 default:
                     if(IsLetter())
