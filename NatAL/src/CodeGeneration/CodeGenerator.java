@@ -205,8 +205,15 @@ public class CodeGenerator implements IVisitor
 
     public Object Visit(FParamsDcl node) {
         String parameters="(";
-        for (FParamDcl param : node.GetFParams())
-            parameters += param.GetConvertedType() + " " + param.Identifier + ",";
+        for (FParamDcl param : node.GetFParams()){
+        	if (param.GetConvertedType().contentEquals("struct"))  {
+        		
+        		parameters += param.GetConvertedType() + " " + param.GetStructType() + " " + param.Identifier + ",";
+        	}
+        	else
+        	parameters += param.GetConvertedType() + " " + param.Identifier + ",";
+        }
+          
 
         if (parameters.endsWith(","))
             parameters = parameters.substring(0, parameters.length() - 1);
