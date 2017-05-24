@@ -16,7 +16,6 @@ import org.junit.runners.Parameterized.Parameters;
 
 import Exceptions.InvalidCharacterException;
 import Exceptions.InvalidIdentifierException;
-import Exceptions.MissingCommentHashtagException;
 import Exceptions.MissingProductionsException;
 import Exceptions.UnexpectedTokenException;
 import Syntax.Parser.Parser;
@@ -196,9 +195,6 @@ public class ParserTest {
 			}
 			catch (InvalidIdentifierException e)
 			{
-				thrown = true;
-			}
-			catch (MissingCommentHashtagException e){
 				thrown = true;
 			}
 			assertEquals(true, thrown);

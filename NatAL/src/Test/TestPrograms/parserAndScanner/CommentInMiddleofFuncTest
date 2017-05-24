@@ -1,7 +1,7 @@
 
 
 void setup()
-#here is a comment#
+#here is a comment
 end setup
 
 void loop()
