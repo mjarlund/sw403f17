@@ -277,7 +277,10 @@ public class CodeGenerator implements IVisitor
                 default: Emit("; \n");
             }
         }
-        Emit(CreateIndentation() + "} \n");
+        if (block.GetParent() != null &&  block.GetParent().GetValue().matches("StructDcl"))
+        Emit(CreateIndentation() + "}; \n");
+        else
+            Emit(CreateIndentation() + "} \n");
         indentation--;
         return null;
     }

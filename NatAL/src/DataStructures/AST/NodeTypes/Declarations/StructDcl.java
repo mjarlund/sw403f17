@@ -11,7 +11,9 @@ public class StructDcl extends Dcl {
 
     public StructDcl(VarDcl declaration, BlockStmt contents){
         block = contents;
-    	AddChild(declaration);
+        block.SetParent(this);
+
+        AddChild(declaration);
         for (AST dcl : contents.children){
         	AddChild(dcl);
         }
