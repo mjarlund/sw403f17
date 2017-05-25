@@ -328,6 +328,11 @@ public class SemanticAnalyzer implements IVisitor{
 
         Object returnValue = null;
 
+        /* The type of boh lType and rType must be either INT, FLOAT, or STRING */
+        if ( !((lType.equals(Types.INT) || lType.equals(Types.FLOAT) || lType.equals(Types.STRING)) &&
+               (rType.equals(Types.INT) || rType.equals(Types.FLOAT) || rType.equals(Types.STRING)))  )
+            Reporter.Error(ReportTypes.NonNumericTypesInBinaryOPExprError, expr);
+
         switch (operator.Value){
             case "+":
                 if ((lType.equals(Types.STRING) || rType.equals(Types.STRING))) {
