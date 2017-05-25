@@ -301,8 +301,6 @@ public class CodeGenerator implements IVisitor
     public void Emit (String instruction)
     {
         instructions.add(instruction);
-
-        //Reporter.Log("Emitting: " + instruction);
     }
 
     /* Writes all Arduino C instructions to a file */

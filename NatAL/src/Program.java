@@ -54,7 +54,7 @@ public class Program extends JFrame
         constraints.insets = new Insets(0, 10, 0, 0);
         constraints.weightx = 2;
         pane.setBorder(BorderFactory.createTitledBorder(
-                BorderFactory.createEtchedBorder(), "NATaL Input"));
+                BorderFactory.createEtchedBorder(), "NatAL Input"));
         newPanel.add(pane, constraints);
 
         //Output
@@ -90,7 +90,7 @@ public class Program extends JFrame
 
         // set border for the panel
         newPanel.setBorder(BorderFactory.createTitledBorder(
-                BorderFactory.createEtchedBorder(), "NATaL Compiler"));
+                BorderFactory.createEtchedBorder(), "NatAL Compiler"));
 
         // add the panel to this frame
         add(newPanel);
