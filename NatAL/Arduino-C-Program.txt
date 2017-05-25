@@ -1,43 +1,14 @@
-int motorLeft = 9;
-int motorRight = 3;
-int dirRight = 8;
-int dirLeft = 2;
 
-int asd(){ 
-  return 2; 
+void main(){ 
+  int a = 1; 
+  int b = 2; 
+  int c = 5; 
   } 
-
-void qwe(int a){ 
-  } 
-int casdasd = ((10+(3*4))+(2*2));
 
 void setup(){ 
 Serial.begin(9600); 
+  main(); 
   } 
 
 void loop(){ 
-  if (true && false){ 
-    int a = 2; 
-    int b = 3; 
-    } 
-  pinMode(dirRight,OUTPUT);
-digitalWrite(dirRight, HIGH); 
-  pinMode(dirLeft,OUTPUT);
-digitalWrite(dirLeft, HIGH); 
-  pinMode(motorLeft,OUTPUT);
-analogWrite(motorLeft, 255); 
-  pinMode(motorRight,OUTPUT);
-analogWrite(motorRight, 255); 
-  delay(1000); 
-  int a = 12398; 
-  pinMode(dirRight,OUTPUT);
-digitalWrite(dirRight, LOW); 
-  pinMode(dirLeft,OUTPUT);
-digitalWrite(dirLeft, LOW); 
-  pinMode(motorLeft,OUTPUT);
-analogWrite(motorLeft, 255); 
-  pinMode(motorRight,OUTPUT);
-analogWrite(motorRight, 255); 
-  delay(1000); 
-  qwe(asd()); 
   } 
