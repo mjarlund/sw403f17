@@ -6,9 +6,6 @@ import processing.core.PVector;
 
 import java.util.ArrayList;
 
-/**
- * Created by Anders Brams on 3/15/2017.
- */
 public class VisualNode extends PApplet {
     AST base;
     PVector pos;

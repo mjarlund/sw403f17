@@ -43,7 +43,6 @@ public class ListSymbol extends Symbol implements IScope {
 
     @Override
     public void AddChildScope(Scope child) {
-
     }
 
     @Override

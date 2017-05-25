@@ -5,9 +5,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.*;
 
-/**
- * Created by Anders Brams on 3/21/2017.
- */
 public class Grammar {
     /**
      * Array of grammar productions.
@@ -296,12 +293,6 @@ public class Grammar {
             Grammar g = Grammar.FromFile("src/Syntax/Grammar/CFG/CFG");
             for(String var : g.Follow("DeclarationStatement"))
                 System.out.println(var);
-            /*for(String nonTerminal : g.NonTerminals) {
-                System.out.print(nonTerminal + " -> ");
-                System.out.print(g.Follow(nonTerminal).size());
-                System.out.println();
-                System.out.println();
-            }*/
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -12,9 +12,6 @@ import Utilities.Reporter;
 import Utilities.TypeConverter;
 import java.util.Stack;
 
-/**
- * Created by Anders Brams on 3/21/2017.
- */
 public class Parser
 {
     private ParsingTable table;
@@ -50,7 +47,6 @@ public class Parser
                 // Hvis dette slettes, så virker skidtet ikke. Wat 2 do
                 if (parseTop.equals("EPSILON"))
                 {
-                    // Do nothing??
                 }
                 // Terminal might be a semantic actions
                 else if (ASTFactory.SemanticAction.get(parseTop) != null)
@@ -112,7 +108,6 @@ public class Parser
 
         if (val.equals(value))
         {
-            //Reporter.Log("Matched " + value);
             if(value.equals("EOL"))
                 scanner.IncreaseLineNumber(1);
             Consume();

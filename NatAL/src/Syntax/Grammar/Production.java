@@ -1,8 +1,5 @@
 package Syntax.Grammar;
 
-/**
- * Created by Anders Brams on 3/21/2017.
- */
 public class Production {
     /**
      * The left side (a non-terminal).

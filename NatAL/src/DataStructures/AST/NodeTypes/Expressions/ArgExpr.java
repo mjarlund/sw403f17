@@ -3,9 +3,6 @@ package DataStructures.AST.NodeTypes.Expressions;
 import DataStructures.AST.AST;
 import DataStructures.AST.NodeTypes.Types;
 
-/**
- * Created by Anders Brams on 3/21/2017.
- */
 public class ArgExpr extends Expr
 {
     public ArgExpr(ValExpr value)

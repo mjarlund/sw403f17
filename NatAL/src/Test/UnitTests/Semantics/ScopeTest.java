@@ -81,14 +81,7 @@ public class ScopeTest {
 		}		
 	}
 	
-	
-	/*
-	public static class multipleInputScopeTest
-	{
-		@Test
-	
-	}
-	*/
+
 	@RunWith(Parameterized.class)
 	public static class AllFailableTests{
 		

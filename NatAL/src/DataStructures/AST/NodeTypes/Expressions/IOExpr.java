@@ -3,9 +3,6 @@ package DataStructures.AST.NodeTypes.Expressions;
 import DataStructures.AST.NodeTypes.Modes;
 import Syntax.Tokens.Token;
 
-/**
- * Created by mysjkin on 3/30/17.
- */
 public class IOExpr extends Expr
 {
     public IOExpr(Modes mode, Token op,IdExpr pin)
@@ -17,7 +14,6 @@ public class IOExpr extends Expr
     }
     private Modes mode;
     private Token operation;
-    private Token pin;
     public Modes GetMode()
     {
         return mode;

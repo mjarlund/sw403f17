@@ -12,9 +12,6 @@ import Utilities.TypeConverter;
 
 import java.util.Stack;
 
-/**
- * Created by Anders Brams on 3/21/2017.
- */
 public class ASTFactory
 {
     public DefaultHashMap<String, Runnable> SemanticAction = new DefaultHashMap<String, Runnable>(null);
@@ -464,8 +461,6 @@ public class ASTFactory
         terminals.pop(); // in
         FParamDcl loopcounter = (FParamDcl) astStack.pop();
         String elementID = loopcounter.GetStructType()==null ? loopcounter.Identifier : loopcounter.GetStructType();
-        // should be different type if struct but not yet implemented
-        // TODO: implement foreach for lists of structs
         Types elementType = loopcounter.Type;
         VarDcl element = new VarDcl(elementType, elementID);
         FindIteratorVariable(code, elementID, listID.ID);

@@ -17,10 +17,6 @@ import java.util.ArrayList;
  */
 public class TargetCodeGen implements IVisitor {
 
-    /*
-     * How to do?
-     * ¯\_(ツ)_/¯ - everyone
-     */
     private AST program;
     private SemanticAnalyzer symbols;
     private ArrayList<String> instructions;

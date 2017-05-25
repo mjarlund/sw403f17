@@ -25,12 +25,4 @@ public class StructDcl extends Dcl {
     }
 
     public BlockStmt GetBlock(){return block;}
-
-    public ArrayList<VarDcl> GetContents(){
-        ArrayList<VarDcl> contents = new ArrayList<>();
-        for (int i = 1; i < children.size(); i++){
-            contents.add( (VarDcl) children.get(i));
-        }
-        return contents;
-    }
 }

@@ -1,14 +1,10 @@
 package DataStructures.AST.NodeTypes.Statements;
 
-
 import DataStructures.AST.NodeTypes.Expressions.Expr;
 import DataStructures.AST.NodeTypes.Expressions.IdExpr;
 import DataStructures.AST.NodeTypes.Modes;
 import Syntax.Tokens.Token;
 
-/**
- * Created by mysjkin on 3/30/17.
- */
 public class IOStmt extends Stmt
 {
     // read stmt
@@ -27,7 +23,6 @@ public class IOStmt extends Stmt
     }
     private Modes mode;
     private Token operation;
-    private Token pin;
     public Modes GetMode()
     {
         return mode;

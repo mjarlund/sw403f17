@@ -4,9 +4,6 @@ import DataStructures.AST.NodeTypes.Declarations.*;
 import DataStructures.AST.NodeTypes.Expressions.*;
 import DataStructures.AST.NodeTypes.Statements.*;
 
-/**
- * Created by mysjkin on 4/12/17.
- */
 public interface IVisitor {
     Object Visit(StructVarDcl dcl);
 

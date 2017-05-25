@@ -29,7 +29,6 @@ public class SemanticAnalyzer implements IVisitor{
     
     
     private VisitorDriver visitValue = new VisitorDriver(this);
-    // Made changes on 27/03
     /* Creates a new scope as a child of the current */
     public void OpenScope(){
         Scope newScope = new Scope();
@@ -83,7 +82,6 @@ public class SemanticAnalyzer implements IVisitor{
                 switchValue = (child.GetValue() != null) ? child.GetValue() : ((IdExpr) child).ID;
                 visitValue.Visit(switchValue, child);
             } catch (ClassCastException e){
-                //System.out.println(e.getCause().toString());
             }
         }
     }
@@ -192,7 +190,6 @@ public class SemanticAnalyzer implements IVisitor{
         {
     	    return null;
         }
-
     }
     
     public Object Visit(IOExpr expr)
@@ -511,10 +508,6 @@ public class SemanticAnalyzer implements IVisitor{
         ArrayList<ArgExpr> args = node.GetArgs();
         for (ArgExpr arg : args) {
             String argID = arg.GetArg().GetValue();
-            /*if (FindSymbol(argID) == null) {
-                Reporter.Error(new UndeclaredSymbolException(argID + " not declared, but is used as an argument."));
-                //throw new Error(argID + " not declared, but is used as an argument. ");
-            }*/
             visitValue.Visit(argID,arg.GetArg());
         }
         

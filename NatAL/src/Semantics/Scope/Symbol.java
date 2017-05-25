@@ -4,9 +4,6 @@ import DataStructures.AST.NodeTypes.Types;
 
 import java.util.ArrayList;
 
-/**
- * Created by Anders Brams on 3/21/2017.
- */
 public class Symbol {
     public String Name;
     public Types Type;
@@ -25,12 +22,7 @@ public class Symbol {
         Name = name;
         Type = type;
     }
-
-    public Symbol(String name, ArrayList<FParamDiscriptor> typeSignature){
-        Name = name;
-        Type = null;
-        TypeSignature = typeSignature;
-    }
+    
     
     public Symbol(String name, Types type, DclType dcltype, ArrayList<FParamDiscriptor> typeSignature){
         Name = name;

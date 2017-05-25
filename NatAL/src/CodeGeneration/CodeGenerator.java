@@ -34,7 +34,6 @@ public class CodeGenerator implements IVisitor
 
     public CodeGenerator (AST programTree, SemanticAnalyzer sm)
     {
-        // ¯\_(ツ)_/¯
         SM = sm;
         VisitChildren(programTree);
     }
@@ -60,7 +59,6 @@ public class CodeGenerator implements IVisitor
     }
 
     public Object Visit(RepeatStatement node){
-        //TODO: Can only take ID's or simple numbers as iterators - maybe extend this?
         GenerateIdentifier();
         if (node.GetIterationExpression() instanceof IdExpr){
             String i = ((IdExpr)node.GetIterationExpression()).ID;
@@ -321,7 +319,6 @@ public class CodeGenerator implements IVisitor
             }
             writer.close();
         } catch (IOException e) {
-            // do something
         }
     }
 

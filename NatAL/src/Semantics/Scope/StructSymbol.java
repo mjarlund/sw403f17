@@ -6,9 +6,6 @@ import Utilities.Reporter;
 
 import java.util.ArrayList;
 
-/**
- * Created by mysjkin on 4/10/17.
- */
 public class StructSymbol extends Symbol implements IScope
 {
     public int Depth = 1;
@@ -27,7 +24,6 @@ public class StructSymbol extends Symbol implements IScope
             Reporter.Error(new DuplicatedSymbolException("Name already defined in current scope " + entry.Name));
         else
             symbols.add(entry);
-        	//System.out.println(symbols);
     }
 
     @Override

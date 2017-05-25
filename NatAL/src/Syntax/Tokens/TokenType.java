@@ -1,8 +1,5 @@
 package Syntax.Tokens;
 
-/**
- * Created by Anders Brams on 3/21/2017.
- */
 public enum TokenType
 {
     SEPARATOR,

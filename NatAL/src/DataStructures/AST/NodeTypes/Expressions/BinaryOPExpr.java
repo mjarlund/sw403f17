@@ -1,6 +1,5 @@
 package DataStructures.AST.NodeTypes.Expressions;
 
-import DataStructures.AST.NodeTypes.Types;
 import Syntax.Tokens.Token;
 
 public class BinaryOPExpr extends Expr
@@ -13,15 +12,6 @@ public class BinaryOPExpr extends Expr
         SetValue("BinaryOPExpr");
     }
     public final Token Operation;
-    private Types evaluationType;
-    public Types GetEvaluationType()
-    {
-        return evaluationType;
-    }
-    public void SetEvaluationType(Types type)
-    {
-        evaluationType = type;
-    }
     public Expr GetLeftExpr()
     {
         return (Expr) children.get(0);

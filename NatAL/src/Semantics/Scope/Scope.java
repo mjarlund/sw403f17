@@ -5,10 +5,6 @@ import Utilities.Reporter;
 
 import java.util.ArrayList;
 
-/**
- * Created by Anders Brams on 3/20/2017.
- * A "Symbol table" implemented in a tree structure.
- */
 public class Scope implements IScope {
 
     public int Depth = 0;
@@ -36,7 +32,6 @@ public class Scope implements IScope {
     public Symbol FindSymbol(String identifier){
         Symbol toReturn = null;
         for (Symbol s : symbols){
-        	//System.out.println(s.Name + " looking for: " + identifier);
             if (s.Name.equals(identifier)){
                 toReturn = s;
                 break;

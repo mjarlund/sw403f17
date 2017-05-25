@@ -5,9 +5,6 @@ import DataStructures.AST.NodeTypes.Expressions.Expr;
 import DataStructures.AST.NodeTypes.Statements.BlockStmt;
 import DataStructures.AST.NodeTypes.Statements.ReturnStmt;
 
-/**
- * Created by Anders Brams on 3/21/2017.
- */
 public class FuncDcl extends Dcl {
     public FuncDcl(VarDcl dcl, FParamsDcl parameters, BlockStmt block)
     {

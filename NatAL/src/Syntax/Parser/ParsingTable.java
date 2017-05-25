@@ -13,9 +13,6 @@ import java.nio.file.Paths;
 import java.util.HashSet;
 import java.util.Set;
 
-/**
- * Created by Anders Brams on 3/21/2017.
- */
 public class ParsingTable {
     public Grammar Grammar;
     public Production ProductionRules[];

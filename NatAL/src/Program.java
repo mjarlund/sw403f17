@@ -1,5 +1,4 @@
-
-        import CodeGeneration.CodeGenerator;
+import CodeGeneration.CodeGenerator;
         import DataStructures.AST.AST;
         import Semantics.Scope.SemanticAnalyzer;
         import Syntax.Parser.Parser;
@@ -12,7 +11,7 @@
         import java.awt.event.ActionListener;
         import java.io.IOException;
 
-        public class Program extends JFrame
+public class Program extends JFrame
 {
     private JTextArea Input = new JTextArea(25,20);
     private JTextArea Output = new JTextArea(25,20);
