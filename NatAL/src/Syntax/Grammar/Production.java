@@ -29,8 +29,4 @@ public class Production {
         for (String r : Right) sb.append(" " + r);
         return sb.toString();
     }
-
-    public static void main(String[] args) {
-        System.out.println(new Production("Program", "Statement", "Statements"));
-    }
 }

@@ -20,7 +20,7 @@ public class Program extends JFrame
     private JButton buttonCompile = new JButton("Compile");
 
     public Program() {
-        super("JPanel Program");
+        super("NatAL Compiler");
         // create a new panel with GridBagLayout manager
         JPanel newPanel = new JPanel(new GridBagLayout());
         GridBagConstraints constraints = new GridBagConstraints();
@@ -99,7 +99,7 @@ public class Program extends JFrame
         setLocationRelativeTo(null);
     }
 
-    public static void main(String[] args) {
+    public static void main(String args[]) {
                Program p = new Program();p.setVisible(true);
                 p.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }

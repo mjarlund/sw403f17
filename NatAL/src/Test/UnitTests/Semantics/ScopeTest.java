@@ -6,6 +6,7 @@ import Semantics.Scope.SemanticAnalyzer;
 import Syntax.Parser.Parser;
 import Syntax.Scanner.Scanner;
 import Test.InputTester;
+import Utilities.Reporter;
 import org.junit.Test;
 import org.junit.experimental.runners.Enclosed;
 import org.junit.runner.RunWith;
@@ -54,7 +55,7 @@ public class ScopeTest {
     			}
 			}
 			catch (Exception e){//Catch exception if any
-				  System.out.println("Error when reading files: " + e.getMessage());
+				  Reporter.Log("Error when reading files: " + e.getMessage());
 			}
 			return data;
 		}
@@ -66,7 +67,7 @@ public class ScopeTest {
 			try 
 			{
 				Scanner testScanner = new Scanner(InputTester.readFile(testPath));
-				System.out.println(testPath);
+				Reporter.Log(testPath);
 				Parser parser = new Parser(testScanner);
 				AST programTree = parser.ParseProgram();
 			    SemanticAnalyzer sm = new SemanticAnalyzer();
@@ -110,7 +111,7 @@ public class ScopeTest {
     			}
 			}
 			catch (Exception e){//Catch exception if any
-				  System.out.println("Error when reading files: " + e.getMessage());
+				  Reporter.Log("Error when reading files: " + e.getMessage());
 			}
 			return data;
 		}
@@ -122,7 +123,7 @@ public class ScopeTest {
 			try 
 			{
 				Scanner testScanner = new Scanner(InputTester.readFile(testPath));
-				System.out.println(testPath);
+				Reporter.Log(testPath);
 				Parser parser = new Parser(testScanner);
 				AST programTree = parser.ParseProgram();
 			    SemanticAnalyzer sm = new SemanticAnalyzer();

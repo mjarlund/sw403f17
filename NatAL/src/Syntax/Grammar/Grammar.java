@@ -1,5 +1,7 @@
 package Syntax.Grammar;
 
+import Utilities.Reporter;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -286,15 +288,5 @@ public class Grammar {
         followMap = new HashMap<>();
         for(String s : Symbols) Epsilon.put(s, false);
         InitEpsilon();
-    }
-    public static void main(String args[])
-    {
-        try {
-            Grammar g = Grammar.FromFile("src/Syntax/Grammar/CFG/CFG");
-            for(String var : g.Follow("DeclarationStatement"))
-                System.out.println(var);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 }

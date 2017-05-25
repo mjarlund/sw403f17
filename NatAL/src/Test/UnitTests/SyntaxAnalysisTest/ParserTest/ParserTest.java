@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 
+import Utilities.Reporter;
 import org.junit.Test;
 import org.junit.experimental.runners.Enclosed;
 import org.junit.runner.RunWith;
@@ -58,7 +59,7 @@ public class ParserTest {
     			}
 			}
 			catch (Exception e){//Catch exception if any
-				  System.out.println("Error when reading files: " + e.getMessage());
+				  Reporter.Log("Error when reading files: " + e.getMessage());
 			}
 			return data;
 		}
@@ -166,7 +167,7 @@ public class ParserTest {
     			}
 			}
 			catch (Exception e){//Catch exception if any
-				  System.out.println("Error when reading files: " + e.getMessage());
+				  Reporter.Log("Error when reading files: " + e.getMessage());
 			}
 			return data;
 		}
@@ -178,7 +179,7 @@ public class ParserTest {
 			try 
 			{
 				Scanner testScanner = new Scanner(InputTester.readFile(testPath));
-				System.out.println(testPath);
+				Reporter.Log(testPath);
 				Parser parser = new Parser(testScanner);
 				parser.ParseProgram();
 			} 

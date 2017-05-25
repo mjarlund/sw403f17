@@ -95,13 +95,4 @@ public class ParsingTable {
             ProductionRules[i] = new Production(Grammar.Productions[i].Left, predictSet.toArray(new String[0]));
         }
     }
-
-    public static void main(String[] args) throws IOException {
-        ParsingTable p = new ParsingTable();
-
-        Reporter.Log(p.GetPrediction("DeclarationStatementPrime", "EPSILON").toString());
-        //for(Production product : p.ProductionRules) System.out.println(product);
-        Reporter.Log(p.GetPrediction("Expression", "IntegerLiteral").toString());
-        Reporter.Log(p.GetPrediction("Expression", new Token("2", TokenType.INTEGER_LITERAL)).toString());
-    }
 }

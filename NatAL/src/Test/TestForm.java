@@ -46,8 +46,6 @@ public class TestForm {
         }
         catch (Exception e){//Catch exception if any
             JOptionPane.showMessageDialog(null, "Error when reading files: " + e.getMessage());
-            System.out.println("Error when reading files: " + e.getMessage());
-
         }
         max = data.size();
         Update();

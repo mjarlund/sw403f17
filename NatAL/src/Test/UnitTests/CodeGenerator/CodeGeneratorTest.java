@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import Utilities.Reporter;
 import org.junit.Test;
 import org.junit.experimental.runners.Enclosed;
 import org.junit.runner.RunWith;
@@ -55,7 +56,7 @@ public class CodeGeneratorTest {
     			}
 			}
 			catch (Exception e){//Catch exception if any
-				  System.out.println("Error when reading files: " + e.getMessage());
+				  Reporter.Log("Error when reading files: " + e.getMessage());
 			}
 			return data;
 			

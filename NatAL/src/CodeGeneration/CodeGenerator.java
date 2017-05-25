@@ -328,13 +328,4 @@ public class CodeGenerator implements IVisitor
         } while (SM.FindSymbol(currentIdentifier) != null);
         SM.AddSymbol(currentIdentifier);
     }
-    public static void main(String args[]) throws IOException {
-        Scanner sc = new Scanner(InputTester.readFile("src/CodeGeneration/ArduinoTestProgram.txt"));
-        Parser parser = new Parser(sc);
-        AST programTree = parser.ParseProgram();
-        SemanticAnalyzer sm = new SemanticAnalyzer();
-        sm.BeginSemanticAnalysis(programTree);
-        CodeGenerator c = new CodeGenerator(programTree, sm);
-        c.ToFile();
-    }
 }
