@@ -15,14 +15,14 @@ public:
   list(){
     size = SIZE_BUFFER;
     num_items = 0;
-    arr = malloc(size * sizeof(T)));
+    arr = (T*)(malloc(size * sizeof(T)));
   }
   
-  int add(T arg) {
+  int Add(T arg) {
     if(num_items == size) {
         T *temp;
         size += SIZE_BUFFER;
-        temp = realloc(arr, sizeof(T) * size);
+        temp = (T*)realloc(arr, sizeof(T) * size);
         arr = temp;
     }
     arr[num_items] = arg;

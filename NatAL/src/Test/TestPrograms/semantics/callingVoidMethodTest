@@ -5,7 +5,7 @@ number c is 5
 end main1
 
 void setup()
-main()
+main1()
 end setup
 
 void loop()
