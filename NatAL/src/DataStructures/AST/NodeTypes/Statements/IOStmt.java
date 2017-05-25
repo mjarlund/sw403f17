@@ -37,7 +37,6 @@ public class IOStmt extends Stmt
     }
     public Expr GetWriteVal()
     {
-        if((Expr)children.get(1)!=null)return (Expr)children.get(1);
-        else return null;
+        return (Expr)children.get(1);
     }
 }
