@@ -4,8 +4,9 @@ import CodeGeneration.CodeGenerator;
         import Syntax.Parser.Parser;
         import Syntax.Scanner.Scanner;
         import Test.InputTester;
+import Visualizing.Visualizer;
 
-        import javax.swing.*;
+import javax.swing.*;
         import java.awt.*;
         import java.awt.event.ActionEvent;
         import java.awt.event.ActionListener;
@@ -99,10 +100,6 @@ public class Program extends JFrame
         setLocationRelativeTo(null);
     }
 
-    public static void main(String args[]) {
-               Program p = new Program();p.setVisible(true);
-                p.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    }
     private String Compile(String input) throws IOException {
 
         try {
@@ -123,5 +120,10 @@ public class Program extends JFrame
         }
 
 return "";
+    }
+
+    public static void main(String args[]) {
+        Program p = new Program();p.setVisible(true);
+        p.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 }
