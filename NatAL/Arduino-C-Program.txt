@@ -1,0 +1,104 @@
+#define SIZE_BUFFER 5
+
+template <typename T>
+class list{
+private:
+  T* arr;
+  void copy_items(T* from, T* to){
+    for(int i=0;i<size;++i){
+      to[i] = from[i];
+    }
+  }
+public:
+  int size;
+  int num_items;
+  list(){
+    size = SIZE_BUFFER;
+    num_items = 0;
+    arr = (T*)(malloc(size * sizeof(T)));
+  }
+  
+  int Add(T arg) {
+    if(num_items == size) {
+        T *temp;
+        size += SIZE_BUFFER;
+        temp = (T*)realloc(arr, sizeof(T) * size);
+        arr = temp;
+    }
+    arr[num_items] = arg;
+    num_items++;
+    return 1;
+}
+
+  int remove(int index){
+    if(index > num_items-1 || index < 0){
+      /*not possible*/
+      return -1;
+    }
+    arr[index] = 0;
+    num_items--;
+    while(index < num_items){
+      arr[index] = arr[index+1];
+      index++;
+    }
+    return 1;
+  }
+  T& operator[] (const int index){
+    return arr[index];
+  }
+  ~list(){
+    delete arr;
+  }
+};int motorRightint motorLeft
+void enableBrakes(int m1,int m2){ 
+  pinMode(motorRight,OUTPUT);
+digitalWrite(motorRight, LOW); 
+  pinMode(motorLeft,OUTPUT);
+digitalWrite(motorLeft, LOW); 
+  } 
+
+void disableBrakes(int m1,int m2){ 
+  pinMode(motorRight,OUTPUT);
+digitalWrite(motorRight, HIGH); 
+  pinMode(motorLeft,OUTPUT);
+digitalWrite(motorLeft, HIGH); 
+  } 
+
+void setup(){ 
+Serial.begin(9600); 
+  motorRight = 13; 
+  motorLeft = 9; 
+  } 
+
+void loop(){ 
+  list<int> aList;
+aList.Add(1);
+aList.Add(2);
+aList.Add(3);
+aList.Add(4);
+aList.Add(5);
+aList.Add(6);
+aList.Add(7);
+aList.Add(8);
+aList.Add(9);
+aList.Add(10);
+  for (int _i = 0;_i < sizeof(aList) - 1; _i++){ 
+    int inverse = (256-aList[_i]); 
+    pinMode(motorRight,OUTPUT);
+analogWrite(motorRight, aList[_i]); 
+    pinMode(motorLeft,OUTPUT);
+analogWrite(motorLeft, inverse); 
+    delay(525); 
+    if (inverse <= 256){ 
+      Serial.println("Successfully inverted a number value, yay"); 
+      } 
+    } 
+  for (int _ii = 0;_ii <3; _ii++){ 
+    String a = "Sucess!"; 
+    Serial.println(a); 
+    a = (a+"!"); 
+    } 
+  enableBrakes(motorRight,motorLeft); 
+  delay(3000); 
+  disableBrakes(motorRight,motorLeft); 
+  } 

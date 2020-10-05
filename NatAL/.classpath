@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="lib" path="lib/core.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER">
+		<attributes>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="NatAL/lib"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
+	<classpathentry kind="lib" path="C:/Users/andre_000/Documents/sw403f17/NatAL/lib/RXTXcomm.jar">
+		<attributes>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="C:/Program Files (x86)/Java/jre1.8.0_121/bin"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Program Files (x86)/Arduino/lib/arduino-core.jar"/>
+	<classpathentry kind="lib" path="C:/Program Files (x86)/Arduino/lib/apple.jar"/>
+	<classpathentry kind="lib" path="C:/Program Files (x86)/Arduino/lib/batik-1.8.jar"/>
+	<classpathentry kind="lib" path="C:/Program Files (x86)/Arduino/lib/batik-anim-1.8.jar"/>
+	<classpathentry kind="lib" path="C:/Program Files (x86)/Arduino/lib/batik-awt-util-1.8.jar"/>
+	<classpathentry kind="lib" path="C:/Program Files (x86)/Arduino/lib/batik-bridge-1.8.jar"/>
+	<classpathentry kind="lib" path="C:/Program Files (x86)/Arduino/lib/batik-codec-1.8.jar"/>
+	<classpathentry kind="lib" path="C:/Program Files (x86)/Arduino/lib/batik-css-1.8.jar"/>
+	<classpathentry kind="lib" path="C:/Program Files (x86)/Arduino/lib/batik-dom-1.8.jar"/>
+	<classpathentry kind="lib" path="C:/Program Files (x86)/Arduino/lib/batik-ext-1.8.jar"/>
+	<classpathentry kind="lib" path="C:/Program Files (x86)/Arduino/lib/batik-gvt-1.8.jar"/>
+	<classpathentry kind="lib" path="C:/Program Files (x86)/Arduino/lib/batik-parser-1.8.jar"/>
+	<classpathentry kind="lib" path="C:/Program Files (x86)/Arduino/lib/batik-rasterizer-1.8.jar"/>
+	<classpathentry kind="lib" path="C:/Program Files (x86)/Arduino/lib/batik-script-1.8.jar"/>
+	<classpathentry kind="lib" path="C:/Program Files (x86)/Arduino/lib/batik-squiggle-1.8.jar"/>
+	<classpathentry kind="lib" path="C:/Program Files (x86)/Arduino/lib/batik-svg-dom-1.8.jar"/>
+	<classpathentry kind="lib" path="C:/Program Files (x86)/Arduino/lib/batik-svgpp-1.8.jar"/>
+	<classpathentry kind="lib" path="C:/Program Files (x86)/Arduino/lib/batik-transcoder-1.8.jar"/>
+	<classpathentry kind="lib" path="C:/Program Files (x86)/Arduino/lib/batik-util-1.8.jar"/>
+	<classpathentry kind="lib" path="C:/Program Files (x86)/Arduino/lib/batik-xml-1.8.jar"/>
+	<classpathentry kind="lib" path="C:/Program Files (x86)/Arduino/lib/bcpg-jdk15on-152.jar"/>
+	<classpathentry kind="lib" path="C:/Program Files (x86)/Arduino/lib/bcprov-jdk15on-152.jar"/>
+	<classpathentry kind="lib" path="C:/Program Files (x86)/Arduino/lib/commons-codec-1.7.jar"/>
+	<classpathentry kind="lib" path="C:/Program Files (x86)/Arduino/lib/commons-compress-1.8.jar"/>
+	<classpathentry kind="lib" path="C:/Program Files (x86)/Arduino/lib/commons-exec-1.1.jar"/>
+	<classpathentry kind="lib" path="C:/Program Files (x86)/Arduino/lib/commons-httpclient-3.1.jar"/>
+	<classpathentry kind="lib" path="C:/Program Files (x86)/Arduino/lib/commons-lang3-3.3.2.jar"/>
+	<classpathentry kind="lib" path="C:/Program Files (x86)/Arduino/lib/commons-logging-1.0.4.jar"/>
+	<classpathentry kind="lib" path="C:/Program Files (x86)/Arduino/lib/commons-net-3.3.jar"/>
+	<classpathentry kind="lib" path="C:/Program Files (x86)/Arduino/lib/jackson-annotations-2.6.3.jar"/>
+	<classpathentry kind="lib" path="C:/Program Files (x86)/Arduino/lib/jackson-core-2.6.3.jar"/>
+	<classpathentry kind="lib" path="C:/Program Files (x86)/Arduino/lib/jackson-databind-2.6.3.jar"/>
+	<classpathentry kind="lib" path="C:/Program Files (x86)/Arduino/lib/jackson-module-mrbean-2.6.3.jar"/>
+	<classpathentry kind="lib" path="C:/Program Files (x86)/Arduino/lib/java-semver-0.8.0.jar"/>
+	<classpathentry kind="lib" path="C:/Program Files (x86)/Arduino/lib/jmdns-3.4.1.jar"/>
+	<classpathentry kind="lib" path="C:/Program Files (x86)/Arduino/lib/jna-4.2.2.jar"/>
+	<classpathentry kind="lib" path="C:/Program Files (x86)/Arduino/lib/jna-platform-4.2.2.jar"/>
+	<classpathentry kind="lib" path="C:/Program Files (x86)/Arduino/lib/jsch-0.1.50.jar"/>
+	<classpathentry kind="lib" path="C:/Program Files (x86)/Arduino/lib/jssc-2.8.0.jar"/>
+	<classpathentry kind="lib" path="C:/Program Files (x86)/Arduino/lib/pde.jar"/>
+	<classpathentry kind="lib" path="C:/Program Files (x86)/Arduino/lib/rsyntaxtextarea-2.5.8.1+arduino.jar"/>
+	<classpathentry kind="lib" path="C:/Program Files (x86)/Arduino/lib/xml-apis-1.3.04.jar"/>
+	<classpathentry kind="lib" path="C:/Program Files (x86)/Arduino/lib/xml-apis-ext-1.3.04.jar"/>
+	<classpathentry kind="lib" path="C:/Program Files (x86)/Arduino/lib/xmlgraphics-commons-2.0.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

@@ -1,0 +1,9 @@
+S -> A C $
+C -> c
+C -> EPSILON
+A -> a B C d
+A -> B Q
+B -> b B
+B -> EPSILON
+Q -> q
+Q -> EPSILON

@@ -1,9 +1,6 @@
 package p4test.AbstractSyntaxTree;
 
-import p4test.AbstractSyntaxTree.Dcl.FormalParameter;
-import p4test.AbstractSyntaxTree.Dcl.FormalParameters;
-import p4test.AbstractSyntaxTree.Dcl.FuncDcl;
-import p4test.AbstractSyntaxTree.Dcl.VarDcl;
+import p4test.AbstractSyntaxTree.Dcl.*;
 import p4test.AbstractSyntaxTree.Expr.*;
 import p4test.AbstractSyntaxTree.Stmt.*;
 
@@ -30,4 +27,5 @@ public interface Visitor
     void visit(IfStmt node);
     void visit(ProcedureCall node);
     void visit(UntilStmt node);
+    void visit(Identifier node);
 }

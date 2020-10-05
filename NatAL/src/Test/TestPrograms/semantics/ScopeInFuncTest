@@ -1,0 +1,24 @@
+number scope1()
+number a is 5
+number b is 6
+number c is a + b
+return c
+end scope1
+
+boolean scope2()
+number d is scope1()
+boolean john is false
+if (d above 15)
+john is true
+end if
+return john
+end scope2
+
+void setup()
+number num is scope1()
+boolean bool is scope2()
+end setup
+
+void loop()
+
+end loop

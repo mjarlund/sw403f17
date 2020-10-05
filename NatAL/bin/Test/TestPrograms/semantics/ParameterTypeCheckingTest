@@ -1,0 +1,16 @@
+number MethodDcl(number a, text b, character c, boolean d, fraction e)
+a is 4
+b is "hej"
+c is 'h'
+d is true
+e is 0.4
+return a
+end MethodDcl
+
+void setup()
+number b is MethodDcl(1, "jogn", 'c', false, 0.5)
+end setup
+
+void loop()
+
+end loop

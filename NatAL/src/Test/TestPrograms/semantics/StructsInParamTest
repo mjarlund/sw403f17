@@ -1,0 +1,16 @@
+structure testStruct
+number a is 5
+end testStruct
+
+void test(number b, testStruct a)
+b is 5
+end test
+
+void setup()
+testStruct actualStruct
+test(5, actualStruct)
+end setup
+
+void loop()
+
+end loop

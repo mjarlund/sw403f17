@@ -1,0 +1,24 @@
+structure teststruct
+number a
+text b
+character c
+end teststruct
+
+structure teststruct2
+number a2
+text b2
+character c2
+end teststruct2
+
+void setup()
+teststruct hej
+hej.b is "john"
+end setup
+
+void structTest2()
+teststruct2 hej2
+hej.b is john
+end structTest2
+
+void loop()
+end loop

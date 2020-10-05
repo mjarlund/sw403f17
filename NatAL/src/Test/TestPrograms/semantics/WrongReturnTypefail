@@ -1,0 +1,10 @@
+number setup()
+fraction a is 5.0
+fraction b is 6.5
+boolean far is true
+return far
+end setup
+
+void loop()
+
+end loop

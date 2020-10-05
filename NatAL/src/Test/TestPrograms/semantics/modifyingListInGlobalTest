@@ -1,0 +1,11 @@
+
+list of number a is (1,2,3,4,5,6)
+a.add(7)
+
+void setup()
+a.add(6)
+end setup
+
+void loop()
+
+end loop

@@ -1,0 +1,14 @@
+void func(fraction a)
+end func
+
+number b is 2
+void setup()
+
+end setup
+
+void loop()
+func(b)
+end loop
+
+
+

@@ -1,0 +1,13 @@
+void setup()
+boolean a is true
+boolean b is true
+number c is 5
+fraction g
+if (a equals true and b equals true)
+g is c + 3
+end if
+end setup
+
+void loop()
+
+end loop

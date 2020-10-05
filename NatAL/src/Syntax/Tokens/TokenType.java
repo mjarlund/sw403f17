@@ -1,0 +1,17 @@
+package Syntax.Tokens;
+
+public enum TokenType
+{
+    SEPARATOR,
+    IDENTIFIER,
+    INTEGER_LITERAL,
+    FLOAT_LITERAL,
+    STRING_LITERAL,
+    BOOLEAN_LITERAL,
+    CHAR_LITERAL,
+    OPERATOR,
+    KEYWORD,
+    ACCESSOR,
+    EOF,
+    DIGITAL_LITERAL
+}

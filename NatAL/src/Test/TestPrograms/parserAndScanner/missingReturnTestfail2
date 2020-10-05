@@ -1,0 +1,8 @@
+number main()
+number a is 5
+number b is 6
+if (a above b)
+a is a + b
+return 1
+end if
+end main

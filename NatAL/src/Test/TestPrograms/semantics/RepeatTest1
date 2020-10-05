@@ -1,0 +1,10 @@
+void setup()
+number a is 1
+repeat(10)
+a is a + 1
+end repeat
+end setup
+
+void loop()
+
+end loop

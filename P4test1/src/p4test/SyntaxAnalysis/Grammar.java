@@ -1,12 +1,8 @@
 package p4test.SyntaxAnalysis;
-import jdk.nashorn.internal.ir.Symbol;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
 import java.util.*;
 
 /**
@@ -48,7 +44,7 @@ public class Grammar {
     /**
      * The initial production.
      */
-    public String initialP;
+    public String InitialProduction;
 
     /**
      * Memoization map of the first sets.
@@ -63,7 +59,7 @@ public class Grammar {
     /**
      *  Construct grammar from file
      */
-    public static Grammar fromFile(String path) throws IOException {
+    public static Grammar FromFile(String path) throws IOException {
         List<String> lines = Files.readAllLines(new File(path).toPath());
         int n = lines.size(); // (== number of productions)
         Grammar cfg = new Grammar(n);
@@ -74,14 +70,14 @@ public class Grammar {
             String[] r = rule[1].trim().split("\\s+");
             for(String s : r) {
                 if(s.equals("$")) {
-                    cfg.initialP = l;
+                    cfg.InitialProduction = l;
                     break;
                 }
             }
             cfg.Productions[i] = new Production(l, r);
         }
 
-        cfg.init();
+        cfg.Init();
         return cfg;
     }
 
@@ -90,7 +86,7 @@ public class Grammar {
      * @param v
      * @return
      */
-    private Set firstChild(String v) {
+    private Set FirstChild(String v) {
         Set s = new HashSet();
 
         // For each production p in the productions array
@@ -117,14 +113,14 @@ public class Grammar {
      * @param v
      * @param visited
      */
-    private void exploreFirstChild(String v, Set visited) {
+    private void ExploreFirstChild(String v, Set visited) {
         visited.add(v);
-        Set<String> s = firstChild(v);
+        Set<String> s = FirstChild(v);
 
         for(String symbol : s) {
 
             // Explore the first child of each symbol not in the visit set.
-            if(!visited.contains(symbol)) exploreFirstChild(symbol, visited);
+            if(!visited.contains(symbol)) ExploreFirstChild(symbol, visited);
         }
     }
 
@@ -143,7 +139,7 @@ public class Grammar {
         Set<String> s = new HashSet(), visited = new HashSet<>();
 
         // Explore the first child of v and add it's children to the visit set.
-        exploreFirstChild(v, visited);
+        ExploreFirstChild(v, visited);
 
         for(String symbol : visited) {
 
@@ -165,7 +161,7 @@ public class Grammar {
      * @param v
      * @return
      */
-    private Set sibling(String v) {
+    private Set Sibling(String v) {
         Set s = new HashSet();
 
         // Check for each production
@@ -202,18 +198,18 @@ public class Grammar {
      * @param v
      * @param visited
      */
-    private void exploreSibling(String v, Set visited) {
-        Set<String> s = sibling(v);
+    private void ExploreSibling(String v, Set visited) {
+        Set<String> s = Sibling(v);
 
         for(String symbol : s) {
 
-            // If sibling is not already in the visit set, add to the visit set
+            // If Sibling is not already in the visit set, add to the visit set
             if(!visited.contains(symbol)) {
                 visited.add(symbol);
 
-                // If sibling is a non-terminal explore its siblings
+                // If Sibling is a non-terminal explore its siblings
                 if(NonTerminals.contains(symbol)) {
-                    exploreSibling(symbol, visited);
+                    ExploreSibling(symbol, visited);
                 }
             }
         }
@@ -232,11 +228,11 @@ public class Grammar {
         Set<String> s = new HashSet(), visited = new HashSet<>();
 
         // If the symbol is the initial non-terminal add $ to its follow set
-        if(v.equals(initialP)) s.add("$");
+        if(v.equals(InitialProduction)) s.add("$");
         visited.add(v);
 
         // Explore the siblings of v
-        exploreSibling(v, visited);
+        ExploreSibling(v, visited);
 
         for(String symbol : visited) {
             if(Terminals.contains(symbol)) s.add(symbol);
@@ -279,7 +275,7 @@ public class Grammar {
     /**
      * Get all terminals and non-terminals in the grammar
      */
-    public void initializeSymbols() {
+    public void InitializeSymbols() {
         Symbols = new HashSet<>();
         Terminals = new HashSet<>();
         NonTerminals = new HashSet<>();
@@ -303,7 +299,7 @@ public class Grammar {
      * If symbol in the right set of the production is epsilon,
      * set the non-terminal in the left of the production equal to epsilon.
      */
-    public void initEpsilon() {
+    public void InitEpsilon() {
         for(Production p : Productions) {
             String l = p.Left;
 
@@ -317,13 +313,13 @@ public class Grammar {
         Epsilon.put("EPSILON", true);
     }
 
-    public void init() {
-        initializeSymbols();
+    public void Init() {
+        InitializeSymbols();
         Epsilon = new HashMap<>();
         firstMap = new HashMap<>();
         followMap = new HashMap<>();
         for(String s : Symbols) Epsilon.put(s, false);
-        initEpsilon();
+        InitEpsilon();
     }
 
     public static void main(String[] args) throws IOException {

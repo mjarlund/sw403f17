@@ -1,0 +1,79 @@
+void delay(number d)
+    end delay
+
+#This is a comment#
+
+structure teststruct
+number a
+text b
+character c
+end teststruct
+
+number func2(number target)
+    number test is target
+    test is test * 2
+    list of number testlist is (1, 2, 3, 4, 5)
+    testlist[1] is 8
+    test is test / 2
+    number one is 10
+    if(1 above 0)
+     number n
+      else
+       number m
+        end else if
+    return 2
+end func2
+
+void foo ()
+    number a is 0
+    list of number l is (2, 3, 4, 5)
+    foreach ( number b in l )
+        b is a
+        foreach (number s in l)
+            b is 2*s
+            foreach (number ls in l)
+                b is 9001 / ls
+                end foreach
+            end foreach
+        end foreach
+    end foo
+
+void func1 ()
+     number target is 0
+     until(target below or equals 10)
+        number asdLOL is 5
+        repeat(asdLOL)
+            target is target + 1
+            func2(10)
+            end repeat
+     end until
+end func1
+
+void main()
+    list of number a is (1, 2, 3, 4)
+    a[2] is 9
+    if(1 above 0)
+        number n
+    else
+        number m
+    end else if
+end main
+
+void func3()
+
+teststruct test1
+test1.a is 5
+
+
+        pin motor1 is 1
+        pin motor2 is 2
+        pin break1 is 3
+        pin break2 is 4
+
+        digital write high to motor1
+        analog write 1 to motor2
+        number hejmor is digital read from motor1
+        number hejfar is analog read from motor2
+        hejmor is digital read from motor2
+
+end func3

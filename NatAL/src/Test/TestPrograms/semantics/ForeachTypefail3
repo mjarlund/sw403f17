@@ -1,0 +1,10 @@
+void setup()
+number sum
+foreach (number num in a)
+sum is sum + num
+end foreach
+end setup
+
+void loop()
+
+end loop

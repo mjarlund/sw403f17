@@ -1,0 +1,16 @@
+void setup()
+        pin motor1 is 1
+        pin motor2 is 2
+        pin break1 is 3
+        pin break2 is 4
+
+        digital write high to motor1
+        analog write 1 to motor2
+        number hejmor is digital read from motor1
+        number hejfar is analog read from motor2
+        hejmor is digital read from motor2
+        end setup
+        
+void loop()
+
+end loop

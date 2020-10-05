@@ -1,0 +1,10 @@
+void setup()
+char a is 1
+repeat(-4)
+a is a + 1
+end repeat
+end setup
+
+void loop()
+
+end loop

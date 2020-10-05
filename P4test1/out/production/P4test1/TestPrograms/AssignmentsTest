@@ -1,0 +1,12 @@
+void func1()
+number n is 10
+number n1 is 10 + 1
+number n2 is 10 - 1
+number n3 is 10 * 2
+number n4 is 10 / 2
+text t is "Hej"
+text t1 is "Hej med dig"
+boolean b is true
+boolean b1 is false
+boolean bo is n equals n1
+end func1

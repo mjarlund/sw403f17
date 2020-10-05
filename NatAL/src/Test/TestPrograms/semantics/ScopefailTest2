@@ -1,0 +1,14 @@
+number scope1(number a, number b)
+number a is 5
+number b is 7
+number c is a + b
+fraction c is 6.5
+return c
+end scope1
+
+void setup()
+end setup
+
+void loop()
+
+end loop

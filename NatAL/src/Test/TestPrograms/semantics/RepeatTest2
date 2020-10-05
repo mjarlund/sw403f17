@@ -1,0 +1,11 @@
+void setup()
+number count is 1
+number times is 15
+repeat(times)
+count is count + 1
+end repeat
+end setup
+
+void loop()
+
+end loop

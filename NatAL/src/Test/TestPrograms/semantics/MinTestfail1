@@ -1,0 +1,9 @@
+void setup()
+number a is 5
+fraction b is 3.5
+char d is 'h'
+fraction c is min(a, d)
+end setup
+
+void loop()
+end loop

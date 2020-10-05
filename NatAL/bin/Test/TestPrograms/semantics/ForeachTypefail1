@@ -1,0 +1,11 @@
+void setup()
+list of character a is ('a', 'b', 'c', 'd')
+number sum
+foreach (character char in a)
+sum is sum + char
+end foreach
+end setup
+
+void loop()
+
+end loop

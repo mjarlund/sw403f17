@@ -47,6 +47,7 @@ public class ASTFactory
         SemanticAction.put("BuildElseStmt", ASTFactory.this::CreateElse);
         SemanticAction.put("BuildActualParams", ASTFactory.this::CreateActualParameters);
         SemanticAction.put("BuildFuncCall", ASTFactory.this::CreateFuncCall);
+        SemanticAction.put("BuildReturnStmt", ASTFactory.this::CreateReturnStmt);
     }
     public void CreateAbstractTree(String action)
     {
@@ -68,6 +69,13 @@ public class ASTFactory
             AST subtree = astStack.pop();
             program.children.add(subtree);
         }
+    }
+    private void CreateReturnStmt()
+    {
+        Expression returnval = (Expression)astStack.pop();
+        ReturnStmt stmt = new ReturnStmt(returnval);
+        stmt.SetValue("Return");
+        astStack.push(stmt);
     }
     private void CreateUntilStmtTree()
     {
@@ -100,8 +108,9 @@ public class ASTFactory
                 if (id.Type.equals(TokenType.IDENTIFIER)){
                     arg = new Argument(new Identifier(id.Value));
                     arg.SetValue(id.Value);
-                } else
+                } else {
                     arg = new Argument(new ValExpr(id));
+                }
 
                 parameters.add(arg);
             }
@@ -163,7 +172,7 @@ public class ASTFactory
         ArrayList<FormalParameter> parameters = new ArrayList<>();
         while (! endPara.Value.equals("("))
         {
-            if (!terminals.peek().Type.SEPARATOR.equals(TokenType.SEPARATOR))
+            if (!terminals.peek().Type.equals(TokenType.SEPARATOR))
             {
                 Token id = terminals.pop();
                 Token type = terminals.pop();
@@ -174,7 +183,9 @@ public class ASTFactory
         FormalParameters astParameters = new FormalParameters();
         for (FormalParameter parameter : parameters)
         {
+            /* TODO: We should only use one of these. */
             astParameters.AdoptChildren(parameter);
+            astParameters.children.add(parameter);
         }
         astParameters.SetValue("FParams");
         astStack.push(astParameters);

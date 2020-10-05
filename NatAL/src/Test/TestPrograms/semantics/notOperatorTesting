@@ -1,0 +1,14 @@
+void setup()
+number a is 5
+boolean b is true
+number c
+if (not b)
+c is 7
+else 
+c is 8
+end else if
+end setup
+
+void loop()
+
+end loop

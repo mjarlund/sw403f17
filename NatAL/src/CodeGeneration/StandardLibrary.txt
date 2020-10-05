@@ -1,0 +1,52 @@
+#define SIZE_BUFFER 5
+
+template <typename T>
+class list{
+private:
+  T* arr;
+  void copy_items(T* from, T* to){
+    for(int i=0;i<size;++i){
+      to[i] = from[i];
+    }
+  }
+public:
+  int size;
+  int num_items;
+  list(){
+    size = SIZE_BUFFER;
+    num_items = 0;
+    arr = (T*)(malloc(size * sizeof(T)));
+  }
+  
+  int Add(T arg) {
+    if(num_items == size) {
+        T *temp;
+        size += SIZE_BUFFER;
+        temp = (T*)realloc(arr, sizeof(T) * size);
+        arr = temp;
+    }
+    arr[num_items] = arg;
+    num_items++;
+    return 1;
+}
+
+  int remove(int index){
+    if(index > num_items-1 || index < 0){
+      /*not possible*/
+      return -1;
+    }
+    arr[index] = 0;
+    num_items--;
+    while(index < num_items){
+      arr[index] = arr[index+1];
+      index++;
+    }
+    return 1;
+  }
+  T& operator[] (const int index){
+    return arr[index];
+  }
+  ~list(){
+    delete arr;
+  }
+};
